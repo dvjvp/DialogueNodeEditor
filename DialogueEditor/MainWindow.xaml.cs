@@ -50,29 +50,17 @@ namespace DialogueEditor
             Canvas.SetLeft(butt, 210);
             Canvas.SetTop(butt, 210);
 
-            DrawNodeCurve();
+			DrawConnection(rect, butt);
 
             //https://forum.unity3d.com/threads/simple-node-editor.189230/
 
-            //             drawArea.MouseUp += DrawArea_MouseUp;
-            //             drawArea.MouseMove += Rect_MouseMove;
         }
 
-        void DrawNodeCurve()
+        void DrawConnection(FrameworkElement fromObj, FrameworkElement toObj)
         {
-			//             NodeGraphics.BezierFigure line = new NodeGraphics.BezierFigure();
-			//             line.StartPoint = new Point(Canvas.GetLeft(rect) + rect.ActualWidth / 2, Canvas.GetTop(rect) + rect.ActualHeight);
-			//             line.EndPoint = new Point(Canvas.GetLeft(butt) + rect.ActualWidth / 2, Canvas.GetTop(rect));
-			//             line.StartBezierPoint = new Point(Canvas.GetLeft(rect) + rect.ActualWidth / 2, Canvas.GetTop(rect) + rect.ActualHeight + NodeGraphics.BezierFigure.TangentOffset);
-			//             line.EndBezierPoint = new Point(Canvas.GetLeft(butt) + rect.ActualWidth / 2, Canvas.GetTop(rect) - NodeGraphics.BezierFigure.TangentOffset);
-			// 
-			//             line.Background = new SolidColorBrush(Colors.Black);
-			//             line.BorderBrush = new SolidColorBrush(Colors.Red);
-			// 
-			//             drawArea.Children.Add(line);
 
-			Point from = new Point(Canvas.GetLeft(rect) + rect.Width / 2, Canvas.GetTop(rect) + rect.Height);
-			Point to = new Point(Canvas.GetLeft(butt) + butt.Width / 2, Canvas.GetTop(butt));
+			Point from = new Point(Canvas.GetLeft(fromObj) + fromObj.Width / 2, Canvas.GetTop(fromObj) + fromObj.Height);
+			Point to = new Point(Canvas.GetLeft(toObj) + toObj.Width / 2, Canvas.GetTop(toObj));
 			Point middlePoint = new Point((from.X + to.X) / 2, (from.Y + to.Y) / 2);
 
 			Point[] linePoints = new Point[]
@@ -80,8 +68,6 @@ namespace DialogueEditor
                 from,
                 new Point(from.X, from.Y + 80),
 				middlePoint
-				//new Point(Canvas.GetLeft(butt) + butt.Width / 2, Canvas.GetTop(butt)),
-                //new Point(90,200), new Point(140,200), new Point(160,200), new Point(180,200), new Point(430,190), new Point(430,280)
             };
 			Point[] linePoints2 = new Point[]
 			{
@@ -100,27 +86,5 @@ namespace DialogueEditor
             drawArea.Children.Add(path);
         }
 
-        //         private void Rect_MouseMove(object sender, MouseEventArgs e)
-        //         {
-        //             if (!isDragNDrop) return;
-        // 
-        //             var mousePos = e.GetPosition(drawArea);
-        // 
-        //             double left = mousePos.X - (rect.ActualWidth / 2), top = mousePos.Y - (rect.ActualHeight / 2);
-        //             Canvas.SetLeft(rect, left);
-        //             Canvas.SetTop(rect, top);
-        //         }
-        // 
-        //         private void DrawArea_MouseUp(object sender, MouseButtonEventArgs e)
-        //         {
-        //             Console.WriteLine("World");
-        //             isDragNDrop = false;
-        //         }
-        // 
-        //         private void Rect_MouseDown(object sender, MouseButtonEventArgs e)
-        //         {
-        //             Console.WriteLine("Hello");
-        //             isDragNDrop = true;
-        //         }
     }
 }
