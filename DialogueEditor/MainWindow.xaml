@@ -14,7 +14,9 @@
         <Rectangle Name="toolbar" Fill="#FFF4F4F5" Grid.Row="0" Stroke="Black" Margin="5"/>
         <Border BorderBrush="Black" BorderThickness="1"  Grid.Row="1" Margin="5">
             <!--<Grid Name="drawArea" Background="#FFF4F4F5" />-->
-            <Canvas Name="drawArea"/>
+            <Canvas Name="drawArea">
+                
+            </Canvas>
         </Border>
     </Grid>
 </Window>
