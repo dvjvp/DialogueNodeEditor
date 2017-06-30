@@ -28,3 +28,5 @@ E:\CSharp\DialogueEditor\DialogueNodeEditor.git\trunk\DialogueEditor\obj\Debug\D
 E:\CSharp\DialogueEditor\DialogueNodeEditor.git\trunk\DialogueEditor\obj\Debug\DialogueEditor.exe
 E:\CSharp\DialogueEditor\DialogueNodeEditor.git\trunk\DialogueEditor\obj\Debug\DialogueEditor.pdb
 E:\CSharp\DialogueEditor\DialogueNodeEditor.git\trunk\DialogueEditor\obj\Debug\DialogueEditor.csprojResolveAssemblyReference.cache
+E:\CSharp\DialogueEditor\DialogueNodeEditor.git\trunk\DialogueEditor\obj\Debug\Connection..g.cs
+E:\CSharp\DialogueEditor\DialogueNodeEditor.git\trunk\DialogueEditor\obj\Debug\Connection..baml

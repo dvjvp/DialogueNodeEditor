@@ -34,6 +34,8 @@ namespace DialogueEditor
 			node1.SetPosition(100, 100);
 			node2.SetPosition(300, 300);
 
+			
+
 			DrawConnection(node1, node2);
 
             //https://forum.unity3d.com/threads/simple-node-editor.189230/
@@ -42,7 +44,6 @@ namespace DialogueEditor
 
         void DrawConnection(FrameworkElement fromObj, FrameworkElement toObj)
         {
-
 			Point from = new Point(Canvas.GetLeft(fromObj) + fromObj.ActualWidth / 2, Canvas.GetTop(fromObj) + fromObj.ActualHeight);
 			Point to = new Point(Canvas.GetLeft(toObj) + toObj.ActualWidth / 2, Canvas.GetTop(toObj));
 			Point middlePoint = new Point((from.X + to.X) / 2, (from.Y + to.Y) / 2);

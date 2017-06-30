@@ -16,21 +16,13 @@ using System.Windows.Shapes;
 namespace DialogueEditor
 {
 	/// <summary>
-	/// Interaction logic for Node.xaml
+	/// Interaction logic for Connection.xaml
 	/// </summary>
-	public partial class Node : UserControl
+	public partial class Connection : UserControl
 	{
-		public Node()
+		public Connection()
 		{
 			InitializeComponent();
-			Width = grid.Width;
-			Height = grid.Height;
-		}
-
-		public void SetPosition(double x, double y)
-		{
-			Canvas.SetLeft(this, x);
-			Canvas.SetTop(this, y);
 		}
 	}
 }
