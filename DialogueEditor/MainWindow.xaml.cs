@@ -12,7 +12,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Drawing;
 
 namespace DialogueEditor
 {
@@ -22,35 +21,20 @@ namespace DialogueEditor
     public partial class MainWindow : Window
     {
         bool isDragNDrop = false;
-        Rectangle rect;
-        Button butt;
+
+
         public MainWindow()
         {
             InitializeComponent();
+			
+			Node node1 = new Node(), node2 = new Node();
+			drawArea.Children.Add(node1);
+			drawArea.Children.Add(node2);
 
+			node1.SetPosition(100, 100);
+			node2.SetPosition(300, 300);
 
-            rect = new Rectangle();
-            rect.Width = 100;    rect.Height = 100;
-            rect.Fill = new SolidColorBrush(Colors.Blue);
-            rect.Stroke = new SolidColorBrush(Colors.Black);
-//             rect.MouseDown += Rect_MouseDown;
-//             rect.MouseUp += DrawArea_MouseUp;
-//             rect.MouseMove += Rect_MouseMove;
-
-            drawArea.Children.Add(rect);
-            Canvas.SetLeft(rect, 10);
-            Canvas.SetTop(rect, 10);
-
-            butt = new Button();
-            butt.Width = 100; butt.Height = 100;
-            butt.Background = new SolidColorBrush(Colors.Blue);
-            butt.Foreground = new SolidColorBrush(Colors.Black);
-
-            drawArea.Children.Add(butt);
-            Canvas.SetLeft(butt, 210);
-            Canvas.SetTop(butt, 210);
-
-			DrawConnection(rect, butt);
+			DrawConnection(node1, node2);
 
             //https://forum.unity3d.com/threads/simple-node-editor.189230/
 
@@ -59,8 +43,8 @@ namespace DialogueEditor
         void DrawConnection(FrameworkElement fromObj, FrameworkElement toObj)
         {
 
-			Point from = new Point(Canvas.GetLeft(fromObj) + fromObj.Width / 2, Canvas.GetTop(fromObj) + fromObj.Height);
-			Point to = new Point(Canvas.GetLeft(toObj) + toObj.Width / 2, Canvas.GetTop(toObj));
+			Point from = new Point(Canvas.GetLeft(fromObj) + fromObj.ActualWidth / 2, Canvas.GetTop(fromObj) + fromObj.ActualHeight);
+			Point to = new Point(Canvas.GetLeft(toObj) + toObj.ActualWidth / 2, Canvas.GetTop(toObj));
 			Point middlePoint = new Point((from.X + to.X) / 2, (from.Y + to.Y) / 2);
 
 			Point[] linePoints = new Point[]
