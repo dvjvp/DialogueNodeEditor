@@ -38,8 +38,8 @@ namespace DialogueEditor
 			path.Stroke = new SolidColorBrush(Colors.Black);
 			path.StrokeThickness = 5;
 			pen = new Pen(new SolidColorBrush(Colors.Black), 5);
-			objFrom.connections.Add(this);
-			objTo.connections.Add(this);
+			objFrom.allConnections.Add(this);
+			objTo.allConnections.Add(this);
 		}
 
 		private static Point GetObjectPosition(FrameworkElement element)

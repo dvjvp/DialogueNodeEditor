@@ -17,7 +17,8 @@ namespace DialogueEditor
 
 		public DialogueDataLine sourceData;
 
-		public List<Connection> connections = new List<Connection>();
+		public List<Connection> allConnections = new List<Connection>();
+		public List<Connection> outputConnections = new List<Connection>();
 
 		public Node(DialogueDataLine sourceData)
 		{
@@ -31,7 +32,18 @@ namespace DialogueEditor
 		public void LoadDataFromSource()
 		{
 			nodeNameField.Text = sourceData.rowName;
-			dialogueText.Text = sourceData.rowName;
+			dialogueText.Text = sourceData.dialogueText;
+			SetPosition(sourceData.nodePositionX, sourceData.nodePositionY);
+		}
+
+		public void LoadOutputConnectionDataFromSource()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void DeleteAllOutputConnections()
+		{
+			throw new NotImplementedException();
 		}
 
 		public void SetPosition(double x, double y)
@@ -77,7 +89,7 @@ namespace DialogueEditor
 		protected void ForceConnectionUpdate()
 		{
 			//(Parent as Canvas).Dispatcher.Invoke(emptyDelegate, System.Windows.Threading.DispatcherPriority.Render);
-			foreach (var connection in connections)
+			foreach (var connection in allConnections)
 			{
 				connection.InvalidateVisual();
 			}
@@ -91,6 +103,7 @@ namespace DialogueEditor
 		public void Delete()
 		{
 			Console.WriteLine("Deleting node: " + nodeNameField.Text);
+			MainWindow.instance.DeleteNode(this);
 		}
 
 		private void dialogueText_TextChanged(object sender, TextChangedEventArgs e)

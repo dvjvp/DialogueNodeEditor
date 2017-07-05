@@ -21,7 +21,7 @@ namespace DialogueEditor.Files
 				Console.WriteLine("LineContent: " + lines[i]);
 
 				string[] s = lines[i].Split(',');
-
+				//string dialogueText = s[1].Substring(3, s[1].Length - 6);   //don't take '"' signs at the beginning and on the end
 				DialogueDataLine d = new DialogueDataLine(s[0], s[1], s[2], s[3], s[4]);
 				try
 				{

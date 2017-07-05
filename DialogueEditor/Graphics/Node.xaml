@@ -10,6 +10,7 @@
             <RowDefinition Height=".2*"/>
             <RowDefinition Height=".125*"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height=".1*"/>
             <RowDefinition Height=".2*"/>
         </Grid.RowDefinitions>
 
@@ -18,18 +19,73 @@
         </Border>
 
         <Border BorderBrush="Black" BorderThickness="1" Grid.Row="1" Background="#3f3f3f">
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="5,5,5,5" MaxWidth="250">
-                <TextBox x:Name="nodeNameField"  Text="NodeName"/>
-                <Button Content="X" Width="20" Margin="5,0,0,0" Click="ButtonDelete_Click" Background="DarkRed"/>
-            </StackPanel>
+            <DockPanel  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="5,5,5,5">
+                <TextBox x:Name="nodeNameField" Text="NodeName"/>
+                <Button Content="X" Width="20" Margin="5,0,0,0" Click="ButtonDelete_Click" Background="DarkRed" HorizontalAlignment="Right"/>
+            </DockPanel>
         </Border>
 
         <Border BorderBrush="Black" BorderThickness="1" Grid.Row="2" Background="#3f3f3f">
-            <TextBox x:Name="dialogueText" Text="Dialogue Text" Margin="5" TextWrapping="Wrap" AcceptsReturn="True" SpellCheck.IsEnabled="True" Height="Auto" TextChanged="dialogueText_TextChanged"/>
+            <TextBox x:Name="dialogueText" Text="Dialogue Text" Margin="5" TextWrapping="Wrap" MaxWidth="300"  VerticalScrollBarVisibility="Auto"  SpellCheck.IsEnabled="True" Height="Auto" TextChanged="dialogueText_TextChanged"/>
         </Border>
-
         <Border BorderBrush="Black" BorderThickness="1" Grid.Row="3" Background="#3f3f3f3f">
-            <RadioButton VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <ComboBox x:Name="outputType" Margin="5">
+                <ComboBoxItem Content="Normal dialogue" IsSelected="True"/>
+                <ComboBoxItem Content="End dialogue"/>
+                <ComboBoxItem Content="Multiple choices"/>
+                <ComboBoxItem Content="If player has item"/>
+                <ComboBoxItem Content="Call actor event"/>
+                <ComboBoxItem Content="Call level event"/>
+            </ComboBox>
+        </Border>
+        <Border BorderBrush="Black" BorderThickness="1" Grid.Row="4" Background="#3f3f3f3f">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=outputType, Path=SelectedItem.Content}" Value="Normal dialogue">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ElementName=outputType, Path=SelectedItem.Content}" Value="Call actor event">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ElementName=outputType, Path=SelectedItem.Content}" Value="Call level event">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <RadioButton VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="1"/>
+        </Border>
+        <Border BorderBrush="Black" BorderThickness="1" Grid.Row="4" Background="#3f3f3f3f">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=outputType, Path=SelectedItem.Content}" Value="If player has item">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0" Grid.Row="0" Foreground="White" HorizontalAlignment="Center">Item name</Label>
+                <Label Grid.Column="1" Grid.Row="0" Foreground="White" HorizontalAlignment="Center">Count</Label>
+                <TextBox x:Name="itemName"  Grid.Column="0" Grid.Row="1" Margin="2"/>
+                <TextBox x:Name="itemCount"  Grid.Column="1" Grid.Row="1" Margin="2"/>
+                <RadioButton Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center"/>
+                <RadioButton Grid.Column="1" Grid.Row="2" HorizontalAlignment="Center"/>
+            </Grid>
         </Border>
 
     </Grid>

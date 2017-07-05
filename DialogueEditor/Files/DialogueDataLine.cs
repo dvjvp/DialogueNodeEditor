@@ -24,7 +24,7 @@ namespace DialogueEditor.Files
 		public DialogueDataLine(string rowName, string dialogueText, string command, string commandArguments, string nextRowName)
 		{
 			this.rowName = rowName;
-			this.dialogueText = dialogueText.Substring(1, dialogueText.Length - 2);	//don't take '"' signs at the beginning and on the end
+			this.dialogueText = dialogueText;
 			this.command = command;
 			this.commandArguments = commandArguments;
 			this.nextRowName = nextRowName;
@@ -48,6 +48,10 @@ namespace DialogueEditor.Files
 			return rowName + ',' + "\"\"\"" + dialogueText + "\"\"\"," + command + ',' + commandArguments + ',' + nextRowName + '\n';
 		}
 
+		public override string ToString()
+		{
+			return "RowName: " + rowName + ", DialogueText: " + dialogueText + ", Command: " + command + ", CommandArgs:" + commandArguments + ", NextRow: " + nextRowName;
+		}
 
 	}
 }

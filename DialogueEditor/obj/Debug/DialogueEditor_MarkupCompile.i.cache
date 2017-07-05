@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 E:\CSharp\DialogueEditor\DialogueNodeEditor.git\trunk\DialogueEditor\App.xaml
-3767929654
+31003249174
 
-11-1892400918
+13-1985021022
 15767094614
-Connection..xaml;MainWindow.xaml;Node.xaml;
+Graphics\Connection.xaml;MainWindow.xaml;Graphics\Node.xaml;
 
-False
+True
 
