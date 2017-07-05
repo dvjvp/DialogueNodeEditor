@@ -1,17 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using DialogueEditor.Files;
 
 namespace DialogueEditor
 {
@@ -21,18 +13,32 @@ namespace DialogueEditor
 	public partial class Node : UserControl
 	{
 		protected Point dragOffset;
+		private static Action emptyDelegate = delegate { };
 
-		public Node()
+		public DialogueDataLine sourceData;
+
+		public List<Connection> connections = new List<Connection>();
+
+		public Node(DialogueDataLine sourceData)
 		{
 			InitializeComponent();
 			Width = grid.Width;
 			Height = grid.Height;
+			this.sourceData = sourceData;
+			LoadDataFromSource();
+		}
+
+		public void LoadDataFromSource()
+		{
+			nodeNameField.Text = sourceData.rowName;
+			dialogueText.Text = sourceData.rowName;
 		}
 
 		public void SetPosition(double x, double y)
 		{
 			Canvas.SetLeft(this, x);
 			Canvas.SetTop(this, y);
+			sourceData.SetPosition(x, y);
 		}
 
 		public Point GetPosition()
@@ -65,6 +71,31 @@ namespace DialogueEditor
 			var mousePos = e.GetPosition((IInputElement)Parent);
 			mousePos = mousePos + (Vector)dragOffset;
 			SetPosition(mousePos.X, mousePos.Y);
+			ForceConnectionUpdate();
+		}
+
+		protected void ForceConnectionUpdate()
+		{
+			//(Parent as Canvas).Dispatcher.Invoke(emptyDelegate, System.Windows.Threading.DispatcherPriority.Render);
+			foreach (var connection in connections)
+			{
+				connection.InvalidateVisual();
+			}
+		}
+
+		private void ButtonDelete_Click(object sender, RoutedEventArgs e)
+		{
+			Delete();
+		}
+
+		public void Delete()
+		{
+			Console.WriteLine("Deleting node: " + nodeNameField.Text);
+		}
+
+		private void dialogueText_TextChanged(object sender, TextChangedEventArgs e)
+		{
+
 		}
 	}
 }

@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DialogueEditor"
              mc:Ignorable="d">
-    <Grid x:Name="grid">
+    <Grid x:Name="grid" Background="#010101">
         <Grid.RowDefinitions>
             <RowDefinition Height=".2*"/>
             <RowDefinition Height=".125*"/>
@@ -17,12 +17,15 @@
             <RadioButton VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="InputPin"/>
         </Border>
 
-        <Border BorderBrush="Black" BorderThickness="1" Grid.Row="1" Background="Gray">
-            <TextBox Text="NodeName" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,5,5,5" MaxWidth="250" x:Name="OutputPin"/>
+        <Border BorderBrush="Black" BorderThickness="1" Grid.Row="1" Background="#3f3f3f">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="5,5,5,5" MaxWidth="250">
+                <TextBox x:Name="nodeNameField"  Text="NodeName"/>
+                <Button Content="X" Width="20" Margin="5,0,0,0" Click="ButtonDelete_Click" Background="DarkRed"/>
+            </StackPanel>
         </Border>
 
-        <Border BorderBrush="Black" BorderThickness="1" Grid.Row="2" Background="#3f3f3f3f">
-            <TextBox x:Name="dialogueText" Text="Dialogue Text" Margin="5"/>
+        <Border BorderBrush="Black" BorderThickness="1" Grid.Row="2" Background="#3f3f3f">
+            <TextBox x:Name="dialogueText" Text="Dialogue Text" Margin="5" TextWrapping="Wrap" AcceptsReturn="True" SpellCheck.IsEnabled="True" Height="Auto" TextChanged="dialogueText_TextChanged"/>
         </Border>
 
         <Border BorderBrush="Black" BorderThickness="1" Grid.Row="3" Background="#3f3f3f3f">
