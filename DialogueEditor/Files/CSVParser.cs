@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
 
@@ -68,6 +65,40 @@ namespace DialogueEditor.Files
 				return dialog.FileName;
 			}
 			return null;
+		}
+
+		public static void SaveFile(string filepath, List<Node> nodes)
+		{
+			if (!filePath.EndsWith(".csv") && !filePath.EndsWith(".CSV")) 
+			{
+				filePath += ".csv";
+			}
+
+			using (StreamWriter outputFile = new StreamWriter(filepath))
+			{
+				outputFile.WriteLine("---,DialogueText,Command,CommandArguments,Next,X,Y");
+				foreach (Node node in nodes)
+				{
+					outputFile.WriteLine(node.sourceData.ToCSVrow());
+				}
+			}
+		}
+
+		public static void ExportFile(string filepath, List<Node> nodes)
+		{
+			if (!filePath.EndsWith(".csv") && !filePath.EndsWith(".CSV"))
+			{
+				filePath += ".csv";
+			}
+
+			using (StreamWriter outputFile = new StreamWriter(filepath))
+			{
+				outputFile.WriteLine("---,DialogueText,Command,CommandArguments,Next");
+				foreach (Node node in nodes)
+				{
+					outputFile.WriteLine(node.sourceData.ToUE4exportCSVrow());
+				}
+			}
 		}
 	}
 }

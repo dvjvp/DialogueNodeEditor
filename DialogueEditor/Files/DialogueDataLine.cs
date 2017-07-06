@@ -40,12 +40,12 @@ namespace DialogueEditor.Files
 
 		public string ToCSVrow()
 		{
-			return rowName + ',' + "\"\"\"" + dialogueText + "\"\"\"," + command + ',' + commandArguments + ',' + nextRowName + ',' + nodePositionX + ',' + nodePositionY + '\n';
+			return rowName + ','/* + "\"\"\""*/ + dialogueText + /*"\"\"\*/"," + command + ',' + commandArguments + ',' + nextRowName + ',' + nodePositionX + ',' + nodePositionY;
 		}
 
 		public string ToUE4exportCSVrow()
 		{
-			return rowName + ',' + "\"\"\"" + dialogueText + "\"\"\"," + command + ',' + commandArguments + ',' + nextRowName + '\n';
+			return rowName + ','/* + "\"\"\""*/ + dialogueText + /*"\"\"\*/"," + command + ',' + commandArguments + ',' + nextRowName;
 		}
 
 		public override string ToString()

@@ -11,6 +11,9 @@
             <RowDefinition Height="100"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        
+        <!-- Toolbar-->
+        
         <Border Name="toolbar" Background="#FFF4F4F5" Grid.Row="0" BorderBrush="Black" Margin="5,5,5,0">
             <TabControl HorizontalAlignment="Stretch" >
                 <TabItem Header="File">
@@ -25,19 +28,19 @@
                             <ColumnDefinition Width="80"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Background="#FFc2c2c2" Margin="2.5" ToolTip="Create new empty dialogue file">
+                        <Button Grid.Column="0" Background="#FFc2c2c2" Margin="2.5" ToolTip="Create new empty dialogue file" Click="ButtonNew_Click">
                             <StackPanel Width="40">
                                 <Image Source="Resources/New.png"/>
                                 <TextBlock HorizontalAlignment="Center">New</TextBlock>
                             </StackPanel>
                         </Button>
-                        <Button Grid.Column="1" Background="#FFc2c2c2" Margin="2.5" ToolTip="Save this dialogue to file it was opened from">
+                        <Button Grid.Column="1" Background="#FFc2c2c2" Margin="2.5" ToolTip="Save this dialogue to file it was opened from" Click="ButtonSave_Click">
                             <StackPanel Width="40">
                                 <Image Source="/Resources/Save.png"/>
                                 <TextBlock HorizontalAlignment="Center">Save</TextBlock>
                             </StackPanel>
                         </Button>
-                        <Button Grid.Column="2" Background="#FFc2c2c2" Margin="2.5" ToolTip="Save dialogue as new CSV file">
+                        <Button Grid.Column="2" Background="#FFc2c2c2" Margin="2.5" ToolTip="Save dialogue as new CSV file" Click="ButtonSaveAs_Click">
                             <StackPanel Width="40">
                                 <Image Source="Resources/SaveAs.png"/>
                                 <TextBlock HorizontalAlignment="Center">Save As</TextBlock>
@@ -49,13 +52,13 @@
                                 <TextBlock HorizontalAlignment="Center">Open</TextBlock>
                             </StackPanel>
                         </Button>
-                        <Button Grid.Column="4" Background="#FFc2c2c2" Margin="2.5" ToolTip="Exports this dialogue as .csv for usage in UE4 (without unnecessary things like node positions)">
+                        <Button Grid.Column="4" Background="#FFc2c2c2" Margin="2.5" ToolTip="Exports this dialogue as .csv for usage in UE4 (without unnecessary things like node positions)" Click="ButtonExport_Click">
                             <StackPanel Width="40">
                                 <Image Source="Resources/Export.png"/>
                                 <TextBlock HorizontalAlignment="Center">Export</TextBlock>
                             </StackPanel>
                         </Button>
-                        <Button Grid.Column="5" Background="#FFc2c2c2" Margin="2.5" ToolTip="Aborts all changes and reloads file.">
+                        <Button Grid.Column="5" Background="#FFc2c2c2" Margin="2.5" ToolTip="Aborts all changes and reloads file." Click="ButtonReload_Click">
                             <StackPanel Width="40">
                                 <Image Source="Resources/Reload.png"/>
                                 <TextBlock HorizontalAlignment="Center">Reload</TextBlock>
@@ -75,13 +78,23 @@
                 </TabItem>
             </TabControl>
         </Border>
-        <Border BorderBrush="Black" BorderThickness="1"  Grid.Row="1" Margin="5">
-            <Canvas Name="drawArea" Background="#8f8f8f" MouseWheel="Canvas_MouseWheel">
+        
+        <!-- Draw area -->
+        
+        <Border BorderBrush="Black" BorderThickness="1"  Grid.Row="1" Margin="5" ClipToBounds="True">
+            <Canvas Name="drawArea" Background="#8f8f8f" MouseWheel="Canvas_MouseWheel" MouseDown="drawArea_MouseDown" MouseUp="drawArea_MouseUp" MouseMove="drawArea_MouseMove">
                 <Canvas.RenderTransform>
                     <ScaleTransform x:Name="canvasZoom"/>
                 </Canvas.RenderTransform>
             </Canvas>
         </Border>
+        
+        <!-- Selection drawing -->
+        
+        <Canvas Grid.Row="1" Margin="5" ClipToBounds="True">
+            <!-- Canvas overlaid over the previous one used for rubber band selection -->
+            <Rectangle x:Name="selectionBox" Visibility="Collapsed" Stroke="Black" StrokeThickness="1" StrokeDashArray="2,1" Fill="#262639B0" />
+        </Canvas>
         
     </Grid>
 </Window>

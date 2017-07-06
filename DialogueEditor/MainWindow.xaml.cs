@@ -18,6 +18,8 @@ namespace DialogueEditor
 		protected List<Node> nodes = new List<Node>();
 		public Dictionary<string, Node> nodeMap = new Dictionary<string, Node>();
 		const double zoomSpeed = .05;
+		bool selectionInProgress = false;
+		Point selectionStartPoint;
 
         public MainWindow()
         {
@@ -38,27 +40,27 @@ namespace DialogueEditor
 
 		}
 
-		private void ButtonOpen_Click(object sender, RoutedEventArgs e)
+		
+		private void OpenFile(string filePath)
 		{
-			string location = CSVParser.GetFileOpenLocation();
-			if (location == null) 
-			{
-				return;
-			}
-			foreach (var node in nodes)
-			{
-				node.Delete();
-			}
-			nodes.Clear();
-			nodeMap.Clear();
+			DeleteAllNodes();
 
-			List<DialogueDataLine> lines = CSVParser.ReadCSV(location);
-			List<Tuple<string, string>> connectionsToAdd = new List<Tuple<string, string>>();
+			List<DialogueDataLine> lines = CSVParser.ReadCSV(filePath);
 			foreach (var line in lines)
 			{
 				AddNode(line);
 			}
 			RefreshNodeConnections();
+		}
+
+		private void DeleteAllNodes()
+		{
+			for (int i = nodes.Count - 1; i >= 0; i--)
+			{
+				nodes[i].Delete();
+			}
+			nodes.Clear();
+			nodeMap.Clear();
 		}
 
 		private void Canvas_MouseWheel(object sender, MouseWheelEventArgs e)
@@ -75,7 +77,7 @@ namespace DialogueEditor
 			}
 		}
 
-		protected void AddNode(DialogueDataLine data)
+		private void AddNode(DialogueDataLine data)
 		{
 			Console.WriteLine("Creating node: " + data.rowName);
 
@@ -109,5 +111,144 @@ namespace DialogueEditor
 				n.LoadOutputConnectionDataFromSource();
 			}
 		}
+
+		#region Buttons
+
+		private void ButtonNew_Click(object sender, RoutedEventArgs e)
+		{
+			string filePath = CSVParser.GetFileSaveLocation();
+			if (null == filePath) 
+			{
+				return;
+			}
+
+			CSVParser.SaveFile(filePath, new List<Node>());
+			OpenFile(filePath);
+		}
+
+		private void ButtonOpen_Click(object sender, RoutedEventArgs e)
+		{
+			string location = CSVParser.GetFileOpenLocation();
+			if (location == null)
+			{
+				return;
+			}
+			OpenFile(location);
+		}
+
+		private void ButtonReload_Click(object sender, RoutedEventArgs e)
+		{
+			if (CSVParser.filePath == null) 
+			{
+				MessageBox.Show("First open a file. Only THEN can you reload it.");
+				return;
+			}
+			OpenFile(CSVParser.filePath);
+		}
+
+		private void ButtonSave_Click(object sender, RoutedEventArgs e)
+		{
+			if (CSVParser.filePath == null) 
+			{
+				ButtonSaveAs_Click(sender, e);
+				return;
+			}
+			CSVParser.SaveFile(CSVParser.filePath, nodes);
+		}
+
+		private void ButtonSaveAs_Click(object sender, RoutedEventArgs e)
+		{
+			string filepath = CSVParser.GetFileSaveLocation();
+
+			if (filepath == null) 
+			{
+				return;
+			}
+
+			ButtonSave_Click(sender, e);
+		}
+
+		private void ButtonExport_Click(object sender, RoutedEventArgs e)
+		{
+			string filepath = CSVParser.GetFileSaveLocation();
+
+			if (filepath == null)
+			{
+				return;
+			}
+
+			CSVParser.ExportFile(filepath, nodes);
+		}
+
+		#endregion
+
+		#region Rubberband selection
+
+		private void drawArea_MouseDown(object sender, MouseButtonEventArgs e)
+		{
+			if (Mouse.DirectlyOver != drawArea) 
+			{
+				return;
+			}
+
+			selectionInProgress = true;
+			selectionStartPoint = e.GetPosition(drawArea);
+			drawArea.CaptureMouse();
+
+			Canvas.SetLeft(selectionBox, selectionStartPoint.X);
+			Canvas.SetTop(selectionBox, selectionStartPoint.Y);
+			selectionBox.Width = 0;
+			selectionBox.Height = 0;
+
+			selectionBox.Visibility = Visibility.Visible;
+		}
+
+		private void drawArea_MouseUp(object sender, MouseButtonEventArgs e)
+		{
+			selectionInProgress = false;
+			drawArea.ReleaseMouseCapture();
+			selectionBox.Visibility = Visibility.Collapsed;
+
+			Point mouseUpPos = e.GetPosition(drawArea);
+
+			//Check here for nodes intersecting with rect and select them
+		}
+
+		private void drawArea_MouseMove(object sender, MouseEventArgs e)
+		{
+			if(!selectionInProgress)
+			{
+				return;
+			}
+
+			Point mousePos = e.GetPosition(drawArea);
+
+			if(selectionStartPoint.X<mousePos.X)
+			{
+				Canvas.SetLeft(selectionBox, selectionStartPoint.X);
+				selectionBox.Width = mousePos.X - selectionStartPoint.X;
+			}
+			else
+			{
+				Canvas.SetLeft(selectionBox, mousePos.X);
+				selectionBox.Width = selectionStartPoint.X - mousePos.X;
+			}
+
+
+			if (selectionStartPoint.Y < mousePos.Y)
+			{
+				Canvas.SetTop(selectionBox, selectionStartPoint.Y);
+				selectionBox.Height = mousePos.Y - selectionStartPoint.Y;
+			}
+			else
+			{
+				Canvas.SetTop(selectionBox, mousePos.Y);
+				selectionBox.Height = selectionStartPoint.Y - mousePos.Y;
+			}
+
+		}
+
+		#endregion
+
 	}
 }

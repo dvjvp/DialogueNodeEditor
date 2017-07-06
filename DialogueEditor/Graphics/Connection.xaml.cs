@@ -13,13 +13,14 @@ namespace DialogueEditor
 		public FrameworkElement objFrom, objTo;
 		public Node parentFrom, parentTo;
 		private Point fromSavedPosition = new Point(double.NaN, double.NaN), toSavedPosition = new Point(double.NaN, double.NaN);
-		public double pinOffset;
+		public double pinOffset = 180;
 
-// 		private Point[] line1Points = { new Point(), new Point(), new Point() }, line2Points = { new Point(), new Point(), new Point() };
-// 		private PolyBezierSegment line1, line2;
-// 		private PathFigure fig;
-// 		private Path path = new Path();
+		private Point[] line1Points = { new Point(), new Point(), new Point() }, line2Points = { new Point(), new Point(), new Point() };
+		private PolyBezierSegment line1, line2;
+		private PathFigure fig;
+		private PathGeometry path;
 		private Pen pen;
+		private Brush brush;
 
 		public Connection(Node parentFrom, FrameworkElement inputFrom, Node to)
 		{
@@ -28,9 +29,8 @@ namespace DialogueEditor
 			objFrom = inputFrom;
 			parentTo = to;
 			objTo = to.InputPin;
-// 			path.Stroke = new SolidColorBrush(Colors.Black);
-// 			path.StrokeThickness = 5;
-			pen = new Pen(new SolidColorBrush(Colors.Black), 5);
+			brush = new SolidColorBrush(Colors.Black);
+			pen = new Pen(brush, 5);
 		}
 
 		private static Point GetObjectPosition(FrameworkElement element)
@@ -48,28 +48,32 @@ namespace DialogueEditor
 				fromSavedPosition = GetObjectPosition(parentFrom) + (Vector)objFrom.TransformToAncestor(parentFrom).Transform(new Point(0, 0));
 				toSavedPosition = GetObjectPosition(parentTo) + (Vector)objTo.TransformToAncestor(parentTo).Transform(new Point(0, 0));
 
-// 				Point pFrom = new Point(fromSavedPosition.X + objFrom.ActualWidth / 2, fromSavedPosition.Y + objFrom.ActualHeight);
-// 				Point pTo = new Point(toSavedPosition.X + objTo.ActualWidth / 2, toSavedPosition.Y);
-// 				Point pMiddle = new Point((pFrom.X + pTo.X) / 2, (pFrom.Y + pTo.Y) / 2);
-// 
-// 				line1Points[0] = pFrom;
-// 				line1Points[1] = new Point(pFrom.X, pFrom.Y + pinOffset);
-// 				line1Points[2] = pMiddle;
-// 
-// 				line2Points[0] = pMiddle;
-// 				line2Points[1] = new Point(pTo.X, pTo.Y - pinOffset);
-// 				line2Points[2] = pTo;
-// 
-// 				line1 = new PolyBezierSegment(line1Points, true);
-// 				line2 = new PolyBezierSegment(line2Points, true);
-// 				fig = new PathFigure(pFrom, new PathSegment[] { line1, line2 }, false);
-// 
-// 				path.Data = new PathGeometry(new PathFigure[] { fig });
+				Point pFrom = new Point(fromSavedPosition.X + objFrom.ActualWidth / 2, fromSavedPosition.Y + objFrom.ActualHeight);
+				Point pTo = new Point(toSavedPosition.X + objTo.ActualWidth / 2, toSavedPosition.Y);
+				Point pMiddle = new Point((pFrom.X + pTo.X) / 2, (pFrom.Y + pTo.Y) / 2);
+
+
+				double distance = ((Vector)(pTo - (Vector)pFrom)).Length;
+				pinOffset = distance / 3;
+
+				line1Points[0] = pFrom;
+				line1Points[1] = new Point(pFrom.X, pFrom.Y + pinOffset);
+				line1Points[2] = pMiddle;
+
+				line2Points[0] = pMiddle;
+				line2Points[1] = new Point(pTo.X, pTo.Y - pinOffset);
+				line2Points[2] = pTo;
+
+				line1 = new PolyBezierSegment(line1Points, true);
+				line2 = new PolyBezierSegment(line2Points, true);
+				fig = new PathFigure(pFrom, new PathSegment[] { line1, line2 }, false);
+
+				path = new PathGeometry(new PathFigure[] { fig });
 			}
-			//Render here
-			drawingContext.DrawLine(pen,
-				new Point(fromSavedPosition.X + objFrom.ActualWidth / 2, fromSavedPosition.Y + objFrom.ActualHeight),
-				new Point(toSavedPosition.X + objTo.ActualWidth / 2, toSavedPosition.Y));
+			// 			drawingContext.DrawLine(pen,
+			// 				new Point(fromSavedPosition.X + objFrom.ActualWidth / 2, fromSavedPosition.Y + objFrom.ActualHeight),
+			// 				new Point(toSavedPosition.X + objTo.ActualWidth / 2, toSavedPosition.Y));
+			drawingContext.DrawGeometry(null, pen, path);
 		}
 	}
 }
