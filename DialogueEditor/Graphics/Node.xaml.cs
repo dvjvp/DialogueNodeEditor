@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using DialogueEditor.Files;
+using System.Windows.Media;
 
 namespace DialogueEditor
 {
@@ -19,6 +20,8 @@ namespace DialogueEditor
 
 		public List<Connection> allConnections = new List<Connection>();
 		public List<Connection> outputConnections = new List<Connection>();
+
+		private string connectionHasItemTrue, connectionHasItemFalse;
 
 		public Node(DialogueDataLine sourceData)
 		{
@@ -75,6 +78,9 @@ namespace DialogueEditor
 					outputType.Text = "Normal dialogue";
 					break;
 			}
+
+
+
 		}
 
 		public void LoadOutputConnectionDataFromSource()
@@ -132,7 +138,8 @@ namespace DialogueEditor
 					}
 					break;
 				case "actor-message":
-					try{
+					try
+					{
 						Node target = MainWindow.instance.nodeMap[sourceData.nextRowName];
 						Connection c //= new Connection(outputPinActorEvent, target.InputPin);
 									= new Connection(this, target);
