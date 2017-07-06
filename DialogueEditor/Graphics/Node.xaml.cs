@@ -37,7 +37,7 @@ namespace DialogueEditor
 			nodeNameField.Text = sourceData.rowName;
 			dialogueText.Text = sourceData.dialogueText;
 			SetPosition(sourceData.nodePositionX, sourceData.nodePositionY);
-			switch(sourceData.command)
+			switch (sourceData.command)
 			{
 				case "leave":
 					outputType.Text = "End dialogue";
@@ -80,7 +80,51 @@ namespace DialogueEditor
 			}
 		}
 
+
+
 		#region Connections
+
+		public FrameworkElement[] GetActiveOutputPins()
+		{
+			switch (outputType.Text)
+			{
+
+				case "End dialogue":
+					return null;
+				case "Multiple choices":
+					return new FrameworkElement[] { outputPinMultipleChoices };
+				case "If player has item":
+					return new FrameworkElement[] { outputPinItemTrue, outputPinItemFalse };
+				case "Call actor event":
+					return new FrameworkElement[] { outputPinActorEvent };
+				case "Call level event":
+					return new FrameworkElement[] { outputPinLevelEvent };
+				case "Normal dialogue":
+				default:
+					return new FrameworkElement[] { outputPinNormal };
+			}
+		}
+
+		private void OnPinMousedDown(object sender, RoutedEventArgs e)
+		{
+			RadioButton pin = sender as RadioButton;
+			MainWindow.instance.StartDrawingConnection(this, pin);
+			pin.CaptureMouse();
+			pin.MouseMove += MainWindow.instance.ConnnectionDrawingOnMouseMoved;
+			pin.Click -= OnPinMousedDown;
+			pin.Click += OnPinMousedUp;
+		}
+
+		private void OnPinMousedUp(object sender, RoutedEventArgs e)
+		{
+			RadioButton pin = sender as RadioButton;
+			pin.ReleaseMouseCapture();
+			pin.MouseMove -= MainWindow.instance.ConnnectionDrawingOnMouseMoved;
+			MainWindow.instance.EndDrawingConnection();
+			pin.MouseUp -= OnPinMousedUp;
+			pin.Click -= OnPinMousedUp;
+			pin.Click += OnPinMousedDown;
+		}
 
 		public void LoadOutputConnectionDataFromSource()
 		{
@@ -182,6 +226,90 @@ namespace DialogueEditor
 				(c.Parent as Canvas)?.Children.Remove(c);
 				allConnections.Remove(c);
 				outputConnections.Remove(c);
+			}
+		}
+
+		public bool PinHasConnection(FrameworkElement pin)
+		{
+			if (pin == InputPin) 
+			{
+				foreach (var c in allConnections)
+				{
+					if (c.parentTo == this)
+					{
+						return true;
+					}
+				}			
+			}
+			else
+			{
+				foreach(var c in outputConnections)
+				{
+					if(c.parentFrom == this)
+					{
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+
+		public void TryConnecting(FrameworkElement thisPin, Node other, FrameworkElement otherPin)
+		{
+			if (thisPin == InputPin) 
+			{
+				switch (other.outputType.Text)
+				{
+
+					case "End dialogue":
+						return;
+					case "Multiple choices":
+						other.MakeConnection(this, other);
+						break;
+					case "If player has item":
+						if(other.PinHasConnection(otherPin))
+						{
+
+						}
+						else
+						{
+							other.MakeConnection(this, other);
+						}
+						break;
+					case "Call actor event":
+						break;
+					case "Call level event":
+						break;
+					case "Normal dialogue":
+					default:
+						break;
+				}
+			}
+			else
+			{
+				//I'm not gonna implement the same shit twice, yo
+				other.TryConnecting(otherPin, this, thisPin);
+			}
+		}
+
+		public void TryConnecting(FrameworkElement thisPin, Node other)
+		{
+			switch (other.outputType.Text)
+			{
+
+				case "End dialogue":
+					return;
+				case "Multiple choices":
+					break;
+				case "If player has item":
+					break;
+				case "Call actor event":
+					break;
+				case "Call level event":
+					break;
+				case "Normal dialogue":
+				default:
+					break;
 			}
 		}
 

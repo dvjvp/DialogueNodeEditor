@@ -122,7 +122,7 @@
         <Canvas Grid.Row="1" Margin="5" ClipToBounds="True">
             <!-- Canvas overlaid over the previous one used for rubber band selection -->
             <Rectangle x:Name="selectionBox" Visibility="Collapsed" Stroke="Black" StrokeThickness="1" StrokeDashArray="2,1" Fill="#262639B0" />
-            <Line x:Name="connectionDrawingLine" Visibility="Collapsed" Stroke="LightSteelBlue" StrokeThickness="2"/>
+            <Line x:Name="connectionDrawingLine" Visibility="Collapsed" Stroke="LightSteelBlue" StrokeThickness="5"/>
         </Canvas>
         
     </Grid>

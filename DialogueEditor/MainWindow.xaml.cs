@@ -53,29 +53,57 @@ namespace DialogueEditor
 			connectionDrawingLine.Visibility = Visibility.Visible;
 			connectionDrawSource = sourceNode;
 			connectionDrawingLineStartPin = pin;
-
-
 		}
 
 		public void ConnnectionDrawingOnMouseMoved(object sender, MouseEventArgs args)
 		{
 			var start = connectionDrawSource.GetPosition() + 
 				(Vector)connectionDrawingLineStartPin.TransformToAncestor(connectionDrawSource).Transform(new Point(0, 0));
+			start += new Vector(connectionDrawingLineStartPin.ActualWidth/2, connectionDrawingLineStartPin.ActualHeight/2);
 			var end = args.GetPosition(drawArea);
 
 			connectionDrawingLine.X1 = start.X;
 			connectionDrawingLine.Y1 = start.Y;
 			connectionDrawingLine.X2 = end.X;
 			connectionDrawingLine.Y2 = end.Y;
-			//connectionDrawingLine.InvalidateVisual();
 		}
 
 		public void EndDrawingConnection()
 		{
 			connectionDrawingLine.Visibility = Visibility.Collapsed;
+			connectionDrawingLine.X1 = connectionDrawingLine.X2 = connectionDrawingLine.Y1 = connectionDrawingLine.Y2 = 0;
+			FrameworkElement mouseOverObject = Mouse.DirectlyOver as FrameworkElement;
+
+
+
+			Node other = null;
+			FrameworkElement transform = mouseOverObject;
+
+			while (transform != drawArea && transform != null) 
+			{
+				if(transform is Node)
+				{
+					other = (Node)transform;
+					break;
+				}
+				transform = transform.Parent as FrameworkElement;
+			}
+			if (other == null) 
+			{
+				return;
+			}
+
+
+
+			if (mouseOverObject is RadioButton)
+			{
+				connectionDrawSource.TryConnecting(connectionDrawingLineStartPin, other, mouseOverObject);
+			}
+			else
+			{
+				connectionDrawSource.TryConnecting(connectionDrawingLineStartPin, other);
+			}
 		}
-
-
 
 		#endregion
 
