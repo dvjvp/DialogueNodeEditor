@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DialogueEditor"
              mc:Ignorable="d">
+    
     <Grid x:Name="grid" Background="#010101">
         <Grid.RowDefinitions>
             <RowDefinition Height=".2*"/>
@@ -14,13 +15,18 @@
             <RowDefinition Height=".2*"/>
         </Grid.RowDefinitions>
 
+        
+<!-- INPUTS -->
+
         <!-- Input pin -->
         <Border BorderBrush="Black" BorderThickness="1" Grid.Row="0" Background="#3f3f3f3f">
             <RadioButton VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="InputPin"/>
         </Border>
 
+<!-- BODY -->
+        
         <!-- Node name & Delete button -->
-        <Border BorderBrush="Black" BorderThickness="1" Grid.Row="1" Background="#3f3f3f">
+        <Border x:Name="BorderUp"  BorderBrush="Black" BorderThickness="1" Grid.Row="1" Background="#3f3f3f">
             <DockPanel  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="5,5,5,5">
                 <TextBox x:Name="nodeNameField" Text="NodeName"/>
                 <Button Content="X" Width="20" Margin="5,0,0,0" Click="ButtonDelete_Click" Background="DarkRed" HorizontalAlignment="Right"/>
@@ -28,13 +34,13 @@
         </Border>
 
         <!-- Dialogue text -->
-        <Border BorderBrush="Black" BorderThickness="1" Grid.Row="2" Background="#3f3f3f">
+        <Border x:Name="BorderMiddle"  BorderBrush="Black" BorderThickness="1" Grid.Row="2" Background="#3f3f3f">
             <TextBox x:Name="dialogueText" Text="Dialogue Text" Margin="5" TextWrapping="Wrap" MaxWidth="300"  VerticalScrollBarVisibility="Auto"  SpellCheck.IsEnabled="True" Height="Auto" TextChanged="dialogueText_TextChanged"/>
         </Border>
         
         <!-- Combo box - outputType selection -->
-        <Border BorderBrush="Black" BorderThickness="1" Grid.Row="3" Background="#3f3f3f3f">
-            <ComboBox x:Name="outputType" Margin="5">
+        <Border x:Name="BorderDown"  BorderBrush="Black" BorderThickness="1" Grid.Row="3" Background="#3f3f3f">
+            <ComboBox x:Name="outputType" Margin="5" SelectionChanged="outputType_SelectionChanged">
                 <ComboBoxItem Content="Normal dialogue" IsSelected="True"/>
                 <ComboBoxItem Content="End dialogue"/>
                 <ComboBoxItem Content="Multiple choices"/>
@@ -43,6 +49,8 @@
                 <ComboBoxItem Content="Call level event"/>
             </ComboBox>
         </Border>
+
+<!-- OUTPUTS -->  
         
         <!-- Normal dialogue output -->
         <Border BorderBrush="Black" BorderThickness="1" Grid.Row="4" Background="#3f3f3f3f">

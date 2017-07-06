@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -16,6 +17,7 @@ namespace DialogueEditor
 		public static MainWindow instance;
 		protected List<Node> nodes = new List<Node>();
 		public Dictionary<string, Node> nodeMap = new Dictionary<string, Node>();
+		const double zoomSpeed = .05;
 
         public MainWindow()
         {
@@ -57,6 +59,20 @@ namespace DialogueEditor
 				AddNode(line);
 			}
 			RefreshNodeConnections();
+		}
+
+		private void Canvas_MouseWheel(object sender, MouseWheelEventArgs e)
+		{
+			if(e.Delta>0)
+			{
+				canvasZoom.ScaleX += zoomSpeed;
+				canvasZoom.ScaleY += zoomSpeed;
+			}
+			else
+			{
+				canvasZoom.ScaleX -= zoomSpeed;
+				canvasZoom.ScaleY -= zoomSpeed;
+			}
 		}
 
 		protected void AddNode(DialogueDataLine data)

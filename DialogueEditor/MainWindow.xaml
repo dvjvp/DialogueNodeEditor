@@ -21,7 +21,9 @@
                             <ColumnDefinition Width="80"/>
                             <ColumnDefinition Width="80"/>
                             <ColumnDefinition Width="80"/>
-                            <ColumnDefinition Width="8*"/>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Button Grid.Column="0" Background="#FFc2c2c2" Margin="2.5" ToolTip="Create new empty dialogue file">
                             <StackPanel Width="40">
@@ -53,6 +55,18 @@
                                 <TextBlock HorizontalAlignment="Center">Export</TextBlock>
                             </StackPanel>
                         </Button>
+                        <Button Grid.Column="5" Background="#FFc2c2c2" Margin="2.5" ToolTip="Aborts all changes and reloads file.">
+                            <StackPanel Width="40">
+                                <Image Source="Resources/Reload.png"/>
+                                <TextBlock HorizontalAlignment="Center">Reload</TextBlock>
+                            </StackPanel>
+                        </Button>
+                        <Button Grid.Column="6" Background="#FFc2c2c2" Margin="2.5" ToolTip="Runs dialogue in console, allowing you to test it.">
+                            <StackPanel Width="40">
+                                <Image Source="Resources/Test.png"/>
+                                <TextBlock HorizontalAlignment="Center">Test</TextBlock>
+                            </StackPanel>
+                        </Button>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Node">
@@ -62,7 +76,11 @@
             </TabControl>
         </Border>
         <Border BorderBrush="Black" BorderThickness="1"  Grid.Row="1" Margin="5">
-            <Canvas Name="drawArea" Background="#8f8f8f"/>
+            <Canvas Name="drawArea" Background="#8f8f8f" MouseWheel="Canvas_MouseWheel">
+                <Canvas.RenderTransform>
+                    <ScaleTransform x:Name="canvasZoom"/>
+                </Canvas.RenderTransform>
+            </Canvas>
         </Border>
         
     </Grid>

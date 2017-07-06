@@ -78,10 +78,9 @@ namespace DialogueEditor
 					outputType.Text = "Normal dialogue";
 					break;
 			}
-
-
-
 		}
+
+		#region Connections
 
 		public void LoadOutputConnectionDataFromSource()
 		{
@@ -186,6 +185,9 @@ namespace DialogueEditor
 			}
 		}
 
+
+		#endregion
+
 		#region Translation and position
 
 		public void SetPosition(double x, double y)
@@ -241,7 +243,9 @@ namespace DialogueEditor
 			}
 		}
 
-#endregion
+		#endregion
+
+		#region Interaction
 
 		private void ButtonDelete_Click(object sender, RoutedEventArgs e)
 		{
@@ -254,9 +258,53 @@ namespace DialogueEditor
 			MainWindow.instance.DeleteNode(this);
 		}
 
+		private void outputType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			DeleteAllOutputConnections();
+			//TODO: Change Data in switch below, not only color
+			Brush b;
+			Color c = new Color();
+			c.A = 255;
+			switch (outputType.Text)
+			{
+				
+				case "End dialogue":
+					c.R = 128; c.G = 0; c.B = 0; //red-ish
+					b = new SolidColorBrush(c);
+					break;
+				case "Multiple choices":
+					c.R = 0; c.G = 128; c.B = 64; //green-ish
+					b = new SolidColorBrush(c);
+					break;
+				case "If player has item":
+					c.R = 198; c.G = 198; c.B = 47; //yellow-ish
+					b = new SolidColorBrush(c);
+					break;
+				case "Call actor event":
+					c.R = 47; c.G = 65; c.B = 198; //blue-ish
+					b = new SolidColorBrush(c);
+					break;
+				case "Call level event":
+					c.R = 0; c.G = 10; c.B = 91; //violet-ish
+					b = new SolidColorBrush(c);
+					break;
+				case "Normal dialogue":
+				default:
+					c.R = 0x3f; c.G = 0x3f; c.B = 0x3f; //gray-ish
+					b = new SolidColorBrush(c);
+					break;
+			}
+
+			BorderUp.Background = BorderMiddle.Background = BorderDown.Background = b;
+			//TODO: Fix changing color manually. It doesn't work for some reason.
+		}
+
 		private void dialogueText_TextChanged(object sender, TextChangedEventArgs e)
 		{
 
 		}
+
+
+		#endregion
 	}
 }
