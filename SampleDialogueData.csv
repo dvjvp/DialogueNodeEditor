@@ -1,0 +1,14 @@
+---,DialogueText,Command,CommandArguments,Next,X,Y
+Row1,This is sample linear dialogue.,,,Row2,0,0
+Row2,There are 3 dialogue lines here one after the other.,,,Row3,30,30
+Row3,This is the last one.,leave,,None,60,60
+SecondDialogue1,This dialogue shows usage of a \""branch\"" and message system,,,SecondDialogue2,90,90
+SecondDialogue2,Message to level blueprint is called by \""level-message\"" in Command field with Event name as CommandArguments,level-message,MyEvent,SecondDialogue3,120,120
+SecondDialogue3,Message to actor is called by \""actor-message\"" in Command field with name of the actor as first argument and name of the event as second,actor-message,MyActor MyEvent,SecondDialogue4,150,150
+SecondDialogue4,Checking whether actor has certain item...,has-item,SampleItem 5,SecondDialogue4true SecondDialogue4false,180,180
+SecondDialogue4true,Returned \""true\"". Finishing dialogue,leave,,None,210,210
+SecondDialogue4false,Returned \""false\"". Finishing dialogue.,leave,,None,240,240
+1,This dialogue shows usage of \""options\"",options,,2 3 4,270,270
+2,You selected first option,leave,,None,300,300
+3,You selected second option,leave,,None,330,330
+4,You selected third option,leave,,None,360,360

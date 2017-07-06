@@ -23,25 +23,17 @@ namespace DialogueEditor
 		bool selectionInProgress = false;
 		Point selectionStartPoint;
 
+		Node connectionDrawSource;
+		FrameworkElement connectionDrawingLineStartPin;
+
         public MainWindow()
         {
 			instance = this;
             InitializeComponent();
-			this.KeyDown += MainWindow_KeyDown;
+			KeyDown += MainWindow_KeyDown;
 			//Based loosely on: https://forum.unity3d.com/threads/simple-node-editor.189230/
 		}
-
-		private void MainWindow_KeyDown(object sender, KeyEventArgs e)
-		{
-			switch(e.Key)
-			{
-				case Key.Back:
-				case Key.Delete:
-					DeleteSelectedNodes();
-					break;
-			}
-		}
-
+		
 		private void OpenFile(string filePath)
 		{
 			DeleteAllNodes();
@@ -52,6 +44,52 @@ namespace DialogueEditor
 				AddNode(line);
 			}
 			RefreshNodeConnections();
+		}
+
+		#region Connection creating
+
+		public void StartDrawingConnection(Node sourceNode, FrameworkElement pin)
+		{
+			connectionDrawingLine.Visibility = Visibility.Visible;
+			connectionDrawSource = sourceNode;
+			connectionDrawingLineStartPin = pin;
+
+
+		}
+
+		public void ConnnectionDrawingOnMouseMoved(object sender, MouseEventArgs args)
+		{
+			var start = connectionDrawSource.GetPosition() + 
+				(Vector)connectionDrawingLineStartPin.TransformToAncestor(connectionDrawSource).Transform(new Point(0, 0));
+			var end = args.GetPosition(drawArea);
+
+			connectionDrawingLine.X1 = start.X;
+			connectionDrawingLine.Y1 = start.Y;
+			connectionDrawingLine.X2 = end.X;
+			connectionDrawingLine.Y2 = end.Y;
+			//connectionDrawingLine.InvalidateVisual();
+		}
+
+		public void EndDrawingConnection()
+		{
+			connectionDrawingLine.Visibility = Visibility.Collapsed;
+		}
+
+
+
+		#endregion
+
+		#region Interaction with canvas
+
+		private void MainWindow_KeyDown(object sender, KeyEventArgs e)
+		{
+			switch(e.Key)
+			{
+				case Key.Back:
+				case Key.Delete:
+					DeleteSelectedNodes();
+					break;
+			}
 		}
 
 		private void Canvas_MouseWheel(object sender, MouseWheelEventArgs e)
@@ -68,16 +106,38 @@ namespace DialogueEditor
 			}
 		}
 
+		#endregion
+
 		#region Node adding and deleting
 
-		private void AddNode(DialogueDataLine data)
+		private void ButtonAddNode_Click(object sender, RoutedEventArgs e)
+		{
+			AddNode(new DialogueDataLine());
+		}
+
+		private void drawArea_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			Point mousePos = e.GetPosition(drawArea);
+			AddNode(new DialogueDataLine()).SetPosition(mousePos.X, mousePos.Y);
+		}
+
+		private Node AddNode(DialogueDataLine data)
 		{
 			Console.WriteLine("Creating node: " + data.rowName);
 
 			Node n = new Node(data);
-			nodeMap.Add(n.nodeNameField.Text, n);
+			try
+			{
+				nodeMap.Add(n.nodeNameField.Text, n);
+			}
+			catch (Exception)
+			{
+				n.nodeNameField.Text = Guid.NewGuid().ToString();
+				nodeMap.Add(n.nodeNameField.Text, n);
+			}
 			nodes.Add(n);
 			drawArea.Children.Add(n);
+			return n;
 		}
 
 		private void ButtonDeleteNodes_Click(object sender, RoutedEventArgs e)
@@ -319,6 +379,7 @@ namespace DialogueEditor
 		}
 
 		#endregion
+
 
 	}
 }

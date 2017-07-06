@@ -19,6 +19,11 @@ namespace DialogueEditor.Files
 
 		public DialogueDataLine()
 		{
+			rowName = "NewNodeName";
+			dialogueText = "Hello world!";
+			command = "";
+			commandArguments = "";
+			nextRowName = "None";
 		}
 
 		public DialogueDataLine(string rowName, string dialogueText, string command, string commandArguments, string nextRowName)
