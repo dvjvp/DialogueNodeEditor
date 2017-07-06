@@ -38,6 +38,8 @@
                 <ComboBoxItem Content="Call level event"/>
             </ComboBox>
         </Border>
+        
+        <!-- Normal dialogue output -->
         <Border BorderBrush="Black" BorderThickness="1" Grid.Row="4" Background="#3f3f3f3f">
             <Border.Style>
                 <Style TargetType="Border">
@@ -46,17 +48,19 @@
                         <DataTrigger Binding="{Binding ElementName=outputType, Path=SelectedItem.Content}" Value="Normal dialogue">
                             <Setter Property="Visibility" Value="Visible"/>
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding ElementName=outputType, Path=SelectedItem.Content}" Value="Call actor event">
-                            <Setter Property="Visibility" Value="Visible"/>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding ElementName=outputType, Path=SelectedItem.Content}" Value="Call level event">
-                            <Setter Property="Visibility" Value="Visible"/>
-                        </DataTrigger>
+                        <!-- <DataTrigger Binding="{Binding ElementName=outputType, Path=SelectedItem.Content}" Value="Call actor event"> -->
+                        <!--                             <Setter Property="Visibility" Value="Visible"/> -->
+                        <!--                         </DataTrigger> -->
+                        <!--                         <DataTrigger Binding="{Binding ElementName=outputType, Path=SelectedItem.Content}" Value="Call level event"> -->
+                        <!--                             <Setter Property="Visibility" Value="Visible"/> -->
+                        <!--                         </DataTrigger> -->
                     </Style.Triggers>
                 </Style>
             </Border.Style>
             <RadioButton VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="1"/>
         </Border>
+        
+        <!-- If player has item output -->
         <Border BorderBrush="Black" BorderThickness="1" Grid.Row="4" Background="#3f3f3f3f">
             <Border.Style>
                 <Style TargetType="Border">
@@ -73,6 +77,7 @@
                     <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
+                    <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -83,10 +88,82 @@
                 <Label Grid.Column="1" Grid.Row="0" Foreground="White" HorizontalAlignment="Center">Count</Label>
                 <TextBox x:Name="itemName"  Grid.Column="0" Grid.Row="1" Margin="2"/>
                 <TextBox x:Name="itemCount"  Grid.Column="1" Grid.Row="1" Margin="2"/>
-                <RadioButton Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center"/>
-                <RadioButton Grid.Column="1" Grid.Row="2" HorizontalAlignment="Center"/>
+                <Label Grid.Column="0" Grid.Row="2" Foreground="White" HorizontalAlignment="Center">True</Label>
+                <Label Grid.Column="1" Grid.Row="2" Foreground="White" HorizontalAlignment="Center">False</Label>
+                <RadioButton Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center"/>
+                <RadioButton Grid.Column="1" Grid.Row="3" HorizontalAlignment="Center"/>
+            </Grid>
+        </Border>
+        
+        <!-- Multiple choices output -->
+        <Border BorderBrush="Black" BorderThickness="1" Grid.Row="4" Background="#3f3f3f3f">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=outputType, Path=SelectedItem.Content}" Value="Multiple choices">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <RadioButton VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="1" Background="#FF10EC4C"/>
+        </Border>
+
+        <!-- Call actor event output -->
+        <Border BorderBrush="Black" BorderThickness="1" Grid.Row="4" Background="#3f3f3f3f">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=outputType, Path=SelectedItem.Content}" Value="Call actor event">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0" Grid.Row="0" Foreground="White" HorizontalAlignment="Center">Actor name</Label>
+                <Label Grid.Column="1" Grid.Row="0" Foreground="White" HorizontalAlignment="Center">Event name</Label>
+                <TextBox x:Name="actorName"  Grid.Column="0" Grid.Row="1" Margin="2"/>
+                <TextBox x:Name="actorEventName"  Grid.Column="1" Grid.Row="1" Margin="2"/>
+                <RadioButton Grid.ColumnSpan="2" Grid.Column="0"  Grid.Row="2" HorizontalAlignment="Center"/>
             </Grid>
         </Border>
 
+        <!-- Call level event output -->
+        <Border BorderBrush="Black" BorderThickness="1" Grid.Row="4" Background="#3f3f3f3f">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=outputType, Path=SelectedItem.Content}" Value="Call level event">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Label Grid.Row="0" Foreground="White" HorizontalAlignment="Center">Event name</Label>
+                <TextBox x:Name="levelEventName" Grid.Row="1" Margin="2"/>
+                <RadioButton Grid.Row="2" HorizontalAlignment="Center"/>
+            </Grid>
+        </Border>
     </Grid>
 </UserControl>
