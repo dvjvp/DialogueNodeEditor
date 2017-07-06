@@ -76,6 +76,10 @@
                     <Grid Background="#FFE5E5E5">
                     </Grid>
                 </TabItem>
+                <TabItem Header="Help">
+                    <Grid Background="#FFE5E5E5">
+                    </Grid>
+                </TabItem>
             </TabControl>
         </Border>
         

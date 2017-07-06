@@ -13,7 +13,7 @@ namespace DialogueEditor
 	/// </summary>
 	public partial class Node : UserControl
 	{
-		protected Point dragOffset;
+		public Vector dragOffset;
 		private static Action emptyDelegate = delegate { };
 
 		public DialogueDataLine sourceData;
@@ -210,11 +210,16 @@ namespace DialogueEditor
 		{
 			base.OnMouseDown(e);
 			//Console.WriteLine("Down");
-			CaptureMouse();
-			MouseMove += OnNodeDragged;
 
-			var mousePos = e.GetPosition((IInputElement)Parent);
-			dragOffset =  GetPosition() - (Vector)mousePos;
+			if(false == MainWindow.instance.selection.Contains(this))
+			{
+				MainWindow.instance.ClearSelection();
+				MainWindow.instance.selection.Add(this);
+			}
+
+			MainWindow.instance.StartDragnDropSelected((Vector)e.GetPosition((IInputElement)Parent));
+			CaptureMouse();
+			MouseMove += MainWindow.instance.DragnDropSelectedOnMove;
 		}
 
 
@@ -223,18 +228,18 @@ namespace DialogueEditor
 			base.OnMouseUp(e);
 			//Console.WriteLine("Up");
 			ReleaseMouseCapture();
-			MouseMove -= OnNodeDragged;
+			MouseMove -= MainWindow.instance.DragnDropSelectedOnMove;
 		}
 
-		protected void OnNodeDragged(object sender, MouseEventArgs e)
-		{
-			var mousePos = e.GetPosition((IInputElement)Parent);
-			mousePos = mousePos + (Vector)dragOffset;
-			SetPosition(mousePos.X, mousePos.Y);
-			ForceConnectionUpdate();
-		}
+// 		protected void OnNodeDragged(object sender, MouseEventArgs e)
+// 		{
+// 			var mousePos = e.GetPosition((IInputElement)Parent);
+// 			mousePos = mousePos + (Vector)dragOffset;
+// 			SetPosition(mousePos.X, mousePos.Y);
+// 			ForceConnectionUpdate();
+// 		}
 
-		protected void ForceConnectionUpdate()
+		public void ForceConnectionUpdate()
 		{
 			//(Parent as Canvas).Dispatcher.Invoke(emptyDelegate, System.Windows.Threading.DispatcherPriority.Render);
 			foreach (var connection in allConnections)
@@ -246,6 +251,12 @@ namespace DialogueEditor
 		#endregion
 
 		#region Interaction
+
+		public void SetSelected(bool selected)
+		{
+			selectionBorder.Background = selected ? new SolidColorBrush(Color.FromRgb(224, 224, 128)) : null;
+			Console.WriteLine("selected node: " + nodeNameField.Text);
+		}
 
 		private void ButtonDelete_Click(object sender, RoutedEventArgs e)
 		{

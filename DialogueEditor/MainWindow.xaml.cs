@@ -17,6 +17,8 @@ namespace DialogueEditor
 		public static MainWindow instance;
 		protected List<Node> nodes = new List<Node>();
 		public Dictionary<string, Node> nodeMap = new Dictionary<string, Node>();
+		public List<Node> selection = new List<Node>();
+
 		const double zoomSpeed = .05;
 		bool selectionInProgress = false;
 		Point selectionStartPoint;
@@ -25,19 +27,7 @@ namespace DialogueEditor
         {
 			instance = this;
             InitializeComponent();
-			DialogueDataLine line = new DialogueDataLine("rowName", "dialogueText", "", "", "rowName");
-
-			//Node node1 = new Node(line), node2 = new Node(line);
-			//drawArea.Children.Add(node1);
-			//drawArea.Children.Add(node2);
-
-			//node1.SetPosition(100, 100);
-			//node2.SetPosition(300, 300);
-			//Connection u1 = new Connection(node1, node2);
-			//drawArea.Children.Add(u1);
-
-			////https://forum.unity3d.com/threads/simple-node-editor.189230/
-
+			//Based loosely on: https://forum.unity3d.com/threads/simple-node-editor.189230/
 		}
 
 		
@@ -184,6 +174,35 @@ namespace DialogueEditor
 
 		#region Rubberband selection
 
+		public void StartDragnDropSelected(Vector mousePos)
+		{
+			for (int i = 0; i < selection.Count; i++)
+			{
+				selection[i].dragOffset = (Vector)selection[i].GetPosition() - mousePos;
+			}
+		}
+
+		public void DragnDropSelectedOnMove(object sender, MouseEventArgs e)
+		{
+			var mousePos = e.GetPosition(drawArea);
+
+			for (int i = 0; i < selection.Count; i++)
+			{
+				var updatedPosition = mousePos + selection[i].dragOffset;
+				selection[i].SetPosition(updatedPosition.X, updatedPosition.Y);
+				selection[i].ForceConnectionUpdate();
+			}
+		}
+
+		public void ClearSelection()
+		{
+			foreach (var node in nodes)
+			{
+				node.SetSelected(false);
+			}
+			selection.Clear();
+		}
+
 		private void drawArea_MouseDown(object sender, MouseButtonEventArgs e)
 		{
 			if (Mouse.DirectlyOver != drawArea) 
@@ -201,17 +220,39 @@ namespace DialogueEditor
 			selectionBox.Height = 0;
 
 			selectionBox.Visibility = Visibility.Visible;
+			ClearSelection();
 		}
 
 		private void drawArea_MouseUp(object sender, MouseButtonEventArgs e)
 		{
+			if(!selectionInProgress)
+			{
+				return;
+			}
 			selectionInProgress = false;
 			drawArea.ReleaseMouseCapture();
-			selectionBox.Visibility = Visibility.Collapsed;
 
 			Point mouseUpPos = e.GetPosition(drawArea);
+			selectionBox.Visibility = Visibility.Collapsed;
 
 			//Check here for nodes intersecting with rect and select them
+
+			foreach (var node in nodes)
+			{
+				if(AreIntersecting(selectionBox,node))
+				{
+					selection.Add(node);
+					node.SetSelected(true);
+				}
+			}
+
+		}
+
+		private bool AreIntersecting(Rectangle first, FrameworkElement second)
+		{
+			Rect r1 = new Rect(Canvas.GetLeft(first), Canvas.GetTop(first), first.Width, first.Height);
+			Rect r2 = new Rect(Canvas.GetLeft(second), Canvas.GetTop(second), second.ActualWidth, second.ActualHeight);
+			return r1.IntersectsWith(r2);
 		}
 
 		private void drawArea_MouseMove(object sender, MouseEventArgs e)
