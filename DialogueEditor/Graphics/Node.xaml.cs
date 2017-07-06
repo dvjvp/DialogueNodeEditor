@@ -34,6 +34,47 @@ namespace DialogueEditor
 			nodeNameField.Text = sourceData.rowName;
 			dialogueText.Text = sourceData.dialogueText;
 			SetPosition(sourceData.nodePositionX, sourceData.nodePositionY);
+			switch(sourceData.command)
+			{
+				case "leave":
+					outputType.Text = "End dialogue";
+					break;
+				case "options":
+					outputType.Text = "Multiple choices";
+					break;
+				case "has-item":
+					outputType.Text = "If player has item";
+					string[] _s = sourceData.commandArguments.Split(' ');
+					itemName.Text = _s[0];
+					try
+					{
+						itemCount.Text = _s[1];
+					}
+					catch (Exception)
+					{
+						itemCount.Text = "1";
+					}
+					break;
+				case "actor-message":
+					outputType.Text = "Call actor event";
+					try
+					{
+						string[] s = sourceData.commandArguments.Split(' ');
+						actorName.Text = s[0];
+						actorEventName.Text = s[1];
+					}
+					catch (Exception)
+					{
+					}
+					break;
+				case "level-message":
+					outputType.Text = "Call level event";
+					levelEventName.Text = sourceData.commandArguments;
+					break;
+				default:
+					outputType.Text = "Normal dialogue";
+					break;
+			}
 		}
 
 		public void LoadOutputConnectionDataFromSource()
@@ -57,6 +98,7 @@ namespace DialogueEditor
 		{
 			return new Point(Canvas.GetLeft(this), Canvas.GetTop(this));
 		}
+#region Drag'n'Drop node
 
 		protected override void OnMouseDown(MouseButtonEventArgs e)
 		{
@@ -94,6 +136,8 @@ namespace DialogueEditor
 				connection.InvalidateVisual();
 			}
 		}
+
+#endregion
 
 		private void ButtonDelete_Click(object sender, RoutedEventArgs e)
 		{
