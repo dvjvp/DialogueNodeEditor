@@ -20,8 +20,6 @@ namespace DialogueEditor
 		public List<Connection> allConnections = new List<Connection>();
 		public List<Connection> outputConnections = new List<Connection>();
 
-		private string connectionHasItemTrue, connectionHasItemFalse;
-
 		public Node(DialogueDataLine sourceData)
 		{
 			InitializeComponent();
@@ -87,7 +85,7 @@ namespace DialogueEditor
 					break;
 				case "options":
 					{
-						string[] s = sourceData.commandArguments.Split(' ');
+						string[] s = sourceData.nextRowName.Split(' ');
 						foreach (var item in s)
 						{
 							try
@@ -106,7 +104,7 @@ namespace DialogueEditor
 					break;
 				case "has-item":
 					{
-						string[] s = sourceData.commandArguments.Split(' ');
+						string[] s = sourceData.nextRowName.Split(' ');
 						try
 						{
 							connectionHasItemTrue = s[0];
