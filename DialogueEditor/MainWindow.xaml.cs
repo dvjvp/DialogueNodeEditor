@@ -27,10 +27,21 @@ namespace DialogueEditor
         {
 			instance = this;
             InitializeComponent();
+			this.KeyDown += MainWindow_KeyDown;
 			//Based loosely on: https://forum.unity3d.com/threads/simple-node-editor.189230/
 		}
 
-		
+		private void MainWindow_KeyDown(object sender, KeyEventArgs e)
+		{
+			switch(e.Key)
+			{
+				case Key.Back:
+				case Key.Delete:
+					DeleteSelectedNodes();
+					break;
+			}
+		}
+
 		private void OpenFile(string filePath)
 		{
 			DeleteAllNodes();
@@ -41,16 +52,6 @@ namespace DialogueEditor
 				AddNode(line);
 			}
 			RefreshNodeConnections();
-		}
-
-		private void DeleteAllNodes()
-		{
-			for (int i = nodes.Count - 1; i >= 0; i--)
-			{
-				nodes[i].Delete();
-			}
-			nodes.Clear();
-			nodeMap.Clear();
 		}
 
 		private void Canvas_MouseWheel(object sender, MouseWheelEventArgs e)
@@ -67,6 +68,8 @@ namespace DialogueEditor
 			}
 		}
 
+		#region Node adding and deleting
+
 		private void AddNode(DialogueDataLine data)
 		{
 			Console.WriteLine("Creating node: " + data.rowName);
@@ -75,6 +78,30 @@ namespace DialogueEditor
 			nodeMap.Add(n.nodeNameField.Text, n);
 			nodes.Add(n);
 			drawArea.Children.Add(n);
+		}
+
+		private void ButtonDeleteNodes_Click(object sender, RoutedEventArgs e)
+		{
+			DeleteSelectedNodes();
+		}
+
+		private void DeleteAllNodes()
+		{
+			for (int i = nodes.Count - 1; i >= 0; i--)
+			{
+				nodes[i].Delete();
+			}
+			nodes.Clear();
+			nodeMap.Clear();
+		}
+
+		private void DeleteSelectedNodes()
+		{
+			for (int i = selection.Count - 1; i >= 0; i--)
+			{
+				selection[i].Delete();
+			}
+			selection.Clear();
 		}
 
 		public void DeleteNode(Node node)
@@ -101,6 +128,8 @@ namespace DialogueEditor
 				n.LoadOutputConnectionDataFromSource();
 			}
 		}
+
+		#endregion
 
 		#region Buttons
 

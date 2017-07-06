@@ -74,6 +74,23 @@
                 </TabItem>
                 <TabItem Header="Node">
                     <Grid Background="#FFE5E5E5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" Background="#FFc2c2c2" Margin="2.5" ToolTip="Deletes selected nodes. Same as key 'Delete'" Click="ButtonDeleteNodes_Click">
+                            <StackPanel >
+                                <Image Source="Resources/DeleteNodes.png" Width="40"/>
+                                <TextBlock HorizontalAlignment="Center">Delete</TextBlock>
+                            </StackPanel>
+                        </Button>
+                        
                     </Grid>
                 </TabItem>
                 <TabItem Header="Help">

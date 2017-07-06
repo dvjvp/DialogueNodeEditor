@@ -231,17 +231,8 @@ namespace DialogueEditor
 			MouseMove -= MainWindow.instance.DragnDropSelectedOnMove;
 		}
 
-// 		protected void OnNodeDragged(object sender, MouseEventArgs e)
-// 		{
-// 			var mousePos = e.GetPosition((IInputElement)Parent);
-// 			mousePos = mousePos + (Vector)dragOffset;
-// 			SetPosition(mousePos.X, mousePos.Y);
-// 			ForceConnectionUpdate();
-// 		}
-
 		public void ForceConnectionUpdate()
 		{
-			//(Parent as Canvas).Dispatcher.Invoke(emptyDelegate, System.Windows.Threading.DispatcherPriority.Render);
 			foreach (var connection in allConnections)
 			{
 				connection.InvalidateVisual();
