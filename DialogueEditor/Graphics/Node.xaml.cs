@@ -97,9 +97,7 @@ namespace DialogueEditor
 							try
 							{
 								Node target = MainWindow.instance.nodeMap[item];
-								Connection c //= new Connection(outputPinMultipleChoices, target.InputPin);
-									= new Connection(this, target);
-								RegisterConnection(target, c);
+								MakeConnection(target, outputPinMultipleChoices);
 							}
 							catch (Exception e)
 							{
@@ -115,9 +113,7 @@ namespace DialogueEditor
 						{
 							connectionHasItemTrue = s[0];
 							Node target = MainWindow.instance.nodeMap[connectionHasItemTrue];
-							Connection c //= new Connection(outputPinItemTrue, target.InputPin);
-									= new Connection(this, target);
-							RegisterConnection(target, c);
+							MakeConnection(target, outputPinItemTrue);
 						}
 						catch (Exception e)
 						{
@@ -127,9 +123,7 @@ namespace DialogueEditor
 						{
 							connectionHasItemFalse = s[1];
 							Node target = MainWindow.instance.nodeMap[connectionHasItemFalse];
-							Connection c //= new Connection(outputPinItemFalse, target.InputPin);
-									= new Connection(this, target);
-							RegisterConnection(target, c);
+							MakeConnection(target, outputPinItemFalse);
 						}
 						catch (Exception e)
 						{
@@ -141,9 +135,7 @@ namespace DialogueEditor
 					try
 					{
 						Node target = MainWindow.instance.nodeMap[sourceData.nextRowName];
-						Connection c //= new Connection(outputPinActorEvent, target.InputPin);
-									= new Connection(this, target);
-						RegisterConnection(target, c);
+						MakeConnection(target, outputPinActorEvent);
 					}
 					catch (Exception e)
 					{
@@ -153,9 +145,7 @@ namespace DialogueEditor
 				case "level-message":
 					try{
 						Node target = MainWindow.instance.nodeMap[sourceData.nextRowName];
-						Connection c //= new Connection(outputPinLevelEvent, target.InputPin);
-									= new Connection(this, target);
-						RegisterConnection(target, c);
+						MakeConnection(target, outputPinLevelEvent);
 					}
 					catch (Exception e)
 					{
@@ -165,9 +155,7 @@ namespace DialogueEditor
 				default:
 					try{
 						Node target = MainWindow.instance.nodeMap[sourceData.nextRowName];
-						Connection c //= new Connection(outputPinNormal, target.InputPin);
-									= new Connection(this, target);
-						RegisterConnection(target, c);
+						MakeConnection(target, outputPinNormal);
 					}
 					catch (Exception e)
 					{
@@ -177,8 +165,9 @@ namespace DialogueEditor
 			}
 		}
 
-		private void RegisterConnection(Node to, Connection c)
+		public void MakeConnection(Node to, FrameworkElement pinFrom)
 		{
+			Connection c = new Connection(this, pinFrom, to);
 			to.allConnections.Add(c);
 			allConnections.Add(c);
 			outputConnections.Add(c);

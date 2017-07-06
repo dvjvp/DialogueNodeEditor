@@ -11,6 +11,7 @@ namespace DialogueEditor
 	public partial class Connection : UserControl
 	{
 		public FrameworkElement objFrom, objTo;
+		public Node parentFrom, parentTo;
 		private Point fromSavedPosition = new Point(double.NaN, double.NaN), toSavedPosition = new Point(double.NaN, double.NaN);
 		public double pinOffset;
 
@@ -20,11 +21,13 @@ namespace DialogueEditor
 // 		private Path path = new Path();
 		private Pen pen;
 
-		public Connection(FrameworkElement from, FrameworkElement to)
+		public Connection(Node parentFrom, FrameworkElement inputFrom, Node to)
 		{
 			InitializeComponent();
-			this.objFrom = from;
-			this.objTo = to;
+			this.parentFrom = parentFrom;
+			objFrom = inputFrom;
+			parentTo = to;
+			objTo = to.InputPin;
 // 			path.Stroke = new SolidColorBrush(Colors.Black);
 // 			path.StrokeThickness = 5;
 			pen = new Pen(new SolidColorBrush(Colors.Black), 5);
@@ -38,15 +41,12 @@ namespace DialogueEditor
 		{
 			base.OnRender(drawingContext);
 
-			Node n1 = objFrom as Node;
-			System.Console.Write(n1.InputPin.TransformToAncestor(n1));
 
-
-			if(fromSavedPosition!=GetObjectPosition(objFrom) || toSavedPosition!=GetObjectPosition(objTo))
+			if (fromSavedPosition != GetObjectPosition(objFrom) || toSavedPosition != GetObjectPosition(objTo))
 			{
 				//Set variables to new values here
-				fromSavedPosition = GetObjectPosition(objFrom);
-				toSavedPosition = GetObjectPosition(objTo);
+				fromSavedPosition = GetObjectPosition(parentFrom) + (Vector)objFrom.TransformToAncestor(parentFrom).Transform(new Point(0, 0));
+				toSavedPosition = GetObjectPosition(parentTo) + (Vector)objTo.TransformToAncestor(parentTo).Transform(new Point(0, 0));
 
 // 				Point pFrom = new Point(fromSavedPosition.X + objFrom.ActualWidth / 2, fromSavedPosition.Y + objFrom.ActualHeight);
 // 				Point pTo = new Point(toSavedPosition.X + objTo.ActualWidth / 2, toSavedPosition.Y);
