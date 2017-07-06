@@ -21,20 +21,20 @@ namespace DialogueEditor
         {
 			instance = this;
             InitializeComponent();
-// 			DialogueDataLine line = new DialogueDataLine("rowName", "dialogueText", "", "", "rowName");
-// 
-// 			Node node1 = new Node(line), node2 = new Node(line);
-// 			drawArea.Children.Add(node1);
-// 			drawArea.Children.Add(node2);
-// 
-// 			node1.SetPosition(100, 100);
-// 			node2.SetPosition(300, 300);
-// 			Connection u1 = new Connection(node1, node2);
-// 			drawArea.Children.Add(u1);
-// 
-//             //https://forum.unity3d.com/threads/simple-node-editor.189230/
+			DialogueDataLine line = new DialogueDataLine("rowName", "dialogueText", "", "", "rowName");
 
-        }
+			//Node node1 = new Node(line), node2 = new Node(line);
+			//drawArea.Children.Add(node1);
+			//drawArea.Children.Add(node2);
+
+			//node1.SetPosition(100, 100);
+			//node2.SetPosition(300, 300);
+			//Connection u1 = new Connection(node1, node2);
+			//drawArea.Children.Add(u1);
+
+			////https://forum.unity3d.com/threads/simple-node-editor.189230/
+
+		}
 
 		private void ButtonOpen_Click(object sender, RoutedEventArgs e)
 		{
@@ -43,6 +43,12 @@ namespace DialogueEditor
 			{
 				return;
 			}
+			foreach (var node in nodes)
+			{
+				node.Delete();
+			}
+			nodes.Clear();
+			nodeMap.Clear();
 
 			List<DialogueDataLine> lines = CSVParser.ReadCSV(location);
 			List<Tuple<string, string>> connectionsToAdd = new List<Tuple<string, string>>();
@@ -50,7 +56,7 @@ namespace DialogueEditor
 			{
 				AddNode(line);
 			}
-			//RefreshNodeConnections();
+			RefreshNodeConnections();
 		}
 
 		protected void AddNode(DialogueDataLine data)
@@ -65,11 +71,11 @@ namespace DialogueEditor
 
 		public void DeleteNode(Node node)
 		{
-			//node.DeleteAllOutputConnections();
+			node.DeleteAllOutputConnections();
 			drawArea.Children.Remove(node);
 			nodeMap.Remove(node.nodeNameField.Text);
 			nodes.Remove(node);
-			//RefreshNodeConnections();
+			RefreshNodeConnections();
 		}
 
 		protected void RefreshNodeConnections()

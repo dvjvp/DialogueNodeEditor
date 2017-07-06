@@ -20,6 +20,8 @@ namespace DialogueEditor
 		public List<Connection> allConnections = new List<Connection>();
 		public List<Connection> outputConnections = new List<Connection>();
 
+		private string connectionHasItemTrue, connectionHasItemFalse;
+
 		public Node(DialogueDataLine sourceData)
 		{
 			InitializeComponent();
@@ -79,13 +81,118 @@ namespace DialogueEditor
 
 		public void LoadOutputConnectionDataFromSource()
 		{
-			throw new NotImplementedException();
+			switch (sourceData.command)
+			{
+				case "leave":
+					break;
+				case "options":
+					{
+						string[] s = sourceData.commandArguments.Split(' ');
+						foreach (var item in s)
+						{
+							try
+							{
+								Node target = MainWindow.instance.nodeMap[item];
+								Connection c //= new Connection(outputPinMultipleChoices, target.InputPin);
+									= new Connection(this, target);
+								RegisterConnection(target, c);
+							}
+							catch (Exception e)
+							{
+								Console.WriteLine("Exception in LoadOutputConnectionDataFromSource():" + e);
+							}
+						}
+					}
+					break;
+				case "has-item":
+					{
+						string[] s = sourceData.commandArguments.Split(' ');
+						try
+						{
+							connectionHasItemTrue = s[0];
+							Node target = MainWindow.instance.nodeMap[connectionHasItemTrue];
+							Connection c //= new Connection(outputPinItemTrue, target.InputPin);
+									= new Connection(this, target);
+							RegisterConnection(target, c);
+						}
+						catch (Exception e)
+						{
+							Console.WriteLine("Exception in LoadOutputConnectionDataFromSource():" + e);
+						}
+						try
+						{
+							connectionHasItemFalse = s[1];
+							Node target = MainWindow.instance.nodeMap[connectionHasItemFalse];
+							Connection c //= new Connection(outputPinItemFalse, target.InputPin);
+									= new Connection(this, target);
+							RegisterConnection(target, c);
+						}
+						catch (Exception e)
+						{
+							Console.WriteLine("Exception in LoadOutputConnectionDataFromSource():" + e);
+						}
+					}
+					break;
+				case "actor-message":
+					try{
+						Node target = MainWindow.instance.nodeMap[sourceData.nextRowName];
+						Connection c //= new Connection(outputPinActorEvent, target.InputPin);
+									= new Connection(this, target);
+						RegisterConnection(target, c);
+					}
+					catch (Exception e)
+					{
+						Console.WriteLine("Exception in LoadOutputConnectionDataFromSource():" + e);
+					}
+					break;
+				case "level-message":
+					try{
+						Node target = MainWindow.instance.nodeMap[sourceData.nextRowName];
+						Connection c //= new Connection(outputPinLevelEvent, target.InputPin);
+									= new Connection(this, target);
+						RegisterConnection(target, c);
+					}
+					catch (Exception e)
+					{
+						Console.WriteLine("Exception in LoadOutputConnectionDataFromSource():" + e);
+					}
+					break;
+				default:
+					try{
+						Node target = MainWindow.instance.nodeMap[sourceData.nextRowName];
+						Connection c //= new Connection(outputPinNormal, target.InputPin);
+									= new Connection(this, target);
+						RegisterConnection(target, c);
+					}
+					catch (Exception e)
+					{
+						Console.WriteLine("Exception in LoadOutputConnectionDataFromSource():" + e);
+					}
+					break;
+			}
+		}
+
+		private void RegisterConnection(Node to, Connection c)
+		{
+			to.allConnections.Add(c);
+			allConnections.Add(c);
+			outputConnections.Add(c);
+			(Parent as Canvas)?.Children.Add(c);
 		}
 
 		public void DeleteAllOutputConnections()
 		{
-			throw new NotImplementedException();
+			for (int i = outputConnections.Count - 1; i >= 0; i--)
+			{
+				Connection c = outputConnections[i];
+				(c.objTo.Parent as Node)?.allConnections.Remove(c);
+				(c.Parent as Canvas)?.Children.Remove(c);
+				allConnections.Remove(c);
+				outputConnections.Remove(c);
+			}
 		}
+
+		#region Translation and position
 
 		public void SetPosition(double x, double y)
 		{
@@ -98,12 +205,15 @@ namespace DialogueEditor
 		{
 			return new Point(Canvas.GetLeft(this), Canvas.GetTop(this));
 		}
-#region Drag'n'Drop node
+
+		#endregion
+
+		#region Drag'n'Drop node
 
 		protected override void OnMouseDown(MouseButtonEventArgs e)
 		{
 			base.OnMouseDown(e);
-			Console.WriteLine("Down");
+			//Console.WriteLine("Down");
 			CaptureMouse();
 			MouseMove += OnNodeDragged;
 
@@ -115,7 +225,7 @@ namespace DialogueEditor
 		protected override void OnMouseUp(MouseButtonEventArgs e)
 		{
 			base.OnMouseUp(e);
-			Console.WriteLine("Up");
+			//Console.WriteLine("Up");
 			ReleaseMouseCapture();
 			MouseMove -= OnNodeDragged;
 		}

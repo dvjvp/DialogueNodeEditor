@@ -14,10 +14,12 @@
             <RowDefinition Height=".2*"/>
         </Grid.RowDefinitions>
 
+        <!-- Input pin -->
         <Border BorderBrush="Black" BorderThickness="1" Grid.Row="0" Background="#3f3f3f3f">
             <RadioButton VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="InputPin"/>
         </Border>
 
+        <!-- Node name & Delete button -->
         <Border BorderBrush="Black" BorderThickness="1" Grid.Row="1" Background="#3f3f3f">
             <DockPanel  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="5,5,5,5">
                 <TextBox x:Name="nodeNameField" Text="NodeName"/>
@@ -25,9 +27,12 @@
             </DockPanel>
         </Border>
 
+        <!-- Dialogue text -->
         <Border BorderBrush="Black" BorderThickness="1" Grid.Row="2" Background="#3f3f3f">
             <TextBox x:Name="dialogueText" Text="Dialogue Text" Margin="5" TextWrapping="Wrap" MaxWidth="300"  VerticalScrollBarVisibility="Auto"  SpellCheck.IsEnabled="True" Height="Auto" TextChanged="dialogueText_TextChanged"/>
         </Border>
+        
+        <!-- Combo box - outputType selection -->
         <Border BorderBrush="Black" BorderThickness="1" Grid.Row="3" Background="#3f3f3f3f">
             <ComboBox x:Name="outputType" Margin="5">
                 <ComboBoxItem Content="Normal dialogue" IsSelected="True"/>
@@ -57,7 +62,7 @@
                     </Style.Triggers>
                 </Style>
             </Border.Style>
-            <RadioButton VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="1"/>
+            <RadioButton x:Name="outputPinNormal"  VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="1"/>
         </Border>
         
         <!-- If player has item output -->
@@ -90,8 +95,8 @@
                 <TextBox x:Name="itemCount"  Grid.Column="1" Grid.Row="1" Margin="2"/>
                 <Label Grid.Column="0" Grid.Row="2" Foreground="White" HorizontalAlignment="Center">True</Label>
                 <Label Grid.Column="1" Grid.Row="2" Foreground="White" HorizontalAlignment="Center">False</Label>
-                <RadioButton Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center"/>
-                <RadioButton Grid.Column="1" Grid.Row="3" HorizontalAlignment="Center"/>
+                <RadioButton x:Name="outputPinItemTrue"  Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center"/>
+                <RadioButton x:Name="outputPinItemFalse"  Grid.Column="1" Grid.Row="3" HorizontalAlignment="Center"/>
             </Grid>
         </Border>
         
@@ -107,7 +112,7 @@
                     </Style.Triggers>
                 </Style>
             </Border.Style>
-            <RadioButton VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="1" Background="#FF10EC4C"/>
+            <RadioButton x:Name="outputPinMultipleChoices"  VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="1" Background="#FF10EC4C"/>
         </Border>
 
         <!-- Call actor event output -->
@@ -137,7 +142,7 @@
                 <Label Grid.Column="1" Grid.Row="0" Foreground="White" HorizontalAlignment="Center">Event name</Label>
                 <TextBox x:Name="actorName"  Grid.Column="0" Grid.Row="1" Margin="2"/>
                 <TextBox x:Name="actorEventName"  Grid.Column="1" Grid.Row="1" Margin="2"/>
-                <RadioButton Grid.ColumnSpan="2" Grid.Column="0"  Grid.Row="2" HorizontalAlignment="Center"/>
+                <RadioButton x:Name="outputPinActorEvent"  Grid.ColumnSpan="2" Grid.Column="0"  Grid.Row="2" HorizontalAlignment="Center"/>
             </Grid>
         </Border>
 
@@ -162,7 +167,7 @@
 
                 <Label Grid.Row="0" Foreground="White" HorizontalAlignment="Center">Event name</Label>
                 <TextBox x:Name="levelEventName" Grid.Row="1" Margin="2"/>
-                <RadioButton Grid.Row="2" HorizontalAlignment="Center"/>
+                <RadioButton x:Name="outputPinLevelEvent"  Grid.Row="2" HorizontalAlignment="Center"/>
             </Grid>
         </Border>
     </Grid>

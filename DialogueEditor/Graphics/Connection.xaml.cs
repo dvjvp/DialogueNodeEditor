@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace DialogueEditor
@@ -20,7 +10,7 @@ namespace DialogueEditor
 	/// </summary>
 	public partial class Connection : UserControl
 	{
-		public Node objFrom, objTo;
+		public FrameworkElement objFrom, objTo;
 		private Point fromSavedPosition = new Point(double.NaN, double.NaN), toSavedPosition = new Point(double.NaN, double.NaN);
 		public double pinOffset;
 
@@ -30,7 +20,7 @@ namespace DialogueEditor
 		private Path path = new Path();
 		private Pen pen;
 
-		public Connection(Node from, Node to)
+		public Connection(FrameworkElement from, FrameworkElement to)
 		{
 			InitializeComponent();
 			this.objFrom = from;
@@ -38,8 +28,6 @@ namespace DialogueEditor
 			path.Stroke = new SolidColorBrush(Colors.Black);
 			path.StrokeThickness = 5;
 			pen = new Pen(new SolidColorBrush(Colors.Black), 5);
-			objFrom.allConnections.Add(this);
-			objTo.allConnections.Add(this);
 		}
 
 		private static Point GetObjectPosition(FrameworkElement element)
