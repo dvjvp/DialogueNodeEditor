@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DialogueEditor"
         mc:Ignorable="d"
-        Title="Dialogue Editor" Width="1024" Height="768" >
+        Title="Dialogue Editor v. 0.1 Alpha" Width="1024" Height="768" >
     <Grid Name="grid">
         <Grid.RowDefinitions>
             <RowDefinition Height="100"/>
@@ -19,6 +19,7 @@
                 <TabItem Header="File">
                     <Grid Background="#FFE5E5E5">
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="80"/>
                             <ColumnDefinition Width="80"/>
                             <ColumnDefinition Width="80"/>
                             <ColumnDefinition Width="80"/>
@@ -64,10 +65,16 @@
                                 <TextBlock HorizontalAlignment="Center">Reload</TextBlock>
                             </StackPanel>
                         </Button>
-                        <Button Grid.Column="6" Background="#FFc2c2c2" Margin="2.5" ToolTip="Runs dialogue in console, allowing you to test it.">
+                        <Button Grid.Column="6" Background="#FFc2c2c2" Margin="2.5" ToolTip="Runs dialogue in console, allowing you to test it." Click="ButtonTest_Click">
                             <StackPanel Width="40">
                                 <Image Source="Resources/Test.png"/>
                                 <TextBlock HorizontalAlignment="Center">Test</TextBlock>
+                            </StackPanel>
+                        </Button>
+                        <Button Grid.Column="7" Background="#FFc2c2c2" Margin="2.5" ToolTip="Creates metadata for UE4 (csv containing widget locations, animation sequence references and all the other asset refs." Click="ButtonCreateMetadata_Click">
+                            <StackPanel>
+                                <Image Source="Resources/CreateMetadata.png" Width="40"/>
+                                <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" LineHeight="9" LineStackingStrategy="BlockLineHeight">Create metadata</TextBlock>
                             </StackPanel>
                         </Button>
                     </Grid>
@@ -84,28 +91,56 @@
                             <ColumnDefinition Width="80"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Background="#FFc2c2c2" Margin="2.5" ToolTip="Deletes selected nodes. Same as key 'Delete'" Click="ButtonDeleteNodes_Click">
-                            <StackPanel >
-                                <Image Source="Resources/DeleteNodes.png" Width="40"/>
-                                <TextBlock HorizontalAlignment="Center">Delete</TextBlock>
-                            </StackPanel>
-                        </Button>
-                        <Button Grid.Column="1" Background="#FFc2c2c2" Margin="2.5" ToolTip="Adds new node and places it in up-left corner of the graph." Click="ButtonAddNode_Click">
+                        <Button Grid.Column="0" Background="#FFc2c2c2" Margin="2.5" ToolTip="Adds new node and places it in up-left corner of the graph." Click="ButtonAddNode_Click">
                             <StackPanel >
                                 <Image Source="Resources/AddNode.png" Width="40"/>
                                 <TextBlock HorizontalAlignment="Center">Add node</TextBlock>
                             </StackPanel>
                         </Button>
-                        <Button Grid.Column="2" Background="#FFc2c2c2" Margin="2.5" ToolTip="Adds new node and places it in up-left corner of the graph." Click="ButtonAddNode_Click">
+                        <Button Grid.Column="1" Background="#FFc2c2c2" Margin="2.5" ToolTip="Deletes selected nodes. Same as key 'Delete'" Click="ButtonDeleteNodes_Click">
                             <StackPanel >
-                                <Image Source="Resources/AddNode.png" Width="40"/>
-                                <TextBlock HorizontalAlignment="Center">Delete connections</TextBlock>
+                                <Image Source="Resources/DeleteNodes.png" Width="40"/>
+                                <TextBlock HorizontalAlignment="Center">Delete</TextBlock>
+                            </StackPanel>
+                        </Button>
+                        <Button Grid.Column="2" Background="#FFc2c2c2" Margin="2.5" ToolTip="Deletes all connections coming to or from selected nodes." Click="ButtonDeleteConnections_Click">
+                            <StackPanel>
+                                <Image Source="Resources/DeleteConnections.png" Width="40"/>
+                                <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" LineHeight="10" LineStackingStrategy="BlockLineHeight">Delete connections</TextBlock>
+                            </StackPanel>
+                        </Button>
+                        <Button Grid.Column="3" Background="#FFc2c2c2" Margin="2.5" ToolTip="Deletes all outputs coming from selected nodes." Click="ButtonDeleteOutputs_Click">
+                            <StackPanel >
+                                <Image Source="Resources/DeleteOutputs.png" Width="40"/>
+                                <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" LineHeight="9" LineStackingStrategy="BlockLineHeight">Delete outputs</TextBlock>
+                            </StackPanel>
+                        </Button>
+                        <Button Grid.Column="4" Background="#FFc2c2c2" Margin="2.5" ToolTip="Selects all nodes in this graph." Click="ButtonSelectAll_Click">
+                            <StackPanel >
+                                <Image Source="Resources/SelectAll.png" Width="40"/>
+                                <TextBlock HorizontalAlignment="Center"  LineStackingStrategy="BlockLineHeight">Select all</TextBlock>
+                            </StackPanel>
+                        </Button>
+                        <Button Grid.Column="5" Background="#FFc2c2c2" Margin="2.5" ToolTip="Deselects all nodes in this graph" Click="ButtonDeselectAll_Click">
+                            <StackPanel >
+                                <Image Source="Resources/DeselectAll.png" Width="40"/>
+                                <TextBlock HorizontalAlignment="Center"  LineStackingStrategy="BlockLineHeight">Deselect all</TextBlock>
                             </StackPanel>
                         </Button>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Help">
                     <Grid Background="#FFE5E5E5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
                     </Grid>
                 </TabItem>
             </TabControl>

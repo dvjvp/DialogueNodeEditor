@@ -124,6 +124,7 @@ namespace DialogueEditor
 			pin.MouseUp -= OnPinMousedUp;
 			pin.Click -= OnPinMousedUp;
 			pin.Click += OnPinMousedDown;
+			pin.IsChecked = false;
 		}
 
 		public void LoadOutputConnectionDataFromSource()
@@ -223,6 +224,19 @@ namespace DialogueEditor
 			{
 				Connection c = outputConnections[i];
 				c.parentTo.allConnections.Remove(c);
+				(c.Parent as Canvas)?.Children.Remove(c);
+				allConnections.Remove(c);
+				outputConnections.Remove(c);
+			}
+		}
+
+		public void DeleteAllConnections()
+		{
+			for (int i = allConnections.Count - 1; i >= 0; i--)
+			{
+				Connection c = allConnections[i];
+				c.parentTo.allConnections.Remove(c);
+				c.parentTo.outputConnections.Remove(c);
 				(c.Parent as Canvas)?.Children.Remove(c);
 				allConnections.Remove(c);
 				outputConnections.Remove(c);

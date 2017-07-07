@@ -199,7 +199,7 @@ namespace DialogueEditor
 
 		public void DeleteNode(Node node)
 		{
-			node.DeleteAllOutputConnections();
+			node.DeleteAllConnections();
 			drawArea.Children.Remove(node);
 			nodeMap.Remove(node.nodeNameField.Text);
 			nodes.Remove(node);
@@ -221,6 +221,126 @@ namespace DialogueEditor
 				n.LoadOutputConnectionDataFromSource();
 			}
 		}
+
+		#endregion
+
+		#region Rubberband selection
+
+		public void StartDragnDropSelected(Vector mousePos)
+		{
+			for (int i = 0; i < selection.Count; i++)
+			{
+				selection[i].dragOffset = (Vector)selection[i].GetPosition() - mousePos;
+			}
+		}
+
+		public void DragnDropSelectedOnMove(object sender, MouseEventArgs e)
+		{
+			var mousePos = e.GetPosition(drawArea);
+
+			for (int i = 0; i < selection.Count; i++)
+			{
+				var updatedPosition = mousePos + selection[i].dragOffset;
+				selection[i].SetPosition(updatedPosition.X, updatedPosition.Y);
+				selection[i].ForceConnectionUpdate();
+			}
+		}
+
+		public void ClearSelection()
+		{
+			foreach (var node in nodes)
+			{
+				node.SetSelected(false);
+			}
+			selection.Clear();
+		}
+
+		private void drawArea_MouseDown(object sender, MouseButtonEventArgs e)
+		{
+			if (Mouse.DirectlyOver != drawArea)
+			{
+				return;
+			}
+
+			selectionInProgress = true;
+			selectionStartPoint = e.GetPosition(drawArea);
+			drawArea.CaptureMouse();
+
+			Canvas.SetLeft(selectionBox, selectionStartPoint.X);
+			Canvas.SetTop(selectionBox, selectionStartPoint.Y);
+			selectionBox.Width = 0;
+			selectionBox.Height = 0;
+
+			selectionBox.Visibility = Visibility.Visible;
+			ClearSelection();
+		}
+
+		private void drawArea_MouseUp(object sender, MouseButtonEventArgs e)
+		{
+			if (!selectionInProgress)
+			{
+				return;
+			}
+			selectionInProgress = false;
+			drawArea.ReleaseMouseCapture();
+
+			Point mouseUpPos = e.GetPosition(drawArea);
+			selectionBox.Visibility = Visibility.Collapsed;
+
+			//Check here for nodes intersecting with rect and select them
+
+			foreach (var node in nodes)
+			{
+				if (AreIntersecting(selectionBox, node))
+				{
+					selection.Add(node);
+					node.SetSelected(true);
+				}
+			}
+
+		}
+
+		private bool AreIntersecting(Rectangle first, FrameworkElement second)
+		{
+			Rect r1 = new Rect(Canvas.GetLeft(first), Canvas.GetTop(first), first.Width, first.Height);
+			Rect r2 = new Rect(Canvas.GetLeft(second), Canvas.GetTop(second), second.ActualWidth, second.ActualHeight);
+			return r1.IntersectsWith(r2);
+		}
+
+		private void drawArea_MouseMove(object sender, MouseEventArgs e)
+		{
+			if (!selectionInProgress)
+			{
+				return;
+			}
+
+			Point mousePos = e.GetPosition(drawArea);
+
+			if (selectionStartPoint.X < mousePos.X)
+			{
+				Canvas.SetLeft(selectionBox, selectionStartPoint.X);
+				selectionBox.Width = mousePos.X - selectionStartPoint.X;
+			}
+			else
+			{
+				Canvas.SetLeft(selectionBox, mousePos.X);
+				selectionBox.Width = selectionStartPoint.X - mousePos.X;
+			}
+
+
+			if (selectionStartPoint.Y < mousePos.Y)
+			{
+				Canvas.SetTop(selectionBox, selectionStartPoint.Y);
+				selectionBox.Height = mousePos.Y - selectionStartPoint.Y;
+			}
+			else
+			{
+				Canvas.SetTop(selectionBox, mousePos.Y);
+				selectionBox.Height = selectionStartPoint.Y - mousePos.Y;
+			}
+
+		}
+
 
 		#endregion
 
@@ -292,127 +412,46 @@ namespace DialogueEditor
 			CSVParser.ExportFile(filepath, nodes);
 		}
 
-		#endregion
-
-		#region Rubberband selection
-
-		public void StartDragnDropSelected(Vector mousePos)
+		private void ButtonDeleteConnections_Click(object sender, RoutedEventArgs e)
 		{
-			for (int i = 0; i < selection.Count; i++)
+			foreach (var node in selection)
 			{
-				selection[i].dragOffset = (Vector)selection[i].GetPosition() - mousePos;
+				node.DeleteAllConnections();
 			}
 		}
 
-		public void DragnDropSelectedOnMove(object sender, MouseEventArgs e)
+		private void ButtonDeleteOutputs_Click(object sender, RoutedEventArgs e)
 		{
-			var mousePos = e.GetPosition(drawArea);
-
-			for (int i = 0; i < selection.Count; i++)
+			foreach (var node in selection)
 			{
-				var updatedPosition = mousePos + selection[i].dragOffset;
-				selection[i].SetPosition(updatedPosition.X, updatedPosition.Y);
-				selection[i].ForceConnectionUpdate();
+				node.DeleteAllOutputConnections();
 			}
 		}
 
-		public void ClearSelection()
+		private void ButtonSelectAll_Click(object sender, RoutedEventArgs e)
 		{
 			foreach (var node in nodes)
 			{
-				node.SetSelected(false);
+				selection.Add(node);
+				node.SetSelected(true);
 			}
-			selection.Clear();
 		}
 
-		private void drawArea_MouseDown(object sender, MouseButtonEventArgs e)
+		private void ButtonDeselectAll_Click(object sender, RoutedEventArgs e)
 		{
-			if (Mouse.DirectlyOver != drawArea) 
-			{
-				return;
-			}
-
-			selectionInProgress = true;
-			selectionStartPoint = e.GetPosition(drawArea);
-			drawArea.CaptureMouse();
-
-			Canvas.SetLeft(selectionBox, selectionStartPoint.X);
-			Canvas.SetTop(selectionBox, selectionStartPoint.Y);
-			selectionBox.Width = 0;
-			selectionBox.Height = 0;
-
-			selectionBox.Visibility = Visibility.Visible;
 			ClearSelection();
 		}
 
-		private void drawArea_MouseUp(object sender, MouseButtonEventArgs e)
+		private void ButtonCreateMetadata_Click(object sender, RoutedEventArgs e)
 		{
-			if(!selectionInProgress)
-			{
-				return;
-			}
-			selectionInProgress = false;
-			drawArea.ReleaseMouseCapture();
-
-			Point mouseUpPos = e.GetPosition(drawArea);
-			selectionBox.Visibility = Visibility.Collapsed;
-
-			//Check here for nodes intersecting with rect and select them
-
-			foreach (var node in nodes)
-			{
-				if(AreIntersecting(selectionBox,node))
-				{
-					selection.Add(node);
-					node.SetSelected(true);
-				}
-			}
-
+			MessageBox.Show("Not implemented yet!");
 		}
 
-		private bool AreIntersecting(Rectangle first, FrameworkElement second)
+		private void ButtonTest_Click(object sender, RoutedEventArgs e)
 		{
-			Rect r1 = new Rect(Canvas.GetLeft(first), Canvas.GetTop(first), first.Width, first.Height);
-			Rect r2 = new Rect(Canvas.GetLeft(second), Canvas.GetTop(second), second.ActualWidth, second.ActualHeight);
-			return r1.IntersectsWith(r2);
-		}
-
-		private void drawArea_MouseMove(object sender, MouseEventArgs e)
-		{
-			if(!selectionInProgress)
-			{
-				return;
-			}
-
-			Point mousePos = e.GetPosition(drawArea);
-
-			if(selectionStartPoint.X<mousePos.X)
-			{
-				Canvas.SetLeft(selectionBox, selectionStartPoint.X);
-				selectionBox.Width = mousePos.X - selectionStartPoint.X;
-			}
-			else
-			{
-				Canvas.SetLeft(selectionBox, mousePos.X);
-				selectionBox.Width = selectionStartPoint.X - mousePos.X;
-			}
-
-
-			if (selectionStartPoint.Y < mousePos.Y)
-			{
-				Canvas.SetTop(selectionBox, selectionStartPoint.Y);
-				selectionBox.Height = mousePos.Y - selectionStartPoint.Y;
-			}
-			else
-			{
-				Canvas.SetTop(selectionBox, mousePos.Y);
-				selectionBox.Height = selectionStartPoint.Y - mousePos.Y;
-			}
-
+			MessageBox.Show("Not implemented yet!");
 		}
 
 		#endregion
-
-
 	}
 }
