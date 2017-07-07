@@ -160,7 +160,6 @@ namespace DialogueEditor
 					{
 						PanCanvas(-30, 0);
 					}
-					e.Handled = true;
 					break;
 
 			}
