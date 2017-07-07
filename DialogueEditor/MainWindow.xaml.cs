@@ -34,7 +34,7 @@ namespace DialogueEditor
 			KeyDown += MainWindow_KeyDown;
 			//Based loosely on: https://forum.unity3d.com/threads/simple-node-editor.189230/
 
-			drawArea.Width = 99999999999;
+			drawArea.Width = 99999999999;	//it's basically infinity right? Who even has screen that big?
 			drawArea.Height = 99999999999;
 		}
 		
@@ -65,6 +65,9 @@ namespace DialogueEditor
 				(Vector)connectionDrawingLineStartPin.TransformToAncestor(connectionDrawSource).Transform(new Point(0, 0));
 			start += new Vector(connectionDrawingLineStartPin.ActualWidth/2, connectionDrawingLineStartPin.ActualHeight/2);
 			var end = args.GetPosition(drawArea);
+
+			start = canvasTotalTransform.Transform(start);
+			end = canvasTotalTransform.Transform(end);
 
 			connectionDrawingLine.X1 = start.X;
 			connectionDrawingLine.Y1 = start.Y;
@@ -118,6 +121,8 @@ namespace DialogueEditor
 				case Key.Delete:
 					DeleteSelectedNodes();
 					break;
+
+
 				case Key.Up:
 				case Key.W:
 					PanCanvas(0, -30);
@@ -127,13 +132,26 @@ namespace DialogueEditor
 					PanCanvas(0, 30);
 					break;
 				case Key.Left:
-				case Key.A:
 					PanCanvas(-30, 0);
 					break;
 				case Key.Right:
 				case Key.D:
 					PanCanvas(30, 0);
 					break;
+
+
+				case Key.A:
+					if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
+					{
+						ButtonSelectAll_Click(null, null);
+					}
+					else
+					{
+						PanCanvas(-30, 0);
+					}
+					
+					break;
+
 			}
 		}
 
