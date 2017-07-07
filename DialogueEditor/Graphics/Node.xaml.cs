@@ -222,7 +222,7 @@ namespace DialogueEditor
 			for (int i = outputConnections.Count - 1; i >= 0; i--)
 			{
 				Connection c = outputConnections[i];
-				(c.objTo.Parent as Node)?.allConnections.Remove(c);
+				c.parentTo.allConnections.Remove(c);
 				(c.Parent as Canvas)?.Children.Remove(c);
 				allConnections.Remove(c);
 				outputConnections.Remove(c);
@@ -254,6 +254,21 @@ namespace DialogueEditor
 			return false;
 		}
 
+		private void RemoveAllOutputConnectionsFromPin(FrameworkElement pin)
+		{
+			for (int i = outputConnections.Count-1; i >= 0; i--)
+			{
+				Connection c = outputConnections[i];
+				if (c.objFrom == pin) 
+				{
+					c.parentTo.allConnections.Remove(c);
+					(c.Parent as Canvas)?.Children.Remove(c);
+					allConnections.Remove(c);
+					outputConnections.Remove(c);
+				}
+			}
+		}
+
 		public void TryConnecting(FrameworkElement thisPin, Node other, FrameworkElement otherPin)
 		{
 			if (thisPin == InputPin) 
@@ -266,51 +281,67 @@ namespace DialogueEditor
 					case "Multiple choices":
 						other.MakeConnection(this, other);
 						break;
+					case "Call actor event":
+					case "Call level event":
+					case "Normal dialogue":
 					case "If player has item":
 						if(other.PinHasConnection(otherPin))
 						{
-
+							other.RemoveAllOutputConnectionsFromPin(otherPin);
 						}
-						else
-						{
-							other.MakeConnection(this, other);
-						}
+						other.MakeConnection(this, otherPin);
 						break;
-					case "Call actor event":
-						break;
-					case "Call level event":
-						break;
-					case "Normal dialogue":
 					default:
 						break;
 				}
 			}
 			else
 			{
-				//I'm not gonna implement the same shit twice, yo
+				//No need to implement the same shit twice, yo
 				other.TryConnecting(otherPin, this, thisPin);
 			}
 		}
 
 		public void TryConnecting(FrameworkElement thisPin, Node other)
 		{
-			switch (other.outputType.Text)
+			if (thisPin == InputPin)
 			{
-
-				case "End dialogue":
-					return;
-				case "Multiple choices":
-					break;
-				case "If player has item":
-					break;
-				case "Call actor event":
-					break;
-				case "Call level event":
-					break;
-				case "Normal dialogue":
-				default:
-					break;
+				switch (other.outputType.Text)
+				{
+					case "End dialogue":
+						Console.WriteLine("Trying to connect input to \"End\" node. Aborting.");
+						return;
+					case "Multiple choices":
+							TryConnecting(thisPin, other, other.outputPinMultipleChoices);
+						break;
+					case "If player has item":
+						if(other.PinHasConnection(other.outputPinItemTrue))
+						{
+							TryConnecting(thisPin, other, other.outputPinItemFalse);
+						}
+						else
+						{
+							TryConnecting(thisPin, other, other.outputPinItemTrue);
+						}
+						break;
+					case "Call actor event":
+						TryConnecting(thisPin, other, other.outputPinActorEvent);
+						break;
+					case "Call level event":
+						TryConnecting(thisPin, other, other.outputPinLevelEvent);
+						break;
+					case "Normal dialogue":
+					default:
+						TryConnecting(thisPin, other, other.outputPinNormal);
+						break;
+				}
 			}
+			else
+			{
+				TryConnecting(thisPin, other, other.InputPin);
+			}
+
+			
 		}
 
 

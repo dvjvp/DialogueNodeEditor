@@ -68,6 +68,11 @@ namespace DialogueEditor
 			connectionDrawingLine.Y2 = end.Y;
 		}
 
+// 		public Node GetNodeUnderMouse()
+// 		{
+// 
+// 		}
+
 		public void EndDrawingConnection()
 		{
 			connectionDrawingLine.Visibility = Visibility.Collapsed;
