@@ -45,12 +45,14 @@ namespace DialogueEditor.Files
 
 		public string ToCSVrow()
 		{
-			return rowName + ','/* + "\"\"\""*/ + dialogueText + /*"\"\"\*/"," + command + ',' + commandArguments + ',' + nextRowName + ',' + (int)nodePositionX + ',' + (int)nodePositionY;
+			string tempDialogueText = dialogueText.Replace("\"", "\"\"");
+			return rowName + ",\"" + tempDialogueText + "\",\"" + command + "\",\"" + commandArguments + "\",\"" + nextRowName + "\"," + (int)nodePositionX + ',' + (int)nodePositionY;
 		}
 
 		public string ToUE4exportCSVrow()
 		{
-			return rowName + ','/* + "\"\"\""*/ + dialogueText + /*"\"\"\*/"," + command + ',' + commandArguments + ',' + nextRowName;
+			string tempDialogueText = dialogueText.Replace("\"", "\"\"");
+			return rowName + ",\"" + tempDialogueText + "\",\"" + command + "\",\"" + commandArguments + "\",\"" + nextRowName + "\",\"";
 		}
 
 		public override string ToString()

@@ -18,8 +18,22 @@ namespace DialogueEditor.Files
 				Console.WriteLine("LineContent: " + lines[i]);
 
 				string[] s = lines[i].Split(',');
-				//string dialogueText = s[1].Substring(3, s[1].Length - 6);   //don't take '"' signs at the beginning and on the end
-				DialogueDataLine d = new DialogueDataLine(s[0], s[1], s[2], s[3], s[4]);
+				string dialogue = string.Empty;
+				for (int j = 1; j < s.Length - 3; j++) 
+				{
+					dialogue += s[j];
+					dialogue += ',';
+				}
+				if (dialogue.Length > 2) 
+				{
+					dialogue = dialogue.Replace("\"\"", "\"");
+				}
+				//string dialogueText = s[1].Substring(1, s[1].Length - 2);   //don't take '"' signs at the beginning and on the end
+				DialogueDataLine d = new DialogueDataLine(s[0],
+					dialogue.Substring(1, dialogue.Length - 3), 
+					s[2].Substring(1, s[2].Length - 2), 
+					s[3].Substring(1, s[3].Length - 2), 
+					s[4].Substring(1, s[4].Length - 2));
 				try
 				{
 					d.SetPosition(double.Parse(s[5]), double.Parse(s[6]));
