@@ -22,6 +22,7 @@ namespace DialogueEditor
 		const double zoomSpeed = .025;
 		bool selectionInProgress = false;
 		Point selectionStartPoint;
+		Rect selectionRect;
 
 		Node connectionDrawSource;
 		FrameworkElement connectionDrawingLineStartPin;
@@ -117,6 +118,22 @@ namespace DialogueEditor
 				case Key.Delete:
 					DeleteSelectedNodes();
 					break;
+				case Key.Up:
+				case Key.W:
+					PanCanvas(0, -30);
+					break;
+				case Key.Down:
+				case Key.S:
+					PanCanvas(0, 30);
+					break;
+				case Key.Left:
+				case Key.A:
+					PanCanvas(-30, 0);
+					break;
+				case Key.Right:
+				case Key.D:
+					PanCanvas(30, 0);
+					break;
 			}
 		}
 
@@ -134,12 +151,6 @@ namespace DialogueEditor
 			}
 			canvasZoom.ScaleX = Math.Max(canvasZoom.ScaleX, 0.025);
 			canvasZoom.ScaleY = Math.Max(canvasZoom.ScaleY, 0.025);
-
-			UpdateCanvasSize();
-		}
-
-		public void UpdateCanvasSize()
-		{
 		}
 
 		#endregion
@@ -280,6 +291,10 @@ namespace DialogueEditor
 			Canvas.SetTop(selectionBox, selectionStartPoint.Y);
 			selectionBox.Width = 0;
 			selectionBox.Height = 0;
+			selectionRect.X = 0;
+			selectionRect.Y = 0;
+			selectionRect.Width = 0;
+			selectionRect.Height = 0;
 
 			selectionBox.Visibility = Visibility.Visible;
 			ClearSelection();
@@ -301,7 +316,7 @@ namespace DialogueEditor
 
 			foreach (var node in nodes)
 			{
-				if (AreIntersecting(selectionBox, node))
+				if (AreIntersecting(selectionRect, node))
 				{
 					selection.Add(node);
 					node.SetSelected(true);
@@ -310,47 +325,63 @@ namespace DialogueEditor
 
 		}
 
-		private bool AreIntersecting(Rectangle first, FrameworkElement second)
+		private bool AreIntersecting(Rect first, FrameworkElement second)
 		{
-			Rect r1 = new Rect(Canvas.GetLeft(first), Canvas.GetTop(first), first.Width, first.Height);
+			//Rect r1 = new Rect(Canvas.GetLeft(first), Canvas.GetTop(first), first.Width, first.Height);
 			Rect r2 = new Rect(Canvas.GetLeft(second), Canvas.GetTop(second), second.ActualWidth, second.ActualHeight);
-			return r1.IntersectsWith(r2);
+			return first.IntersectsWith(r2);
 		}
 
 		private void drawArea_MouseMove(object sender, MouseEventArgs e)
 		{
+
 			if (!selectionInProgress)
 			{
 				return;
 			}
 
 			Point mousePos = e.GetPosition(drawArea);
+			Point tMousePos = canvasTotalTransform.Transform(mousePos);
+			Point tSelectionStartPoint = canvasTotalTransform.Transform(this.selectionStartPoint);
 
 			if (selectionStartPoint.X < mousePos.X)
 			{
-				Canvas.SetLeft(selectionBox, selectionStartPoint.X);
-				selectionBox.Width = mousePos.X - selectionStartPoint.X;
+				Canvas.SetLeft(selectionBox, tSelectionStartPoint.X);
+				selectionBox.Width = tMousePos.X - tSelectionStartPoint.X;
+				selectionRect.X = selectionStartPoint.X;
+				selectionRect.Width = mousePos.X - selectionStartPoint.X;
 			}
 			else
 			{
-				Canvas.SetLeft(selectionBox, mousePos.X);
-				selectionBox.Width = selectionStartPoint.X - mousePos.X;
+				Canvas.SetLeft(selectionBox, tMousePos.X);
+				selectionBox.Width = tSelectionStartPoint.X - tMousePos.X;
+				selectionRect.X = mousePos.X;
+				selectionRect.Width = selectionStartPoint.X - mousePos.X;
 			}
 
 
 			if (selectionStartPoint.Y < mousePos.Y)
 			{
-				Canvas.SetTop(selectionBox, selectionStartPoint.Y);
-				selectionBox.Height = mousePos.Y - selectionStartPoint.Y;
+				Canvas.SetTop(selectionBox, tSelectionStartPoint.Y);
+				selectionBox.Height = tMousePos.Y - tSelectionStartPoint.Y;
+				selectionRect.Y = selectionStartPoint.Y;
+				selectionRect.Height = mousePos.Y - selectionStartPoint.Y;
 			}
 			else
 			{
-				Canvas.SetTop(selectionBox, mousePos.Y);
-				selectionBox.Height = selectionStartPoint.Y - mousePos.Y;
+				Canvas.SetTop(selectionBox, tMousePos.Y);
+				selectionBox.Height = tSelectionStartPoint.Y - tMousePos.Y;
+				selectionRect.Y = mousePos.Y;
+				selectionRect.Height = selectionStartPoint.Y - mousePos.Y;
 			}
 
 		}
 
+		private void PanCanvas(double x, double y)
+		{
+			canvasTranslation.X = Math.Min(canvasTranslation.X - x, 0);
+			canvasTranslation.Y = Math.Min(canvasTranslation.Y - y, 0);
+		}
 
 		#endregion
 

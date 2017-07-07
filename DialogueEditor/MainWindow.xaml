@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DialogueEditor"
         mc:Ignorable="d"
-        Title="Dialogue Editor v. 0.2 Alpha" Width="1024" Height="768" >
+        Title="Woodpecker Dialogue Editor v. 0.3 Alpha" Width="1024" Height="768" >
     <Grid Name="grid">
         <Grid.RowDefinitions>
             <RowDefinition Height="100"/>
@@ -179,7 +179,10 @@
                     MouseRightButtonDown="drawArea_MouseRightButtonDown"
                     >
                 <Canvas.RenderTransform>
-                    <ScaleTransform x:Name="canvasZoom"/>
+                    <TransformGroup x:Name="canvasTotalTransform">
+                        <ScaleTransform x:Name="canvasZoom"/>
+                        <TranslateTransform x:Name="canvasTranslation"/>
+                    </TransformGroup>
                 </Canvas.RenderTransform>
             </Canvas>
 
@@ -187,7 +190,7 @@
         
         <!-- Selection and connection drawing -->
         
-        <Canvas Grid.Row="1" Margin="5" ClipToBounds="True">
+        <Canvas Grid.Row="1" Margin="5" ClipToBounds="True" x:Name="selectionDrawArea">
             <!-- Canvas overlaid over the previous one used for rubber band selection -->
             <Rectangle x:Name="selectionBox" Visibility="Collapsed" Stroke="Black" StrokeThickness="1" StrokeDashArray="2,1" Fill="#262639B0" />
             <Line x:Name="connectionDrawingLine" Visibility="Collapsed" Stroke="LightSteelBlue" StrokeThickness="5" IsHitTestVisible="False"/>
