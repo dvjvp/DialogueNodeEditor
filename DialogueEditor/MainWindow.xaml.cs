@@ -165,8 +165,8 @@ namespace DialogueEditor
 			}
 			catch (Exception)
 			{
-				n.nodeNameField.Text = Guid.NewGuid().ToString();
-				nodeMap.Add(n.nodeNameField.Text, n);
+// 				n.nodeNameField.Text = Guid.NewGuid().ToString();
+// 				nodeMap.Add(n.nodeNameField.Text, n);
 			}
 			nodes.Add(n);
 			drawArea.Children.Add(n);
@@ -210,11 +210,7 @@ namespace DialogueEditor
 		{
 			foreach (var n in nodes)
 			{
-				n.DeleteAllOutputConnections();
-			}
-			foreach (var n in nodes)
-			{
-				n.allConnections.Clear();
+				n.DeleteAllConnections();
 			}
 			foreach (var n in nodes)
 			{

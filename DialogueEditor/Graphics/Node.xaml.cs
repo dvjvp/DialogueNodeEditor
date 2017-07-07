@@ -18,10 +18,10 @@ namespace DialogueEditor
 
 		public DialogueDataLine sourceData;
 
-		public List<Connection> allConnections = new List<Connection>();
+		//public List<Connection> allConnections = new List<Connection>();
+		public List<Connection> inputConnections = new List<Connection>();
 		public List<Connection> outputConnections = new List<Connection>();
-
-		private string connectionHasItemTrue, connectionHasItemFalse;
+		
 
 		public Node(DialogueDataLine sourceData)
 		{
@@ -155,8 +155,7 @@ namespace DialogueEditor
 						string[] s = sourceData.nextRowName.Split(' ');
 						try
 						{
-							connectionHasItemTrue = s[0];
-							Node target = MainWindow.instance.nodeMap[connectionHasItemTrue];
+							Node target = MainWindow.instance.nodeMap[s[0]];
 							MakeConnection(target, outputPinItemTrue);
 						}
 						catch (Exception e)
@@ -165,8 +164,7 @@ namespace DialogueEditor
 						}
 						try
 						{
-							connectionHasItemFalse = s[1];
-							Node target = MainWindow.instance.nodeMap[connectionHasItemFalse];
+							Node target = MainWindow.instance.nodeMap[s[1]];
 							MakeConnection(target, outputPinItemFalse);
 						}
 						catch (Exception e)
@@ -212,8 +210,7 @@ namespace DialogueEditor
 		public void MakeConnection(Node to, FrameworkElement pinFrom)
 		{
 			Connection c = new Connection(this, pinFrom, to);
-			to.allConnections.Add(c);
-			allConnections.Add(c);
+			to.inputConnections.Add(c);
 			outputConnections.Add(c);
 			(Parent as Canvas)?.Children.Add(c);
 		}
@@ -223,43 +220,40 @@ namespace DialogueEditor
 			for (int i = outputConnections.Count - 1; i >= 0; i--)
 			{
 				Connection c = outputConnections[i];
-				c.parentTo.allConnections.Remove(c);
+				c.parentTo.inputConnections.Remove(c);
 				(c.Parent as Canvas)?.Children.Remove(c);
-				allConnections.Remove(c);
 				outputConnections.Remove(c);
+			}
+		}
+
+		public void DeleteAllInputConnections()
+		{
+			for (int i = inputConnections.Count - 1; i >= 0; i--)
+			{
+				Connection c = inputConnections[i];
+				c.parentTo.outputConnections.Remove(c);
+				(c.Parent as Canvas)?.Children.Remove(c);
+				inputConnections.Remove(c);
 			}
 		}
 
 		public void DeleteAllConnections()
 		{
-			for (int i = allConnections.Count - 1; i >= 0; i--)
-			{
-				Connection c = allConnections[i];
-				c.parentTo.allConnections.Remove(c);
-				c.parentTo.outputConnections.Remove(c);
-				(c.Parent as Canvas)?.Children.Remove(c);
-				allConnections.Remove(c);
-				outputConnections.Remove(c);
-			}
+			DeleteAllInputConnections();
+			DeleteAllOutputConnections();
 		}
 
 		public bool PinHasConnection(FrameworkElement pin)
 		{
 			if (pin == InputPin) 
 			{
-				foreach (var c in allConnections)
-				{
-					if (c.parentTo == this)
-					{
-						return true;
-					}
-				}			
+				return inputConnections.Count > 0;		
 			}
 			else
 			{
 				foreach(var c in outputConnections)
 				{
-					if(c.parentFrom == this)
+					if(c.objFrom == pin)
 					{
 						return true;
 					}
@@ -268,16 +262,15 @@ namespace DialogueEditor
 			return false;
 		}
 
-		private void RemoveAllOutputConnectionsFromPin(FrameworkElement pin)
+		private void DeleteAllOutputConnectionsFromPin(FrameworkElement pin)
 		{
 			for (int i = outputConnections.Count-1; i >= 0; i--)
 			{
 				Connection c = outputConnections[i];
 				if (c.objFrom == pin) 
 				{
-					c.parentTo.allConnections.Remove(c);
+					c.parentTo.inputConnections.Remove(c);
 					(c.Parent as Canvas)?.Children.Remove(c);
-					allConnections.Remove(c);
 					outputConnections.Remove(c);
 				}
 			}
@@ -301,7 +294,7 @@ namespace DialogueEditor
 					case "If player has item":
 						if(other.PinHasConnection(otherPin))
 						{
-							other.RemoveAllOutputConnectionsFromPin(otherPin);
+							other.DeleteAllOutputConnectionsFromPin(otherPin);
 						}
 						other.MakeConnection(this, otherPin);
 						break;
@@ -406,7 +399,11 @@ namespace DialogueEditor
 
 		public void ForceConnectionUpdate()
 		{
-			foreach (var connection in allConnections)
+			foreach (var connection in inputConnections)
+			{
+				connection.InvalidateVisual();
+			}
+			foreach (var connection in outputConnections)
 			{
 				connection.InvalidateVisual();
 			}
@@ -437,49 +434,152 @@ namespace DialogueEditor
 		{
 			DeleteAllOutputConnections();
 			//TODO: Change Data in switch below, not only color
-			Brush b;
 			Color c = new Color();
 			c.A = 255;
 			switch (outputType.Text)
 			{
-				
 				case "End dialogue":
-					c.R = 128; c.G = 0; c.B = 0; //red-ish
-					b = new SolidColorBrush(c);
+					c.R = 128; c.G = 0; c.B = 0; //red
 					break;
 				case "Multiple choices":
-					c.R = 0; c.G = 128; c.B = 64; //green-ish
-					b = new SolidColorBrush(c);
+					c.R = 0; c.G = 128; c.B = 64; //green
 					break;
 				case "If player has item":
-					c.R = 198; c.G = 198; c.B = 47; //yellow-ish
-					b = new SolidColorBrush(c);
+					c.R = 198; c.G = 198; c.B = 47; //yellow
 					break;
 				case "Call actor event":
-					c.R = 47; c.G = 65; c.B = 198; //blue-ish
-					b = new SolidColorBrush(c);
+					c.R = 47; c.G = 65; c.B = 198; //blue
 					break;
 				case "Call level event":
-					c.R = 0; c.G = 10; c.B = 91; //violet-ish
-					b = new SolidColorBrush(c);
+					c.R = 0; c.G = 10; c.B = 91; //violet
 					break;
 				case "Normal dialogue":
 				default:
-					c.R = 0x3f; c.G = 0x3f; c.B = 0x3f; //gray-ish
-					b = new SolidColorBrush(c);
+					c.R = 0x3f; c.G = 0x3f; c.B = 0x3f; //gray
 					break;
 			}
 
-			BorderUp.Background = BorderMiddle.Background = BorderDown.Background = b;
+			BorderUp.Background = new SolidColorBrush(c);
+			BorderMiddle.Background = new SolidColorBrush(c);
+			BorderDown.Background = new SolidColorBrush(c);
 			//TODO: Fix changing color manually. It doesn't work for some reason.
 		}
 
-		private void dialogueText_TextChanged(object sender, TextChangedEventArgs e)
+		private void nodeNameField_TextChanged(object sender, TextChangedEventArgs e)
 		{
+			nodeNameField.Text = nodeNameField.Text.Replace(" ", "");
+			// 			if (MainWindow.instance.nodeMap.ContainsKey(nodeNameField.Text))
+			// 			{
+			// 				MessageBox.Show("Node names have to be unique!");
+			// 				nodeNameField.Text = Guid.NewGuid().ToString();
+			// 			}
+			if (sourceData != null)
+			{
+				string oldName = sourceData.rowName;
+				MainWindow.instance.nodeMap.Remove(oldName);
+				MainWindow.instance.nodeMap.Add(nodeNameField.Text, this);
+			}
 
 		}
 
+		private void RemoveSpacesFromSender(object sender, TextChangedEventArgs e)
+		{
+			TextBox b = sender as TextBox;
+			b.Text = b.Text.Replace(" ", "");
+		}
 
 		#endregion
+
+		public void ApplyChangesToSourceData()
+		{
+			sourceData.rowName = nodeNameField.Text;
+			sourceData.dialogueText = dialogueText.Text;
+
+			switch (outputType.Text)
+			{
+				case "End dialogue":
+					sourceData.command = "leave";
+					sourceData.commandArguments = string.Empty;
+					break;
+				case "Multiple choices":
+					sourceData.command = "options";
+					sourceData.commandArguments = string.Empty;
+					break;
+				case "If player has item":
+					sourceData.command = "has-item";
+					sourceData.commandArguments = itemName.Text + " " + itemCount.Text;
+					break;
+				case "Call actor event":
+					sourceData.command = "actor-message";
+					sourceData.commandArguments = actorName.Text + " " + actorEventName.Text;
+					break;
+				case "Call level event":
+					sourceData.command = "level-message";
+					sourceData.commandArguments = levelEventName.Text;
+					break;
+				case "Normal dialogue":
+					sourceData.command = "";
+					sourceData.commandArguments = string.Empty;
+					break;
+				default:
+					break;
+			}
+		}
+
+		public void ApplyConnectionChangesToSourceData()
+		{
+			switch (outputType.Text)
+			{
+				case "End dialogue":
+					sourceData.nextRowName = "None";
+					break;
+				case "Multiple choices":
+					{
+						System.Text.StringBuilder s = new System.Text.StringBuilder();
+						foreach (var item in outputConnections)
+						{
+							s.Append(item.parentTo.sourceData.rowName);
+							s.Append(' ');
+						}
+						s.Length--;
+						sourceData.nextRowName = s.ToString();
+					}
+					break;
+				case "If player has item":
+					{
+						string sTrue = "None";
+						string sFalse = "None";
+
+						foreach (var item in outputConnections)
+						{
+							if (item.objFrom == outputPinItemTrue)
+							{
+								sTrue = item.parentTo.sourceData.rowName;
+							}
+							else if (item.objFrom == outputPinItemFalse) 
+							{
+								sFalse = item.parentTo.sourceData.rowName;
+							}
+						}
+						sourceData.nextRowName = sTrue + " " + sFalse;
+					}
+					break;
+				case "Call actor event":
+				case "Call level event":
+				case "Normal dialogue":
+				default:
+					if (outputConnections.Count > 0) 
+					{
+						sourceData.nextRowName = outputConnections[0].parentTo.sourceData.rowName;
+					}
+					else
+					{
+						sourceData.nextRowName = "None";
+					}
+					break;
+			}
+		}
+
+
 	}
 }

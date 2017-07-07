@@ -45,7 +45,7 @@ namespace DialogueEditor.Files
 
 		public string ToCSVrow()
 		{
-			return rowName + ','/* + "\"\"\""*/ + dialogueText + /*"\"\"\*/"," + command + ',' + commandArguments + ',' + nextRowName + ',' + nodePositionX + ',' + nodePositionY;
+			return rowName + ','/* + "\"\"\""*/ + dialogueText + /*"\"\"\*/"," + command + ',' + commandArguments + ',' + nextRowName + ',' + (int)nodePositionX + ',' + (int)nodePositionY;
 		}
 
 		public string ToUE4exportCSVrow()

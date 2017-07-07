@@ -1,0 +1,7 @@
+---,DialogueText,Command,CommandArguments,Next,X,Y
+1,Tis' a normal dialogue,,,2,40,14
+4,Hello world!,leave,,None,436,768
+2,Tis' multiple choices yo',options,,3 4,212,129
+5,Gib me wine!,actor-message,Player GiveWine,4,521,357
+3,Does he have wine?,has-item,Wine 9001,5 6,825,99
+6,HE'S NOT WORTHY,level-message,KillPlayer,4,825,432

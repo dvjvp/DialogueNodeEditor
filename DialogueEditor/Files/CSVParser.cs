@@ -74,6 +74,15 @@ namespace DialogueEditor.Files
 				filePath += ".csv";
 			}
 
+			foreach (var node in nodes)
+			{
+				node.ApplyChangesToSourceData();
+			}
+			foreach (var node in nodes)	//Yes, they HAVE to be in 2 separate foreach-es or it won't work properly
+			{
+				node.ApplyConnectionChangesToSourceData();
+			}
+
 			using (StreamWriter outputFile = new StreamWriter(filepath))
 			{
 				outputFile.WriteLine("---,DialogueText,Command,CommandArguments,Next,X,Y");
