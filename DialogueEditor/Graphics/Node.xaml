@@ -20,8 +20,8 @@
             <!-- INPUTS -->
 
             <!-- Input pin -->
-            <Border BorderBrush="Black" BorderThickness="1" Grid.Row="0" Background="#3f3f3f3f">
-                <RadioButton VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="InputPin" Click="OnPinMousedDown"/>
+            <Border BorderBrush="Black" BorderThickness="1" Grid.Row="0" Background="#3f3f3f3f" x:Name="InputBorder">
+                <RadioButton VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="InputPin" LostMouseCapture="OnMouseControlLost" Click="OnPinMousedDown"/>
             </Border>
 
             <!-- BODY -->
@@ -29,19 +29,39 @@
             <!-- Node name & Delete button -->
             <Border x:Name="BorderUp"  BorderBrush="Black" BorderThickness="1" Grid.Row="1" Background="#3f3f3f">
                 <DockPanel  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="5,5,5,5">
-                    <TextBox x:Name="nodeNameField" Text="NodeName"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Label Grid.Column="0" Grid.Row="0" FontWeight="DemiBold" IsHitTestVisible="False">Dialogue ID:</Label>
+                        <Label x:Name="nodeNameField" Content="NodeName" Grid.Column="1" Grid.Row="0" IsHitTestVisible="False"/>
+
+                        <Label Grid.Column="0" Grid.Row="1" FontWeight="DemiBold" IsHitTestVisible="False">Actor name:</Label>
+                        <TextBox x:Name="actorName" Text="Alex" Grid.Column="1" Grid.Row="1" TextChanged="aactorName_TextChanged"/>
+                    </Grid>
                     <Button Content="X" Width="20" Margin="5,0,0,0" Click="ButtonDelete_Click" Background="DarkRed" HorizontalAlignment="Right"/>
                 </DockPanel>
             </Border>
 
             <!-- Dialogue text -->
             <Border x:Name="BorderMiddle"  BorderBrush="Black" BorderThickness="1" Grid.Row="2" Background="#3f3f3f">
-                <TextBox x:Name="dialogueText" Text="Dialogue Text" Margin="5" TextWrapping="Wrap" MaxWidth="300"  VerticalScrollBarVisibility="Auto"  SpellCheck.IsEnabled="True" Height="Auto"/>
+                <StackPanel>
+                    <Label HorizontalAlignment="Center" FontWeight="DemiBold" Content=" Dialogue text:" IsHitTestVisible="False"/>
+                    <TextBox x:Name="dialogueText" Text="Dialogue Text" Margin="5" TextWrapping="Wrap" MaxWidth="300"  VerticalScrollBarVisibility="Auto"  SpellCheck.IsEnabled="True" Height="Auto"/>
+                </StackPanel>
             </Border>
 
             <!-- Combo box - outputType selection -->
             <Border x:Name="BorderDown"  BorderBrush="Black" BorderThickness="1" Grid.Row="3" Background="#3f3f3f">
-                <ComboBox x:Name="outputType" Margin="5" SelectionChanged="outputType_SelectionChanged">
+                <StackPanel>
+                    <Label HorizontalAlignment="Center" FontWeight="DemiBold"  Content="Output type:" IsHitTestVisible="False"/>
+                    <ComboBox x:Name="outputType" Margin="5" SelectionChanged="outputType_SelectionChanged">
                     <ComboBoxItem Content="Normal dialogue" IsSelected="True"/>
                     <ComboBoxItem Content="End dialogue"/>
                     <ComboBoxItem Content="Multiple choices"/>
@@ -49,6 +69,7 @@
                     <ComboBoxItem Content="Call actor event"/>
                     <ComboBoxItem Content="Call level event"/>
                 </ComboBox>
+                </StackPanel>
             </Border>
 
             <!-- OUTPUTS -->
@@ -71,7 +92,7 @@
                         </Style.Triggers>
                     </Style>
                 </Border.Style>
-                <RadioButton x:Name="outputPinNormal"  VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="1" Click="OnPinMousedDown"/>
+                <RadioButton x:Name="outputPinNormal"  VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="1" Click="OnPinMousedDown" LostMouseCapture="OnMouseControlLost"/>
             </Border>
 
             <!-- If player has item output -->
@@ -104,8 +125,8 @@
                     <TextBox x:Name="itemCount"  Grid.Column="1" Grid.Row="1" Margin="2"/>
                     <Label Grid.Column="0" Grid.Row="2" Foreground="White" HorizontalAlignment="Center">True</Label>
                     <Label Grid.Column="1" Grid.Row="2" Foreground="White" HorizontalAlignment="Center">False</Label>
-                    <RadioButton x:Name="outputPinItemTrue"  Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" Click="OnPinMousedDown"/>
-                    <RadioButton x:Name="outputPinItemFalse"  Grid.Column="1" Grid.Row="3" HorizontalAlignment="Center" Click="OnPinMousedDown"/>
+                    <RadioButton x:Name="outputPinItemTrue"  Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" Click="OnPinMousedDown" LostMouseCapture="OnMouseControlLost"/>
+                    <RadioButton x:Name="outputPinItemFalse"  Grid.Column="1" Grid.Row="3" HorizontalAlignment="Center" Click="OnPinMousedDown" LostMouseCapture="OnMouseControlLost"/>
                 </Grid>
             </Border>
 
@@ -121,7 +142,7 @@
                         </Style.Triggers>
                     </Style>
                 </Border.Style>
-                <RadioButton x:Name="outputPinMultipleChoices"  VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="1" Background="#FF10EC4C" Click="OnPinMousedDown"/>
+                <RadioButton x:Name="outputPinMultipleChoices" LostMouseCapture="OnMouseControlLost" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="1" Background="#FF10EC4C" Click="OnPinMousedDown"/>
             </Border>
 
             <!-- Call actor event output -->
@@ -149,9 +170,9 @@
 
                     <Label Grid.Column="0" Grid.Row="0" Foreground="White" HorizontalAlignment="Center">Actor name</Label>
                     <Label Grid.Column="1" Grid.Row="0" Foreground="White" HorizontalAlignment="Center">Event name</Label>
-                    <TextBox x:Name="actorName"  Grid.Column="0" Grid.Row="1" Margin="2" TextChanged="RemoveSpacesFromSender"/>
-                    <TextBox x:Name="actorEventName"  Grid.Column="1" Grid.Row="1" Margin="2" TextChanged="RemoveSpacesFromSender"/>
-                    <RadioButton x:Name="outputPinActorEvent"  Grid.ColumnSpan="2" Grid.Column="0"  Grid.Row="2" HorizontalAlignment="Center" Click="OnPinMousedDown"/>
+                    <TextBox x:Name="eventActorName"  Grid.Column="0" Grid.Row="1" Margin="2" TextChanged="RemoveSpacesFromSender"/>
+                    <TextBox x:Name="eventActorEventName"  Grid.Column="1" Grid.Row="1" Margin="2" TextChanged="RemoveSpacesFromSender"/>
+                    <RadioButton x:Name="outputPinActorEvent"  Grid.ColumnSpan="2" Grid.Column="0"  Grid.Row="2" HorizontalAlignment="Center" Click="OnPinMousedDown" LostMouseCapture="OnMouseControlLost"/>
                 </Grid>
             </Border>
 
@@ -176,7 +197,7 @@
 
                     <Label Grid.Row="0" Foreground="White" HorizontalAlignment="Center">Event name</Label>
                     <TextBox x:Name="levelEventName" Grid.Row="1" Margin="2"/>
-                    <RadioButton x:Name="outputPinLevelEvent"  Grid.Row="2" HorizontalAlignment="Center" Click="OnPinMousedDown"/>
+                    <RadioButton x:Name="outputPinLevelEvent"  Grid.Row="2" HorizontalAlignment="Center" Click="OnPinMousedDown" LostMouseCapture="OnMouseControlLost"/>
                 </Grid>
             </Border>
         </Grid>

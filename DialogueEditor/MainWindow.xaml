@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DialogueEditor"
         mc:Ignorable="d"
-        Title="Dialogue Editor v. 0.1 Alpha" Width="1024" Height="768" >
+        Title="Dialogue Editor v. 0.2 Alpha" Width="1024" Height="768" >
     <Grid Name="grid">
         <Grid.RowDefinitions>
             <RowDefinition Height="100"/>
@@ -15,147 +15,174 @@
         <!-- Toolbar-->
         
         <Border Name="toolbar" Background="#FFF4F4F5" Grid.Row="0" BorderBrush="Black" Margin="5,5,5,0">
-            <TabControl HorizontalAlignment="Stretch" >
-                <TabItem Header="File">
-                    <Grid Background="#FFE5E5E5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="80"/>
-                            <ColumnDefinition Width="80"/>
-                            <ColumnDefinition Width="80"/>
-                            <ColumnDefinition Width="80"/>
-                            <ColumnDefinition Width="80"/>
-                            <ColumnDefinition Width="80"/>
-                            <ColumnDefinition Width="80"/>
-                            <ColumnDefinition Width="80"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Background="#FFc2c2c2" Margin="2.5" ToolTip="Create new empty dialogue file" Click="ButtonNew_Click">
-                            <StackPanel Width="40">
-                                <Image Source="Resources/New.png"/>
-                                <TextBlock HorizontalAlignment="Center">New</TextBlock>
-                            </StackPanel>
-                        </Button>
-                        <Button Grid.Column="1" Background="#FFc2c2c2" Margin="2.5" ToolTip="Save this dialogue to file it was opened from" Click="ButtonSave_Click">
-                            <StackPanel Width="40">
-                                <Image Source="/Resources/Save.png"/>
-                                <TextBlock HorizontalAlignment="Center">Save</TextBlock>
-                            </StackPanel>
-                        </Button>
-                        <Button Grid.Column="2" Background="#FFc2c2c2" Margin="2.5" ToolTip="Save dialogue as new CSV file" Click="ButtonSaveAs_Click">
-                            <StackPanel Width="40">
-                                <Image Source="Resources/SaveAs.png"/>
-                                <TextBlock HorizontalAlignment="Center">Save As</TextBlock>
-                            </StackPanel>
-                        </Button>
-                        <Button Grid.Column="3" Background="#FFc2c2c2" Margin="2.5" ToolTip="Open a CSV dialogue file in this editor" Click="ButtonOpen_Click">
-                            <StackPanel Width="40">
-                                <Image Source="Resources/Open.png"/>
-                                <TextBlock HorizontalAlignment="Center">Open</TextBlock>
-                            </StackPanel>
-                        </Button>
-                        <Button Grid.Column="4" Background="#FFc2c2c2" Margin="2.5" ToolTip="Exports this dialogue as .csv for usage in UE4 (without unnecessary things like node positions)" Click="ButtonExport_Click">
-                            <StackPanel Width="40">
-                                <Image Source="Resources/Export.png"/>
-                                <TextBlock HorizontalAlignment="Center">Export</TextBlock>
-                            </StackPanel>
-                        </Button>
-                        <Button Grid.Column="5" Background="#FFc2c2c2" Margin="2.5" ToolTip="Aborts all changes and reloads file." Click="ButtonReload_Click">
-                            <StackPanel Width="40">
-                                <Image Source="Resources/Reload.png"/>
-                                <TextBlock HorizontalAlignment="Center">Reload</TextBlock>
-                            </StackPanel>
-                        </Button>
-                        <Button Grid.Column="6" Background="#FFc2c2c2" Margin="2.5" ToolTip="Runs dialogue in console, allowing you to test it." Click="ButtonTest_Click">
-                            <StackPanel Width="40">
-                                <Image Source="Resources/Test.png"/>
-                                <TextBlock HorizontalAlignment="Center">Test</TextBlock>
-                            </StackPanel>
-                        </Button>
-                        <Button Grid.Column="7" Background="#FFc2c2c2" Margin="2.5" ToolTip="Creates metadata for UE4 (csv containing widget locations, animation sequence references and all the other asset refs." Click="ButtonCreateMetadata_Click">
-                            <StackPanel>
-                                <Image Source="Resources/CreateMetadata.png" Width="40"/>
-                                <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" LineHeight="9" LineStackingStrategy="BlockLineHeight">Create metadata</TextBlock>
-                            </StackPanel>
-                        </Button>
-                    </Grid>
-                </TabItem>
-                <TabItem Header="Node">
-                    <Grid Background="#FFE5E5E5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="80"/>
-                            <ColumnDefinition Width="80"/>
-                            <ColumnDefinition Width="80"/>
-                            <ColumnDefinition Width="80"/>
-                            <ColumnDefinition Width="80"/>
-                            <ColumnDefinition Width="80"/>
-                            <ColumnDefinition Width="80"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Background="#FFc2c2c2" Margin="2.5" ToolTip="Adds new node and places it in up-left corner of the graph." Click="ButtonAddNode_Click">
-                            <StackPanel >
-                                <Image Source="Resources/AddNode.png" Width="40"/>
-                                <TextBlock HorizontalAlignment="Center">Add node</TextBlock>
-                            </StackPanel>
-                        </Button>
-                        <Button Grid.Column="1" Background="#FFc2c2c2" Margin="2.5" ToolTip="Deletes selected nodes. Same as key 'Delete'" Click="ButtonDeleteNodes_Click">
-                            <StackPanel >
-                                <Image Source="Resources/DeleteNodes.png" Width="40"/>
-                                <TextBlock HorizontalAlignment="Center">Delete</TextBlock>
-                            </StackPanel>
-                        </Button>
-                        <Button Grid.Column="2" Background="#FFc2c2c2" Margin="2.5" ToolTip="Deletes all connections coming to or from selected nodes." Click="ButtonDeleteConnections_Click">
-                            <StackPanel>
-                                <Image Source="Resources/DeleteConnections.png" Width="40"/>
-                                <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" LineHeight="10" LineStackingStrategy="BlockLineHeight">Delete connections</TextBlock>
-                            </StackPanel>
-                        </Button>
-                        <Button Grid.Column="3" Background="#FFc2c2c2" Margin="2.5" ToolTip="Deletes all outputs coming from selected nodes." Click="ButtonDeleteOutputs_Click">
-                            <StackPanel >
-                                <Image Source="Resources/DeleteOutputs.png" Width="40"/>
-                                <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" LineHeight="9" LineStackingStrategy="BlockLineHeight">Delete outputs</TextBlock>
-                            </StackPanel>
-                        </Button>
-                        <Button Grid.Column="4" Background="#FFc2c2c2" Margin="2.5" ToolTip="Selects all nodes in this graph." Click="ButtonSelectAll_Click">
-                            <StackPanel >
-                                <Image Source="Resources/SelectAll.png" Width="40"/>
-                                <TextBlock HorizontalAlignment="Center"  LineStackingStrategy="BlockLineHeight">Select all</TextBlock>
-                            </StackPanel>
-                        </Button>
-                        <Button Grid.Column="5" Background="#FFc2c2c2" Margin="2.5" ToolTip="Deselects all nodes in this graph" Click="ButtonDeselectAll_Click">
-                            <StackPanel >
-                                <Image Source="Resources/DeselectAll.png" Width="40"/>
-                                <TextBlock HorizontalAlignment="Center"  LineStackingStrategy="BlockLineHeight">Deselect all</TextBlock>
-                            </StackPanel>
-                        </Button>
-                    </Grid>
-                </TabItem>
-                <TabItem Header="Help">
-                    <Grid Background="#FFE5E5E5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="80"/>
-                            <ColumnDefinition Width="80"/>
-                            <ColumnDefinition Width="80"/>
-                            <ColumnDefinition Width="80"/>
-                            <ColumnDefinition Width="80"/>
-                            <ColumnDefinition Width="80"/>
-                            <ColumnDefinition Width="80"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                    </Grid>
-                </TabItem>
-            </TabControl>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="200"/>
+                </Grid.ColumnDefinitions>
+                <TabControl HorizontalAlignment="Stretch" Grid.Column="0">
+                    <TabItem Header="File">
+                        <Grid Background="#FFE5E5E5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0" Background="#FFc2c2c2" Margin="2.5" ToolTip="Create new empty dialogue file" Click="ButtonNew_Click">
+                                <StackPanel Width="40">
+                                    <Image Source="Resources/New.png"/>
+                                    <TextBlock HorizontalAlignment="Center">New</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="1" Background="#FFc2c2c2" Margin="2.5" ToolTip="Save this dialogue to file it was opened from" Click="ButtonSave_Click">
+                                <StackPanel Width="40">
+                                    <Image Source="/Resources/Save.png"/>
+                                    <TextBlock HorizontalAlignment="Center">Save</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="2" Background="#FFc2c2c2" Margin="2.5" ToolTip="Save dialogue as new CSV file" Click="ButtonSaveAs_Click">
+                                <StackPanel Width="40">
+                                    <Image Source="Resources/SaveAs.png"/>
+                                    <TextBlock HorizontalAlignment="Center">Save As</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="3" Background="#FFc2c2c2" Margin="2.5" ToolTip="Open a CSV dialogue file in this editor" Click="ButtonOpen_Click">
+                                <StackPanel Width="40">
+                                    <Image Source="Resources/Open.png"/>
+                                    <TextBlock HorizontalAlignment="Center">Open</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="4" Background="#FFc2c2c2" Margin="2.5" ToolTip="Exports this dialogue as .csv for usage in UE4 (without unnecessary things like node positions)" Click="ButtonExport_Click">
+                                <StackPanel Width="40">
+                                    <Image Source="Resources/Export.png"/>
+                                    <TextBlock HorizontalAlignment="Center">Export</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="5" Background="#FFc2c2c2" Margin="2.5" ToolTip="Aborts all changes and reloads file." Click="ButtonReload_Click">
+                                <StackPanel Width="40">
+                                    <Image Source="Resources/Reload.png"/>
+                                    <TextBlock HorizontalAlignment="Center">Reload</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="6" Background="#FFc2c2c2" Margin="2.5" ToolTip="Runs dialogue in console, allowing you to test it." Click="ButtonTest_Click">
+                                <StackPanel Width="40">
+                                    <Image Source="Resources/Test.png"/>
+                                    <TextBlock HorizontalAlignment="Center">Test</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="7" Background="#FFc2c2c2" Margin="2.5" ToolTip="Creates metadata for UE4 (csv containing widget locations, animation sequence references and all the other asset refs." Click="ButtonCreateMetadata_Click">
+                                <StackPanel>
+                                    <Image Source="Resources/CreateMetadata.png" Width="40"/>
+                                    <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" LineHeight="9" LineStackingStrategy="BlockLineHeight">Create metadata</TextBlock>
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Node">
+                        <Grid Background="#FFE5E5E5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0" Background="#FFc2c2c2" Margin="2.5" ToolTip="Adds new node and places it in up-left corner of the graph." Click="ButtonAddNode_Click">
+                                <StackPanel >
+                                    <Image Source="Resources/AddNode.png" Width="40"/>
+                                    <TextBlock HorizontalAlignment="Center">Add node</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="1" Background="#FFc2c2c2" Margin="2.5" ToolTip="Deletes selected nodes. Same as key 'Delete'" Click="ButtonDeleteNodes_Click">
+                                <StackPanel >
+                                    <Image Source="Resources/DeleteNodes.png" Width="40"/>
+                                    <TextBlock HorizontalAlignment="Center">Delete</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="2" Background="#FFc2c2c2" Margin="2.5" ToolTip="Deletes all connections coming to or from selected nodes." Click="ButtonDeleteConnections_Click">
+                                <StackPanel>
+                                    <Image Source="Resources/DeleteConnections.png" Width="40"/>
+                                    <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" LineHeight="10" LineStackingStrategy="BlockLineHeight">Delete connections</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="3" Background="#FFc2c2c2" Margin="2.5" ToolTip="Deletes all outputs coming from selected nodes." Click="ButtonDeleteOutputs_Click">
+                                <StackPanel >
+                                    <Image Source="Resources/DeleteOutputs.png" Width="40"/>
+                                    <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" LineHeight="9" LineStackingStrategy="BlockLineHeight">Delete outputs</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="4" Background="#FFc2c2c2" Margin="2.5" ToolTip="Selects all nodes in this graph." Click="ButtonSelectAll_Click">
+                                <StackPanel >
+                                    <Image Source="Resources/SelectAll.png" Width="40"/>
+                                    <TextBlock HorizontalAlignment="Center"  LineStackingStrategy="BlockLineHeight">Select all</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="5" Background="#FFc2c2c2" Margin="2.5" ToolTip="Deselects all nodes in this graph" Click="ButtonDeselectAll_Click">
+                                <StackPanel >
+                                    <Image Source="Resources/DeselectAll.png" Width="40"/>
+                                    <TextBlock HorizontalAlignment="Center"  LineStackingStrategy="BlockLineHeight">Deselect all</TextBlock>
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Help">
+                        <Grid Background="#FFE5E5E5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                        </Grid>
+                    </TabItem>
+                </TabControl>
+                <Grid Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Background="#FFc2c2c2" Margin="2.5" ToolTip="Undoes last action" Click="ButtonUndo_Click">
+                        <StackPanel Width="40">
+                            <Image Source="Resources/Undo.png"/>
+                            <TextBlock HorizontalAlignment="Center">Undo</TextBlock>
+                        </StackPanel>
+                    </Button>
+                    <Button Grid.Column="1" Background="#FFc2c2c2" Margin="2.5" ToolTip="Undoes undoing last action" Click="ButtonRedo_Click">
+                        <StackPanel Width="40">
+                            <Image Source="Resources/Redo.png"/>
+                            <TextBlock HorizontalAlignment="Center">Redo</TextBlock>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </Grid>
+            
         </Border>
         
         <!-- Draw area -->
-        
+
         <Border BorderBrush="Black" BorderThickness="1"  Grid.Row="1" Margin="5" ClipToBounds="True">
-            <Canvas Name="drawArea" Background="#8f8f8f" 
+            <Canvas Name="drawArea" Background="#8f8f8f"
                     MouseWheel="Canvas_MouseWheel" MouseDown="drawArea_MouseDown" MouseUp="drawArea_MouseUp" MouseMove="drawArea_MouseMove"
-                    MouseRightButtonDown="drawArea_MouseRightButtonDown">
+                    MouseRightButtonDown="drawArea_MouseRightButtonDown"
+                    >
                 <Canvas.RenderTransform>
                     <ScaleTransform x:Name="canvasZoom"/>
                 </Canvas.RenderTransform>
             </Canvas>
+
         </Border>
         
         <!-- Selection and connection drawing -->

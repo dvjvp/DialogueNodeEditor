@@ -59,7 +59,7 @@ namespace DialogueEditor.Files
 			dialog.Title = "Save dialogue as...";
 			dialog.DefaultExt = ".csv";
 
-			if(dialog.ShowDialog() == DialogResult.OK)
+			if (dialog.ShowDialog() == DialogResult.OK)
 			{
 				filePath = dialog.FileName;
 				return dialog.FileName;
@@ -69,7 +69,7 @@ namespace DialogueEditor.Files
 
 		public static void SaveFile(string filepath, List<Node> nodes)
 		{
-			if (!filePath.EndsWith(".csv") && !filePath.EndsWith(".CSV")) 
+			if (!filePath.EndsWith(".csv") && !filePath.EndsWith(".CSV"))
 			{
 				filePath += ".csv";
 			}
@@ -78,7 +78,7 @@ namespace DialogueEditor.Files
 			{
 				node.ApplyChangesToSourceData();
 			}
-			foreach (var node in nodes)	//Yes, they HAVE to be in 2 separate foreach-es or it won't work properly
+			foreach (var node in nodes) //Yes, they HAVE to be in 2 separate foreach-es or it won't work properly
 			{
 				node.ApplyConnectionChangesToSourceData();
 			}
@@ -100,12 +100,46 @@ namespace DialogueEditor.Files
 				filePath += ".csv";
 			}
 
+			foreach (var node in nodes)
+			{
+				node.ApplyChangesToSourceData();
+			}
+			foreach (var node in nodes) //Yes, they HAVE to be in 2 separate foreach-es or it won't work properly
+			{
+				node.ApplyConnectionChangesToSourceData();
+			}
+
 			using (StreamWriter outputFile = new StreamWriter(filepath))
 			{
 				outputFile.WriteLine("---,DialogueText,Command,CommandArguments,Next");
 				foreach (Node node in nodes)
 				{
 					outputFile.WriteLine(node.sourceData.ToUE4exportCSVrow());
+				}
+			}
+		}
+
+		public static void GenerateMetadata(string filepath, List<Node> nodes)
+		{
+			foreach (var node in nodes)
+			{
+				node.ApplyChangesToSourceData();
+			}
+			foreach (var node in nodes) //Yes, they HAVE to be in 2 separate foreach-es or it won't work properly
+			{
+				node.ApplyConnectionChangesToSourceData();
+			}
+
+			if (!filePath.EndsWith(".csv") && !filePath.EndsWith(".CSV"))
+			{
+				filePath += ".csv";
+			}
+			using (StreamWriter outputFile = new StreamWriter(filepath))
+			{
+				outputFile.WriteLine("---,ParentActor,WidgetOffset,WidgetText,SequenceToPlay");
+				foreach (Node node in nodes)
+				{
+					outputFile.WriteLine(node.sourceData.rowName + ",\"None\",\"(Rotation=(X=0.000000,Y=-0.000000,Z=0.000000,W=1.000000),Translation=(X=0.000000,Y=0.000000,Z=100.000000),Scale3D=(X=1.000000,Y=1.000000,Z=1.000000))\",\"\",\"None\"");
 				}
 			}
 		}

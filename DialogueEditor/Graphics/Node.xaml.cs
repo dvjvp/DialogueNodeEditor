@@ -34,7 +34,7 @@ namespace DialogueEditor
 
 		public void LoadDataFromSource()
 		{
-			nodeNameField.Text = sourceData.rowName;
+			nodeNameField.Content = sourceData.rowName;
 			dialogueText.Text = sourceData.dialogueText;
 			SetPosition(sourceData.nodePositionX, sourceData.nodePositionY);
 			switch (sourceData.command)
@@ -63,8 +63,8 @@ namespace DialogueEditor
 					try
 					{
 						string[] s = sourceData.commandArguments.Split(' ');
-						actorName.Text = s[0];
-						actorEventName.Text = s[1];
+						eventActorName.Text = s[0];
+						eventActorEventName.Text = s[1];
 					}
 					catch (Exception)
 					{
@@ -381,6 +381,7 @@ namespace DialogueEditor
 			{
 				MainWindow.instance.ClearSelection();
 				MainWindow.instance.selection.Add(this);
+				SetSelected(true);
 			}
 
 			MainWindow.instance.StartDragnDropSelected((Vector)e.GetPosition((IInputElement)Parent));
@@ -395,6 +396,11 @@ namespace DialogueEditor
 			//Console.WriteLine("Up");
 			ReleaseMouseCapture();
 			MouseMove -= MainWindow.instance.DragnDropSelectedOnMove;
+		}
+
+		protected void OnMouseControlLost(object sender, MouseEventArgs e)
+		{
+			OnMouseUp(null);
 		}
 
 		public void ForceConnectionUpdate()
@@ -416,7 +422,7 @@ namespace DialogueEditor
 		public void SetSelected(bool selected)
 		{
 			selectionBorder.Background = selected ? new SolidColorBrush(Color.FromRgb(224, 224, 128)) : null;
-			Console.WriteLine("selected node: " + nodeNameField.Text);
+			Console.WriteLine("selected node: " + nodeNameField.Content);
 		}
 
 		private void ButtonDelete_Click(object sender, RoutedEventArgs e)
@@ -426,7 +432,7 @@ namespace DialogueEditor
 
 		public void Delete()
 		{
-			Console.WriteLine("Deleting node: " + nodeNameField.Text);
+			Console.WriteLine("Deleting node: " + nodeNameField.Content);
 			MainWindow.instance.DeleteNode(this);
 		}
 
@@ -467,7 +473,7 @@ namespace DialogueEditor
 
 		private void nodeNameField_TextChanged(object sender, TextChangedEventArgs e)
 		{
-			nodeNameField.Text = nodeNameField.Text.Replace(" ", "");
+			nodeNameField.Content = nodeNameField.Content.ToString().Replace(" ", "");
 			// 			if (MainWindow.instance.nodeMap.ContainsKey(nodeNameField.Text))
 			// 			{
 			// 				MessageBox.Show("Node names have to be unique!");
@@ -477,7 +483,7 @@ namespace DialogueEditor
 			{
 				string oldName = sourceData.rowName;
 				MainWindow.instance.nodeMap.Remove(oldName);
-				MainWindow.instance.nodeMap.Add(nodeNameField.Text, this);
+				MainWindow.instance.nodeMap.Add(nodeNameField.Content.ToString(), this);
 			}
 
 		}
@@ -492,7 +498,7 @@ namespace DialogueEditor
 
 		public void ApplyChangesToSourceData()
 		{
-			sourceData.rowName = nodeNameField.Text;
+			sourceData.rowName = nodeNameField.Content.ToString();
 			sourceData.dialogueText = dialogueText.Text;
 
 			switch (outputType.Text)
@@ -511,7 +517,7 @@ namespace DialogueEditor
 					break;
 				case "Call actor event":
 					sourceData.command = "actor-message";
-					sourceData.commandArguments = actorName.Text + " " + actorEventName.Text;
+					sourceData.commandArguments = eventActorName.Text + " " + eventActorEventName.Text;
 					break;
 				case "Call level event":
 					sourceData.command = "level-message";
@@ -541,7 +547,10 @@ namespace DialogueEditor
 							s.Append(item.parentTo.sourceData.rowName);
 							s.Append(' ');
 						}
-						s.Length--;
+						if (s.Length > 0) 
+						{
+							s.Length--;
+						} 						
 						sourceData.nextRowName = s.ToString();
 					}
 					break;
@@ -580,6 +589,19 @@ namespace DialogueEditor
 			}
 		}
 
+		public void CreateUniqueID()
+		{
+			nodeNameField.Content = actorName.Text + Guid.NewGuid().ToString();
+		}
 
+		private void aactorName_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			CreateUniqueID();
+		}
+
+		private void dialogueText_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			CreateUniqueID();
+		}
 	}
 }

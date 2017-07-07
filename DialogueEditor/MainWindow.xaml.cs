@@ -19,7 +19,7 @@ namespace DialogueEditor
 		public Dictionary<string, Node> nodeMap = new Dictionary<string, Node>();
 		public List<Node> selection = new List<Node>();
 
-		const double zoomSpeed = .05;
+		const double zoomSpeed = .025;
 		bool selectionInProgress = false;
 		Point selectionStartPoint;
 
@@ -32,6 +32,9 @@ namespace DialogueEditor
             InitializeComponent();
 			KeyDown += MainWindow_KeyDown;
 			//Based loosely on: https://forum.unity3d.com/threads/simple-node-editor.189230/
+
+			drawArea.Width = 99999999999;
+			drawArea.Height = 99999999999;
 		}
 		
 		private void OpenFile(string filePath)
@@ -68,37 +71,15 @@ namespace DialogueEditor
 			connectionDrawingLine.Y2 = end.Y;
 		}
 
-// 		public Node GetNodeUnderMouse()
-// 		{
-// 
-// 		}
-
 		public void EndDrawingConnection()
 		{
 			connectionDrawingLine.Visibility = Visibility.Collapsed;
 			connectionDrawingLine.X1 = connectionDrawingLine.X2 = connectionDrawingLine.Y1 = connectionDrawingLine.Y2 = 0;
 			FrameworkElement mouseOverObject = Mouse.DirectlyOver as FrameworkElement;
 
-
-
+			
 			Node other = null;
 			FrameworkElement transform = mouseOverObject;
-
-			while (transform != drawArea && transform != null) 
-			{
-				if(transform is Node)
-				{
-					other = (Node)transform;
-					break;
-				}
-				transform = transform.Parent as FrameworkElement;
-			}
-			if (other == null) 
-			{
-				return;
-			}
-
-
 
 			if (mouseOverObject is RadioButton)
 			{
@@ -106,8 +87,22 @@ namespace DialogueEditor
 			}
 			else
 			{
+				while (transform != drawArea && transform != null)
+				{
+					if (transform is Node)
+					{
+						other = (Node)transform;
+						break;
+					}
+					transform = transform.Parent as FrameworkElement;
+				}
+				if (other == null)
+				{
+					return;
+				}
 				connectionDrawSource.TryConnecting(connectionDrawingLineStartPin, other);
 			}
+			
 		}
 
 		#endregion
@@ -127,7 +122,7 @@ namespace DialogueEditor
 
 		private void Canvas_MouseWheel(object sender, MouseWheelEventArgs e)
 		{
-			if(e.Delta>0)
+			if (e.Delta > 0) 
 			{
 				canvasZoom.ScaleX += zoomSpeed;
 				canvasZoom.ScaleY += zoomSpeed;
@@ -137,6 +132,14 @@ namespace DialogueEditor
 				canvasZoom.ScaleX -= zoomSpeed;
 				canvasZoom.ScaleY -= zoomSpeed;
 			}
+			canvasZoom.ScaleX = Math.Max(canvasZoom.ScaleX, 0.025);
+			canvasZoom.ScaleY = Math.Max(canvasZoom.ScaleY, 0.025);
+
+			UpdateCanvasSize();
+		}
+
+		public void UpdateCanvasSize()
+		{
 		}
 
 		#endregion
@@ -145,13 +148,15 @@ namespace DialogueEditor
 
 		private void ButtonAddNode_Click(object sender, RoutedEventArgs e)
 		{
-			AddNode(new DialogueDataLine());
+			AddNode(new DialogueDataLine()).CreateUniqueID();
 		}
 
 		private void drawArea_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
 		{
 			Point mousePos = e.GetPosition(drawArea);
-			AddNode(new DialogueDataLine()).SetPosition(mousePos.X, mousePos.Y);
+			var node = AddNode(new DialogueDataLine());
+			node.SetPosition(mousePos.X, mousePos.Y);
+			node.CreateUniqueID();
 		}
 
 		private Node AddNode(DialogueDataLine data)
@@ -161,7 +166,7 @@ namespace DialogueEditor
 			Node n = new Node(data);
 			try
 			{
-				nodeMap.Add(n.nodeNameField.Text, n);
+				nodeMap.Add(n.nodeNameField.Content.ToString(), n);
 			}
 			catch (Exception)
 			{
@@ -199,9 +204,18 @@ namespace DialogueEditor
 
 		public void DeleteNode(Node node)
 		{
+			foreach (var n in nodes)
+			{
+				n.ApplyChangesToSourceData();
+			}
+			foreach (var n in nodes) //Yes, they HAVE to be in 2 separate foreach-es or it won't work properly
+			{
+				n.ApplyConnectionChangesToSourceData();
+			}
+
 			node.DeleteAllConnections();
 			drawArea.Children.Remove(node);
-			nodeMap.Remove(node.nodeNameField.Text);
+			nodeMap.Remove(node.nodeNameField.Content.ToString());
 			nodes.Remove(node);
 			RefreshNodeConnections();
 		}
@@ -440,7 +454,12 @@ namespace DialogueEditor
 
 		private void ButtonCreateMetadata_Click(object sender, RoutedEventArgs e)
 		{
-			MessageBox.Show("Not implemented yet!");
+			string filepath = CSVParser.GetFileSaveLocation();
+			if (filepath == null) 
+			{
+				return;
+			}
+			CSVParser.GenerateMetadata(filepath, nodes);
 		}
 
 		private void ButtonTest_Click(object sender, RoutedEventArgs e)
@@ -448,6 +467,17 @@ namespace DialogueEditor
 			MessageBox.Show("Not implemented yet!");
 		}
 
+		private void ButtonUndo_Click(object sender, RoutedEventArgs e)
+		{
+			MessageBox.Show("Not implemented yet");
+		}
+
+		private void ButtonRedo_Click(object sender, RoutedEventArgs e)
+		{
+			MessageBox.Show("Not implemented yet");
+		}
+
 		#endregion
+
 	}
 }
