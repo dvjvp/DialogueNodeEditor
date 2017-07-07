@@ -120,23 +120,34 @@ namespace DialogueEditor
 				case Key.Back:
 				case Key.Delete:
 					DeleteSelectedNodes();
+					e.Handled = true;
 					break;
 
 
 				case Key.Up:
+					PanCanvas(0, -30);
+					e.Handled = true;
+					break;
 				case Key.W:
 					PanCanvas(0, -30);
 					break;
 				case Key.Down:
+					PanCanvas(0, 30);
+					e.Handled = true;
+					break;
 				case Key.S:
 					PanCanvas(0, 30);
 					break;
-				case Key.Left:
-					PanCanvas(-30, 0);
-					break;
 				case Key.Right:
+					PanCanvas(30, 0);
+					e.Handled = true;
+					break;
 				case Key.D:
 					PanCanvas(30, 0);
+					break;
+				case Key.Left:
+					PanCanvas(-30, 0);
+					e.Handled = true;
 					break;
 
 
@@ -149,7 +160,7 @@ namespace DialogueEditor
 					{
 						PanCanvas(-30, 0);
 					}
-					
+					e.Handled = true;
 					break;
 
 			}

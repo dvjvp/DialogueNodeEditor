@@ -13,13 +13,17 @@ namespace DialogueEditor.Files
 			string[] lines = File.ReadAllLines(filepath);
 			List<DialogueDataLine> list = new List<DialogueDataLine>();
 
+			bool withCoordinates = lines[0].Contains("X,Y");
+
 			for (int i = 1 /*Ignore first line*/; i < lines.Length; i++)
 			{
 				Console.WriteLine("LineContent: " + lines[i]);
 
 				string[] s = lines[i].Split(',');
 				string dialogue = string.Empty;
-				for (int j = 1; j < s.Length - 3; j++) 
+				int lastIndex = withCoordinates ? s.Length - 5 : s.Length - 3;
+				int j = 1;	//counts how many array elements are consumed by dialogueText.
+				for (; j < s.Length - 3; j++) 
 				{
 					dialogue += s[j];
 					dialogue += ',';
@@ -30,13 +34,13 @@ namespace DialogueEditor.Files
 				}
 				//string dialogueText = s[1].Substring(1, s[1].Length - 2);   //don't take '"' signs at the beginning and on the end
 				DialogueDataLine d = new DialogueDataLine(s[0],
-					dialogue.Substring(1, dialogue.Length - 3), 
-					s[2].Substring(1, s[2].Length - 2), 
-					s[3].Substring(1, s[3].Length - 2), 
-					s[4].Substring(1, s[4].Length - 2));
+					dialogue.Substring(1, dialogue.Length - 3),
+					s[0 + j].Length > 2 ? s[0 + j].Substring(1, s[0 + j].Length - 2) : "",
+					s[1 + j].Length > 2 ? s[1 + j].Substring(1, s[1 + j].Length - 2) : "",
+					s[2 + j].Length > 2 ? s[2 + j].Substring(1, s[2 + j].Length - 2) : "");
 				try
 				{
-					d.SetPosition(double.Parse(s[5]), double.Parse(s[6]));
+					d.SetPosition(double.Parse(s[3 + j]), double.Parse(s[4 + j]));
 				}
 				catch (Exception)
 				{
