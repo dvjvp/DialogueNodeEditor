@@ -35,10 +35,13 @@ namespace DialogueEditor
 			RecalculatePromptAreaVisibility();
 		}
 
+		#region Source data
+
 		public void LoadDataFromSource()
 		{
 			nodeNameField.Text = sourceData.rowName;
 			dialogueText.Text = sourceData.commandArguments;
+			PromptTextBox.Text = sourceData.prompt;
 			SetPosition(sourceData.nodePositionX, sourceData.nodePositionY);
 			switch (sourceData.command)
 			{
@@ -90,30 +93,147 @@ namespace DialogueEditor
 			}
 		}
 
+		public void ApplyChangesToSourceData()
+		{
+			sourceData.rowName = nodeNameField.Text.ToString();
+			sourceData.prompt = PromptTextBox.Text;
 
+			switch (outputType.Text)
+			{
+				case "End dialogue":
+					sourceData.command = "leave";
+					sourceData.commandArguments = string.Empty;
+					break;
+				case "Go to node":
+					sourceData.command = "go-to";
+					sourceData.commandArguments = string.Empty;
+					break;
+				case "Multiple choices":
+					sourceData.command = "options";
+					sourceData.commandArguments = string.Empty;
+					break;
+				case "If player has item":
+					sourceData.command = "has-item";
+					sourceData.commandArguments = itemName.Text + " " + itemCount.Text;
+					break;
+				case "Call actor event":
+					sourceData.command = "actor-message";
+					sourceData.commandArguments = eventActorName.Text + " " + eventActorEventName.Text;
+					break;
+				case "Call level event":
+					sourceData.command = "level-message";
+					sourceData.commandArguments = levelEventName.Text;
+					break;
+				case "Normal dialogue":
+					sourceData.command = "dialogue";
+					sourceData.commandArguments = dialogueText.Text;
+					break;
+				default:
+					break;
+			}
+		}
+
+		public void ApplyConnectionChangesToSourceData()
+		{
+			switch (outputType.Text)
+			{
+				case "End dialogue":
+					sourceData.nextRowName = "None";
+					break;
+				case "Go to node":
+					sourceData.nextRowName = TargetDialogueID.Text;
+					break;
+				case "Multiple choices":
+					{
+						System.Text.StringBuilder s = new System.Text.StringBuilder();
+						Connection defaultC = null;
+						foreach (var item in outputConnections)
+						{
+							if (item.objFrom == outputPinMultipleChoices)
+							{
+								s.Append(item.parentTo.sourceData.rowName);
+								s.Append(' ');
+							}
+							else if (item.objFrom == outputPinMultipleChoicesDefault)
+							{
+								defaultC = item;
+							}
+						}
+						if (s.Length > 0)
+						{
+							s.Length--;
+						}
+						sourceData.nextRowName = s.ToString();
+
+						if (defaultC != null)
+						{
+							sourceData.commandArguments = SecondsTextBox.Text + " " + defaultC.parentTo.sourceData.rowName;
+						}
+						else
+						{
+							sourceData.commandArguments = string.Empty;
+						}
+					}
+					break;
+				case "If player has item":
+					{
+						string sTrue = "None";
+						string sFalse = "None";
+
+						foreach (var item in outputConnections)
+						{
+							if (item.objFrom == outputPinItemTrue)
+							{
+								sTrue = item.parentTo.sourceData.rowName;
+							}
+							else if (item.objFrom == outputPinItemFalse)
+							{
+								sFalse = item.parentTo.sourceData.rowName;
+							}
+						}
+						sourceData.nextRowName = sTrue + " " + sFalse;
+					}
+					break;
+				case "Call actor event":
+				case "Call level event":
+				case "Normal dialogue":
+				default:
+					if (outputConnections.Count > 0)
+					{
+						sourceData.nextRowName = outputConnections[0].parentTo.sourceData.rowName;
+					}
+					else
+					{
+						sourceData.nextRowName = "None";
+					}
+					break;
+			}
+		}
+
+		#endregion
 
 		#region Connections
 
-// 		public FrameworkElement[] GetActiveOutputPins()
-// 		{
-// 			switch (outputType.Text)
-// 			{
-// 
-// 				case "End dialogue":
-// 					return null;
-// 				case "Multiple choices":
-// 					return new FrameworkElement[] { outputPinMultipleChoices, outputPinMultipleChoicesDefault };
-// 				case "If player has item":
-// 					return new FrameworkElement[] { outputPinItemTrue, outputPinItemFalse };
-// 				case "Call actor event":
-// 					return new FrameworkElement[] { outputPinActorEvent };
-// 				case "Call level event":
-// 					return new FrameworkElement[] { outputPinLevelEvent };
-// 				case "Normal dialogue":
-// 				default:
-// 					return new FrameworkElement[] { outputPinNormal };
-// 			}
-// 		}
+		// 		public FrameworkElement[] GetActiveOutputPins()
+		// 		{
+		// 			switch (outputType.Text)
+		// 			{
+		// 
+		// 				case "End dialogue":
+		// 					return null;
+		// 				case "Multiple choices":
+		// 					return new FrameworkElement[] { outputPinMultipleChoices, outputPinMultipleChoicesDefault };
+		// 				case "If player has item":
+		// 					return new FrameworkElement[] { outputPinItemTrue, outputPinItemFalse };
+		// 				case "Call actor event":
+		// 					return new FrameworkElement[] { outputPinActorEvent };
+		// 				case "Call level event":
+		// 					return new FrameworkElement[] { outputPinLevelEvent };
+		// 				case "Normal dialogue":
+		// 				default:
+		// 					return new FrameworkElement[] { outputPinNormal };
+		// 			}
+		// 		}
 
 		private void OnPinMousedDown(object sender, RoutedEventArgs e)
 		{
@@ -542,130 +662,12 @@ namespace DialogueEditor
 			b.Text = b.Text.Replace(" ", "");
 		}
 
-		#endregion
-
-		public void ApplyChangesToSourceData()
-		{
-			sourceData.rowName = nodeNameField.Text.ToString();
-
-			switch (outputType.Text)
-			{
-				case "End dialogue":
-					sourceData.command = "leave";
-					sourceData.commandArguments = string.Empty;
-					break;
-				case "Go to node":
-					sourceData.command = "go-to";
-					sourceData.commandArguments = string.Empty;
-					break;
-				case "Multiple choices":
-					sourceData.command = "options";
-					sourceData.commandArguments = string.Empty;
-					break;
-				case "If player has item":
-					sourceData.command = "has-item";
-					sourceData.commandArguments = itemName.Text + " " + itemCount.Text;
-					break;
-				case "Call actor event":
-					sourceData.command = "actor-message";
-					sourceData.commandArguments = eventActorName.Text + " " + eventActorEventName.Text;
-					break;
-				case "Call level event":
-					sourceData.command = "level-message";
-					sourceData.commandArguments = levelEventName.Text;
-					break;
-				case "Normal dialogue":
-					sourceData.command = "dialogue";
-					sourceData.commandArguments = dialogueText.Text;
-					break;
-				default:
-					break;
-			}
-		}
-
-		public void ApplyConnectionChangesToSourceData()
-		{
-			switch (outputType.Text)
-			{
-				case "End dialogue":
-					sourceData.nextRowName = "None";
-					break;
-				case "Go to node":
-					sourceData.nextRowName = TargetDialogueID.Text;
-					break;
-				case "Multiple choices":
-					{
-						System.Text.StringBuilder s = new System.Text.StringBuilder();
-						Connection defaultC = null;
-						foreach (var item in outputConnections)
-						{
-							if (item.objFrom == outputPinMultipleChoices)
-							{
-								s.Append(item.parentTo.sourceData.rowName);
-								s.Append(' ');
-							}
-							else if (item.objFrom == outputPinMultipleChoicesDefault) 
-							{
-								defaultC = item;
-							}
-						}
-						if (s.Length > 0) 
-						{
-							s.Length--;
-						} 						
-						sourceData.nextRowName = s.ToString();
-
-						if (defaultC != null) 
-						{
-							sourceData.commandArguments = SecondsTextBox.Text + " " + defaultC.parentTo.sourceData.rowName;
-						}
-						else
-						{
-							sourceData.commandArguments = string.Empty;
-						}
-					}
-					break;
-				case "If player has item":
-					{
-						string sTrue = "None";
-						string sFalse = "None";
-
-						foreach (var item in outputConnections)
-						{
-							if (item.objFrom == outputPinItemTrue)
-							{
-								sTrue = item.parentTo.sourceData.rowName;
-							}
-							else if (item.objFrom == outputPinItemFalse) 
-							{
-								sFalse = item.parentTo.sourceData.rowName;
-							}
-						}
-						sourceData.nextRowName = sTrue + " " + sFalse;
-					}
-					break;
-				case "Call actor event":
-				case "Call level event":
-				case "Normal dialogue":
-				default:
-					if (outputConnections.Count > 0) 
-					{
-						sourceData.nextRowName = outputConnections[0].parentTo.sourceData.rowName;
-					}
-					else
-					{
-						sourceData.nextRowName = "None";
-					}
-					break;
-			}
-		}
-
 		public void RecalculatePromptAreaVisibility()
 		{
 
 			foreach (var item in inputConnections)
 			{
-				if(item.parentFrom.outputType.Text == "Multiple choices")
+				if (item.parentFrom.outputType.Text == "Multiple choices")
 				{
 					BorderPrompt.Visibility = Visibility.Visible;
 					return;
@@ -688,6 +690,9 @@ namespace DialogueEditor
 		{
 			CreateUniqueID();
 		}
+
+
+		#endregion
 
 	}
 }
