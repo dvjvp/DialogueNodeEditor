@@ -193,6 +193,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="History\" />
+    <Folder Include="Testing\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\LayoutAuto.png">

@@ -1,7 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Shapes;
 
 namespace DialogueEditor
 {
@@ -21,7 +20,7 @@ namespace DialogueEditor
 		private PathGeometry path;
 		private Pen pen;
 		private Brush _brush;
-		public Brush brush
+		public Brush Brush
 		{
 			get
 			{
@@ -30,7 +29,7 @@ namespace DialogueEditor
 			set
 			{
 				_brush = value;
-				pen = new Pen(brush, 5);
+				pen = new Pen(Brush, 5);
 			}
 		}
 
@@ -41,8 +40,14 @@ namespace DialogueEditor
 			objFrom = inputFrom;
 			parentTo = to;
 			objTo = to.InputPin;
-			brush = new SolidColorBrush(Colors.Black);
+			Brush = new SolidColorBrush(Colors.Black);
 			//pen = new Pen(brush, 5);
+		}
+
+		public void SetHighlightEnabled(bool highlighted)
+		{
+			Brush = highlighted ? Brushes.AliceBlue : Brushes.Black;
+			InvalidateVisual();
 		}
 
 		private static Point GetObjectPosition(FrameworkElement element)

@@ -705,5 +705,46 @@ namespace DialogueEditor
 
 		#endregion
 
+		private void HighlightPinConnections(object sender, MouseEventArgs e)
+		{
+			if (sender == InputPin) 
+			{
+				foreach (var item in inputConnections)
+				{
+					item.SetHighlightEnabled(true);
+				}
+			}
+			else
+			{
+				foreach (var item in outputConnections)
+				{
+					if(item.objFrom == sender)
+					{
+						item.SetHighlightEnabled(true);
+					}
+				}
+			}
+		}
+
+		private void UnhighlightPinConnections(object sender, MouseEventArgs e)
+		{
+			if (sender == InputPin)
+			{
+				foreach (var item in inputConnections)
+				{
+					item.SetHighlightEnabled(false);
+				}
+			}
+			else
+			{
+				foreach (var item in outputConnections)
+				{
+					if (item.objFrom == sender)
+					{
+						item.SetHighlightEnabled(false);
+					}
+				}
+			}
+		}
 	}
 }
