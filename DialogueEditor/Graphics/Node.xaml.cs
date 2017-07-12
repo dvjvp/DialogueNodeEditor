@@ -34,7 +34,7 @@ namespace DialogueEditor
 
 		public void LoadDataFromSource()
 		{
-			nodeNameField.Content = sourceData.rowName;
+			nodeNameField.Text = sourceData.rowName;
 			dialogueText.Text = sourceData.commandArguments;
 			SetPosition(sourceData.nodePositionX, sourceData.nodePositionY);
 			switch (sourceData.command)
@@ -91,26 +91,26 @@ namespace DialogueEditor
 
 		#region Connections
 
-		public FrameworkElement[] GetActiveOutputPins()
-		{
-			switch (outputType.Text)
-			{
-
-				case "End dialogue":
-					return null;
-				case "Multiple choices":
-					return new FrameworkElement[] { outputPinMultipleChoices };
-				case "If player has item":
-					return new FrameworkElement[] { outputPinItemTrue, outputPinItemFalse };
-				case "Call actor event":
-					return new FrameworkElement[] { outputPinActorEvent };
-				case "Call level event":
-					return new FrameworkElement[] { outputPinLevelEvent };
-				case "Normal dialogue":
-				default:
-					return new FrameworkElement[] { outputPinNormal };
-			}
-		}
+// 		public FrameworkElement[] GetActiveOutputPins()
+// 		{
+// 			switch (outputType.Text)
+// 			{
+// 
+// 				case "End dialogue":
+// 					return null;
+// 				case "Multiple choices":
+// 					return new FrameworkElement[] { outputPinMultipleChoices, outputPinMultipleChoicesDefault };
+// 				case "If player has item":
+// 					return new FrameworkElement[] { outputPinItemTrue, outputPinItemFalse };
+// 				case "Call actor event":
+// 					return new FrameworkElement[] { outputPinActorEvent };
+// 				case "Call level event":
+// 					return new FrameworkElement[] { outputPinLevelEvent };
+// 				case "Normal dialogue":
+// 				default:
+// 					return new FrameworkElement[] { outputPinNormal };
+// 			}
+// 		}
 
 		private void OnPinMousedDown(object sender, RoutedEventArgs e)
 		{
@@ -156,6 +156,22 @@ namespace DialogueEditor
 							{
 								Console.WriteLine("Exception in LoadOutputConnectionDataFromSource():" + e);
 							}
+						}
+
+						if (sourceData.commandArguments.Length > 0) 
+						{
+							try
+							{
+								s = sourceData.commandArguments.Split(' ');
+								SecondsTextBox.Text = s[0];
+								Node target = MainWindow.instance.nodeMap[s[1]];
+								MakeConnection(target, outputPinMultipleChoicesDefault);
+							}
+							catch (Exception e)
+							{
+								Console.WriteLine("Exception in LoadOutputConnectionDataFromSource():" + e);
+							}
+							
 						}
 					}
 					break;
@@ -299,7 +315,7 @@ namespace DialogueEditor
 						other.TargetDialogueID.Text = sourceData.rowName;
 						break;
 					case "Multiple choices":
-						other.MakeConnection(this, other);
+						other.MakeConnection(this, otherPin);
 						break;
 					case "Call actor event":
 					case "Call level event":
@@ -439,7 +455,7 @@ namespace DialogueEditor
 		public void SetSelected(bool selected)
 		{
 			selectionBorder.Background = selected ? new SolidColorBrush(Color.FromRgb(224, 224, 128)) : null;
-			Console.WriteLine("selected node: " + nodeNameField.Content);
+			Console.WriteLine("selected node: " + nodeNameField.Text);
 		}
 
 		private void ButtonDelete_Click(object sender, RoutedEventArgs e)
@@ -449,7 +465,7 @@ namespace DialogueEditor
 
 		public void Delete()
 		{
-			Console.WriteLine("Deleting node: " + nodeNameField.Content);
+			Console.WriteLine("Deleting node: " + nodeNameField.Text);
 			MainWindow.instance.DeleteNode(this);
 		}
 
@@ -480,7 +496,7 @@ namespace DialogueEditor
 					c.R = 47; c.G = 65; c.B = 198; //blue
 					break;
 				case "Call level event":
-					c.R = 0; c.G = 10; c.B = 91; //violet
+					c.R = 114; c.G = 69; c.B = 114; //violet
 					break;
 				case "Normal dialogue":
 				default:
@@ -493,7 +509,7 @@ namespace DialogueEditor
 
 		private void nodeNameField_TextChanged(object sender, TextChangedEventArgs e)
 		{
-			nodeNameField.Content = nodeNameField.Content.ToString().Replace(" ", "");
+			nodeNameField.Text = nodeNameField.Text.ToString().Replace(" ", "");
 			// 			if (MainWindow.instance.nodeMap.ContainsKey(nodeNameField.Text))
 			// 			{
 			// 				MessageBox.Show("Node names have to be unique!");
@@ -503,7 +519,7 @@ namespace DialogueEditor
 			{
 				string oldName = sourceData.rowName;
 				MainWindow.instance.nodeMap.Remove(oldName);
-				MainWindow.instance.nodeMap.Add(nodeNameField.Content.ToString(), this);
+				MainWindow.instance.nodeMap.Add(nodeNameField.Text.ToString(), this);
 			}
 
 		}
@@ -518,7 +534,7 @@ namespace DialogueEditor
 
 		public void ApplyChangesToSourceData()
 		{
-			sourceData.rowName = nodeNameField.Content.ToString();
+			sourceData.rowName = nodeNameField.Text.ToString();
 
 			switch (outputType.Text)
 			{
@@ -568,16 +584,33 @@ namespace DialogueEditor
 				case "Multiple choices":
 					{
 						System.Text.StringBuilder s = new System.Text.StringBuilder();
+						Connection defaultC = null;
 						foreach (var item in outputConnections)
 						{
-							s.Append(item.parentTo.sourceData.rowName);
-							s.Append(' ');
+							if (item.objFrom == outputPinMultipleChoices)
+							{
+								s.Append(item.parentTo.sourceData.rowName);
+								s.Append(' ');
+							}
+							else if (item.objFrom == outputPinMultipleChoicesDefault) 
+							{
+								defaultC = item;
+							}
 						}
 						if (s.Length > 0) 
 						{
 							s.Length--;
 						} 						
 						sourceData.nextRowName = s.ToString();
+
+						if (defaultC != null) 
+						{
+							sourceData.commandArguments = SecondsTextBox.Text + " " + defaultC.parentTo.sourceData.rowName;
+						}
+						else
+						{
+							sourceData.commandArguments = string.Empty;
+						}
 					}
 					break;
 				case "If player has item":
@@ -617,7 +650,7 @@ namespace DialogueEditor
 
 		public void CreateUniqueID()
 		{
-			nodeNameField.Content = actorName.Text + Guid.NewGuid().ToString();
+			nodeNameField.Text = actorName.Text + Guid.NewGuid().ToString();
 		}
 
 		private void aactorName_TextChanged(object sender, TextChangedEventArgs e)
@@ -629,5 +662,6 @@ namespace DialogueEditor
 		{
 			CreateUniqueID();
 		}
+
 	}
 }

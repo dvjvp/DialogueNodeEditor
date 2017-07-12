@@ -209,7 +209,7 @@ namespace DialogueEditor
 			Node n = new Node(data);
 			try
 			{
-				nodeMap.Add(n.nodeNameField.Content.ToString(), n);
+				nodeMap.Add(n.nodeNameField.Text.ToString(), n);
 			}
 			catch (Exception)
 			{
@@ -258,7 +258,7 @@ namespace DialogueEditor
 
 			node.DeleteAllConnections();
 			drawArea.Children.Remove(node);
-			nodeMap.Remove(node.nodeNameField.Content.ToString());
+			nodeMap.Remove(node.nodeNameField.Text.ToString());
 			nodes.Remove(node);
 			RefreshNodeConnections();
 		}

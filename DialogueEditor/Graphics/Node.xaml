@@ -40,9 +40,9 @@
                         </Grid.RowDefinitions>
 
                         <Label Grid.Column="0" Grid.Row="0" FontWeight="DemiBold" IsHitTestVisible="False">Dialogue ID:</Label>
-                        <Label x:Name="nodeNameField" Content="NodeName" Grid.Column="1" Grid.Row="0" IsHitTestVisible="False"/>
+                        <TextBox x:Name="nodeNameField" Text="NodeName" Grid.Column="1" Grid.Row="0" IsHitTestVisible="False" IsReadOnly="True" Background="Transparent" BorderThickness="0" VerticalAlignment="Center"/>
 
-                        
+
                     </Grid>
                 <!--    <Button Content="X" Width="20" Margin="5,0,0,0" Click="ButtonDelete_Click" Background="DarkRed" HorizontalAlignment="Right" Cursor="Hand"/>
             -->    </DockPanel>
