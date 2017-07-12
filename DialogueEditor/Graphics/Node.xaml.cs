@@ -5,14 +5,13 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using DialogueEditor.Files;
 using System.Windows.Media;
-using System.ComponentModel;
 
 namespace DialogueEditor
 {
 	/// <summary>
 	/// Interaction logic for Node.xaml
 	/// </summary>
-	public partial class Node : UserControl, INotifyPropertyChanged
+	public partial class Node : UserControl
 	{
 		public Vector dragOffset;
 		private static Action emptyDelegate = delegate { };
@@ -22,8 +21,6 @@ namespace DialogueEditor
 		//public List<Connection> allConnections = new List<Connection>();
 		public List<Connection> inputConnections = new List<Connection>();
 		public List<Connection> outputConnections = new List<Connection>();
-
-		public event PropertyChangedEventHandler PropertyChanged;
 
 		public Node(DialogueDataLine sourceData)
 		{
@@ -237,12 +234,26 @@ namespace DialogueEditor
 
 		private void OnPinMousedDown(object sender, RoutedEventArgs e)
 		{
-			RadioButton pin = sender as RadioButton;
-			MainWindow.instance.StartDrawingConnection(this, pin);
-			pin.CaptureMouse();
-			pin.MouseMove += MainWindow.instance.ConnnectionDrawingOnMouseMoved;
-			pin.Click -= OnPinMousedDown;
-			pin.Click += OnPinMousedUp;
+			if(Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt))
+			{
+				if (sender == InputPin) 
+				{
+					DeleteAllInputConnections();
+				}
+				else
+				{
+					DeleteAllOutputConnectionsFromPin((FrameworkElement)sender);
+				}
+			}
+			else
+			{
+				RadioButton pin = sender as RadioButton;
+				MainWindow.instance.StartDrawingConnection(this, pin);
+				pin.CaptureMouse();
+				pin.MouseMove += MainWindow.instance.ConnnectionDrawingOnMouseMoved;
+				pin.Click -= OnPinMousedDown;
+				pin.Click += OnPinMousedUp;
+			}
 		}
 
 		private void OnPinMousedUp(object sender, RoutedEventArgs e)
