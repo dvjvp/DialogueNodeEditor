@@ -30,3 +30,5 @@ E:\CSharp\DialogueEditor\DialogueNodeEditor.git\trunk\DialogueEditor\obj\Debug\G
 E:\CSharp\DialogueEditor\DialogueNodeEditor.git\trunk\DialogueEditor\obj\Debug\Graphics\Connection.baml
 E:\CSharp\DialogueEditor\DialogueNodeEditor.git\trunk\DialogueEditor\obj\Debug\Graphics\Node.baml
 E:\CSharp\DialogueEditor\DialogueNodeEditor.git\trunk\DialogueEditor\obj\Debug\DialogueEditor.csprojResolveAssemblyReference.cache
+E:\CSharp\DialogueEditor\DialogueNodeEditor.git\trunk\DialogueEditor\obj\Debug\Testing\TestingWindow.g.cs
+E:\CSharp\DialogueEditor\DialogueNodeEditor.git\trunk\DialogueEditor\obj\Debug\Testing\TestingWindow.baml

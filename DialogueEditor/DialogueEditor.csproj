@@ -56,6 +56,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Testing\TestingWindow.xaml.cs">
+      <DependentUpon>TestingWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="Graphics\Connection.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -78,6 +81,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Graphics\Node.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Testing\TestingWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -193,7 +200,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="History\" />
-    <Folder Include="Testing\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\LayoutAuto.png">

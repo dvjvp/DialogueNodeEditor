@@ -17,8 +17,7 @@ namespace DialogueEditor
 		private static Action emptyDelegate = delegate { };
 
 		public DialogueDataLine sourceData;
-
-		//public List<Connection> allConnections = new List<Connection>();
+		
 		public List<Connection> inputConnections = new List<Connection>();
 		public List<Connection> outputConnections = new List<Connection>();
 
@@ -643,7 +642,7 @@ namespace DialogueEditor
 					break;
 				case "Normal dialogue":
 				default:
-					c.R = 0x3f; c.G = 0x3f; c.B = 0x3f; //gray
+					c.R = 98; c.G = 110; c.B = 130; //gray
 					break;
 			}
 
@@ -702,9 +701,6 @@ namespace DialogueEditor
 			CreateUniqueID();
 		}
 
-
-		#endregion
-
 		private void HighlightPinConnections(object sender, MouseEventArgs e)
 		{
 			if (sender == InputPin) 
@@ -746,5 +742,8 @@ namespace DialogueEditor
 				}
 			}
 		}
+
+
+		#endregion
 	}
 }
