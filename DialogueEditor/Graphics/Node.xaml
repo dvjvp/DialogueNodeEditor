@@ -7,7 +7,7 @@
              mc:Ignorable="d">
 
     <Border x:Name="selectionBorder">
-        <Grid x:Name="grid" Background="#010101" Margin="3">
+        <Grid x:Name="grid" Background="#010101" Margin="3" Cursor="SizeAll">
             <Grid.RowDefinitions>
                 <RowDefinition Height=".2*"/>
                 <RowDefinition Height=".125*"/>
@@ -21,7 +21,7 @@
 
             <!-- Input pin -->
             <Border BorderBrush="Black" BorderThickness="1" Grid.Row="0" Background="#3f3f3f3f" x:Name="InputBorder">
-                <RadioButton VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="InputPin" LostMouseCapture="OnMouseControlLost" Click="OnPinMousedDown"/>
+                <RadioButton VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="InputPin" LostMouseCapture="OnMouseControlLost" Click="OnPinMousedDown" Cursor="Hand"/>
             </Border>
 
             <!-- BODY -->
@@ -45,7 +45,7 @@
                         <Label Grid.Column="0" Grid.Row="1" FontWeight="DemiBold" IsHitTestVisible="False">Actor name:</Label>
                         <TextBox x:Name="actorName" Text="Alex" Grid.Column="1" Grid.Row="1" TextChanged="aactorName_TextChanged"/>
                     </Grid>
-                    <Button Content="X" Width="20" Margin="5,0,0,0" Click="ButtonDelete_Click" Background="DarkRed" HorizontalAlignment="Right"/>
+                    <Button Content="X" Width="20" Margin="5,0,0,0" Click="ButtonDelete_Click" Background="DarkRed" HorizontalAlignment="Right" Cursor="Hand"/>
                 </DockPanel>
             </Border>
 
@@ -61,7 +61,7 @@
             <Border x:Name="BorderDown"  BorderBrush="Black" BorderThickness="1" Grid.Row="3" Background="#3f3f3f">
                 <StackPanel>
                     <Label HorizontalAlignment="Center" FontWeight="DemiBold"  Content="Output type:" IsHitTestVisible="False"/>
-                    <ComboBox x:Name="outputType" Margin="5" SelectionChanged="outputType_SelectionChanged">
+                    <ComboBox x:Name="outputType" Margin="5" SelectionChanged="outputType_SelectionChanged" Cursor="Arrow">
                     <ComboBoxItem Content="Normal dialogue" IsSelected="True"/>
                     <ComboBoxItem Content="End dialogue"/>
                     <ComboBoxItem Content="Multiple choices"/>
@@ -92,7 +92,7 @@
                         </Style.Triggers>
                     </Style>
                 </Border.Style>
-                <RadioButton x:Name="outputPinNormal"  VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="1" Click="OnPinMousedDown" LostMouseCapture="OnMouseControlLost"/>
+                <RadioButton x:Name="outputPinNormal"  VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="1" Click="OnPinMousedDown" LostMouseCapture="OnMouseControlLost" Cursor="Hand"/>
             </Border>
 
             <!-- If player has item output -->
@@ -125,8 +125,8 @@
                     <TextBox x:Name="itemCount"  Grid.Column="1" Grid.Row="1" Margin="2"/>
                     <Label Grid.Column="0" Grid.Row="2" Foreground="White" HorizontalAlignment="Center">True</Label>
                     <Label Grid.Column="1" Grid.Row="2" Foreground="White" HorizontalAlignment="Center">False</Label>
-                    <RadioButton x:Name="outputPinItemTrue"  Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" Click="OnPinMousedDown" LostMouseCapture="OnMouseControlLost"/>
-                    <RadioButton x:Name="outputPinItemFalse"  Grid.Column="1" Grid.Row="3" HorizontalAlignment="Center" Click="OnPinMousedDown" LostMouseCapture="OnMouseControlLost"/>
+                    <RadioButton x:Name="outputPinItemTrue"  Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" Click="OnPinMousedDown" LostMouseCapture="OnMouseControlLost" Cursor="Hand"/>
+                    <RadioButton x:Name="outputPinItemFalse"  Grid.Column="1" Grid.Row="3" HorizontalAlignment="Center" Click="OnPinMousedDown" LostMouseCapture="OnMouseControlLost" Cursor="Hand"/>
                 </Grid>
             </Border>
 
@@ -142,7 +142,7 @@
                         </Style.Triggers>
                     </Style>
                 </Border.Style>
-                <RadioButton x:Name="outputPinMultipleChoices" LostMouseCapture="OnMouseControlLost" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="1" Background="#FF10EC4C" Click="OnPinMousedDown"/>
+                <RadioButton x:Name="outputPinMultipleChoices" LostMouseCapture="OnMouseControlLost" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="1" Background="#FF10EC4C" Click="OnPinMousedDown" Cursor="Hand"/>
             </Border>
 
             <!-- Call actor event output -->
@@ -172,7 +172,7 @@
                     <Label Grid.Column="1" Grid.Row="0" Foreground="White" HorizontalAlignment="Center">Event name</Label>
                     <TextBox x:Name="eventActorName"  Grid.Column="0" Grid.Row="1" Margin="2" TextChanged="RemoveSpacesFromSender"/>
                     <TextBox x:Name="eventActorEventName"  Grid.Column="1" Grid.Row="1" Margin="2" TextChanged="RemoveSpacesFromSender"/>
-                    <RadioButton x:Name="outputPinActorEvent"  Grid.ColumnSpan="2" Grid.Column="0"  Grid.Row="2" HorizontalAlignment="Center" Click="OnPinMousedDown" LostMouseCapture="OnMouseControlLost"/>
+                    <RadioButton x:Name="outputPinActorEvent"  Grid.ColumnSpan="2" Grid.Column="0"  Grid.Row="2" HorizontalAlignment="Center" Click="OnPinMousedDown" LostMouseCapture="OnMouseControlLost" Cursor="Hand"/>
                 </Grid>
             </Border>
 
@@ -197,7 +197,7 @@
 
                     <Label Grid.Row="0" Foreground="White" HorizontalAlignment="Center">Event name</Label>
                     <TextBox x:Name="levelEventName" Grid.Row="1" Margin="2"/>
-                    <RadioButton x:Name="outputPinLevelEvent"  Grid.Row="2" HorizontalAlignment="Center" Click="OnPinMousedDown" LostMouseCapture="OnMouseControlLost"/>
+                    <RadioButton x:Name="outputPinLevelEvent"  Grid.Row="2" HorizontalAlignment="Center" Click="OnPinMousedDown" LostMouseCapture="OnMouseControlLost" Cursor="Hand"/>
                 </Grid>
             </Border>
         </Grid>

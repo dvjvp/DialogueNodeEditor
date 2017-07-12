@@ -14,16 +14,20 @@ namespace DialogueEditor
     /// </summary>
     public partial class MainWindow : Window
     {
+		//Nodes & System variables
 		public static MainWindow instance;
 		protected List<Node> nodes = new List<Node>();
 		public Dictionary<string, Node> nodeMap = new Dictionary<string, Node>();
 		public List<Node> selection = new List<Node>();
 
+		//Zoom, pan & selection
 		const double zoomSpeed = .025;
 		bool selectionInProgress = false;
+		bool panInProgress = false;
+		Vector panDragOffset;
+		Vector panStartCanvasTranslation;
 		Point selectionStartPoint;
 		Rect selectionRect;
-
 		Node connectionDrawSource;
 		FrameworkElement connectionDrawingLineStartPin;
 
@@ -273,7 +277,9 @@ namespace DialogueEditor
 
 		#endregion
 
-		#region Rubberband selection
+		#region Rubberband selection and multi-node drag'n'drop
+
+		/* DRAG'N'DROP NODES */
 
 		public void StartDragnDropSelected(Vector mousePos)
 		{
@@ -281,8 +287,8 @@ namespace DialogueEditor
 			{
 				selection[i].dragOffset = (Vector)selection[i].GetPosition() - mousePos;
 			}
+			drawArea.Cursor = Cursors.SizeAll;
 		}
-
 		public void DragnDropSelectedOnMove(object sender, MouseEventArgs e)
 		{
 			var mousePos = e.GetPosition(drawArea);
@@ -294,6 +300,12 @@ namespace DialogueEditor
 				selection[i].ForceConnectionUpdate();
 			}
 		}
+		public void EndDragnDropSelected()
+		{
+			drawArea.Cursor = Cursors.Arrow;
+		}
+
+
 
 		public void ClearSelection()
 		{
@@ -304,7 +316,9 @@ namespace DialogueEditor
 			selection.Clear();
 		}
 
-		private void drawArea_MouseDown(object sender, MouseButtonEventArgs e)
+		/* RUBBERBAND SELECTION */
+
+		private void StartRubberbandSelection(object sender, MouseButtonEventArgs e)
 		{
 			if (Mouse.DirectlyOver != drawArea)
 			{
@@ -327,47 +341,8 @@ namespace DialogueEditor
 			selectionBox.Visibility = Visibility.Visible;
 			ClearSelection();
 		}
-
-		private void drawArea_MouseUp(object sender, MouseButtonEventArgs e)
+		private void UpdateRubberbandSelection(object sender, MouseEventArgs e)
 		{
-			if (!selectionInProgress)
-			{
-				return;
-			}
-			selectionInProgress = false;
-			drawArea.ReleaseMouseCapture();
-
-			Point mouseUpPos = e.GetPosition(drawArea);
-			selectionBox.Visibility = Visibility.Collapsed;
-
-			//Check here for nodes intersecting with rect and select them
-
-			foreach (var node in nodes)
-			{
-				if (AreIntersecting(selectionRect, node))
-				{
-					selection.Add(node);
-					node.SetSelected(true);
-				}
-			}
-
-		}
-
-		private bool AreIntersecting(Rect first, FrameworkElement second)
-		{
-			//Rect r1 = new Rect(Canvas.GetLeft(first), Canvas.GetTop(first), first.Width, first.Height);
-			Rect r2 = new Rect(Canvas.GetLeft(second), Canvas.GetTop(second), second.ActualWidth, second.ActualHeight);
-			return first.IntersectsWith(r2);
-		}
-
-		private void drawArea_MouseMove(object sender, MouseEventArgs e)
-		{
-
-			if (!selectionInProgress)
-			{
-				return;
-			}
-
 			Point mousePos = e.GetPosition(drawArea);
 			Point tMousePos = canvasTotalTransform.Transform(mousePos);
 			Point tSelectionStartPoint = canvasTotalTransform.Transform(this.selectionStartPoint);
@@ -402,7 +377,63 @@ namespace DialogueEditor
 				selectionRect.Y = mousePos.Y;
 				selectionRect.Height = selectionStartPoint.Y - mousePos.Y;
 			}
+		}
+		private void EndRubberbandSelection(object sender, MouseButtonEventArgs e)
+		{
+			selectionInProgress = false;
+			drawArea.ReleaseMouseCapture();
 
+			Point mouseUpPos = e.GetPosition(drawArea);
+			selectionBox.Visibility = Visibility.Collapsed;
+
+			//Check here for nodes intersecting with rect and select them
+
+			foreach (var node in nodes)
+			{
+				if (AreIntersecting(selectionRect, node))
+				{
+					selection.Add(node);
+					node.SetSelected(true);
+				}
+			}
+
+		}
+
+		private bool AreIntersecting(Rect first, FrameworkElement second)
+		{
+			//Rect r1 = new Rect(Canvas.GetLeft(first), Canvas.GetTop(first), first.Width, first.Height);
+			Rect r2 = new Rect(Canvas.GetLeft(second), Canvas.GetTop(second), second.ActualWidth, second.ActualHeight);
+			return first.IntersectsWith(r2);
+		}
+
+		#endregion
+
+		#region Pan canvas with middle mouse button or arrow keys
+
+		/* PAN BY DRAGGING W/ MIDDLE MOUSE BUTTON */
+
+		private void StartPanCanvas(object sender, MouseButtonEventArgs e)
+		{
+			//Console.WriteLine("Started pan");
+			panInProgress = true;
+			panDragOffset = (Vector)e.GetPosition(this);
+			panStartCanvasTranslation = new Vector(canvasTranslation.X, canvasTranslation.Y);
+			drawArea.Cursor = Cursors.ScrollAll;
+		}
+		private void UpdatePanCanvas(object sender, MouseEventArgs e)
+		{
+			var totalDeltaDrag = e.GetPosition(this) - panDragOffset;
+			//Console.WriteLine(totalDeltaDrag);
+
+			canvasTranslation.X = Math.Min(panStartCanvasTranslation.X + totalDeltaDrag.X, 0);
+			canvasTranslation.Y = Math.Min(panStartCanvasTranslation.Y + totalDeltaDrag.Y, 0);
+
+		}
+		private void EndPanCanvas(object sender, MouseButtonEventArgs e)
+		{
+			//Console.WriteLine("Stopped pan");
+			panInProgress = false;
+			drawArea.Cursor = Cursors.Arrow;
 		}
 
 		private void PanCanvas(double x, double y)
@@ -410,6 +441,53 @@ namespace DialogueEditor
 			canvasTranslation.X = Math.Min(canvasTranslation.X - x, 0);
 			canvasTranslation.Y = Math.Min(canvasTranslation.Y - y, 0);
 		}
+
+		#endregion
+
+		#region Mouse Interaction
+
+
+		private void drawArea_MouseDown(object sender, MouseButtonEventArgs e)
+		{
+			if (e.LeftButton == MouseButtonState.Pressed)
+			{
+				StartRubberbandSelection(sender, e);
+			}
+			else if (e.MiddleButton == MouseButtonState.Pressed) 
+			{
+				StartPanCanvas(sender, e);
+			}
+		}
+
+		private void drawArea_MouseUp(object sender, MouseButtonEventArgs e)
+		{
+			if (selectionInProgress)
+			{
+				EndRubberbandSelection(sender, e);
+			}
+			else if (panInProgress) 
+			{
+				EndPanCanvas(sender, e);
+			}
+			
+		}
+
+
+		private void drawArea_MouseMove(object sender, MouseEventArgs e)
+		{
+			if(selectionInProgress)
+			{
+				UpdateRubberbandSelection(sender, e);
+			}
+			if(panInProgress)
+			{
+				UpdatePanCanvas(sender, e);
+			}
+
+			
+		}
+
+
 
 		#endregion
 

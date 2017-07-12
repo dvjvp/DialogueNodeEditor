@@ -396,6 +396,7 @@ namespace DialogueEditor
 			//Console.WriteLine("Up");
 			ReleaseMouseCapture();
 			MouseMove -= MainWindow.instance.DragnDropSelectedOnMove;
+			MainWindow.instance.EndDragnDropSelected();
 		}
 
 		protected void OnMouseControlLost(object sender, MouseEventArgs e)
