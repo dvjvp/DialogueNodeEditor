@@ -25,8 +25,8 @@ namespace DialogueEditor.Files
 		public static DialogueDataLine ReadCSVLine(string line)
 		{
 			/* Line samples:
-			 * RowName,"Przecinek, przecinek, przecinek","leave","","None"
-			 * RowName2,"Cudzyslow"" Cudzyslow"" Cudzyslow","","","None",100,345
+			 * RowName,"Comma, Comma, Comma","leave","","None"
+			 * RowName2,"Quote"" Quote"" Quote","","","None",100,345
 			 */
 
 			string[] s = line.Split(',');
@@ -41,9 +41,9 @@ namespace DialogueEditor.Files
 			/* From:
 			 * 
 			 * RowName
-			 * "Przecinek
-			 *  przecinek
-			 *  przecinek"
+			 * "Comma
+			 *  Comma
+			 *  Comma"
 			 * "leave"
 			 * ""
 			 * "None"
@@ -54,7 +54,7 @@ namespace DialogueEditor.Files
 			/* To:
 			 * 
 			 * RowName
-			 * Przecinek, przecinek, przecinek
+			 * Comma, Comma, Comma
 			 * leave
 			 * 
 			 * None
@@ -62,7 +62,7 @@ namespace DialogueEditor.Files
 			 * 0
 			 */ 
 			string rowName = s[0];
-			string dialogueText = s[1];
+			string dialogueText = s[1].Replace("\"\"", "\"");
 			string command = s[s.Length - 5];
 			string commandArgs = s[s.Length - 4];
 			string next = s[s.Length - 3];
@@ -90,6 +90,7 @@ namespace DialogueEditor.Files
 					dialogueText += ',';
 				}
 				dialogueText += s[index];
+				dialogueText = dialogueText.Replace("\"\"", "\"");
 			}
 
 			//remove unnecessary quote symbols
@@ -115,6 +116,7 @@ namespace DialogueEditor.Files
 			d.SetPosition(x, y);
 			return d;
 		}
+
 
 		public static string GetFileOpenLocation()
 		{
