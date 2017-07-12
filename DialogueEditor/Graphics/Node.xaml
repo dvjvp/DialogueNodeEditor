@@ -10,6 +10,7 @@
         <Grid x:Name="grid" Background="#010101" Margin="3" Cursor="SizeAll">
             <Grid.RowDefinitions>
                 <RowDefinition Height=".2*"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height=".125*"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height=".1*"/>
@@ -25,7 +26,7 @@
             </Border>
 
             <!-- BODY -->
-
+   
             <!-- Node name & Delete button -->
             <Border x:Name="BorderUp"  BorderBrush="Black" BorderThickness="1" Grid.Row="1" Background="#3f3f3f">
                 <DockPanel  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="5,5,5,5">
@@ -48,8 +49,16 @@
             -->    </DockPanel>
             </Border>
 
+            <!-- Prompt for being an option in multi selection -->
+            <Border x:Name="BorderPrompt" BorderBrush="Black" BorderThickness="1" Grid.Row="2" Background="#FF4C8D46">
+                <StackPanel>
+                    <Label HorizontalAlignment="Center" FontWeight="DemiBold">Prompt:</Label>
+                    <TextBox x:Name="PromptTextBox" Margin="5"/>
+                </StackPanel>
+            </Border>
+            
             <!-- Dialogue text -->
-            <Border x:Name="BorderMiddle"  BorderBrush="Black" BorderThickness="1" Grid.Row="2" Background="#3f3f3f">
+            <Border x:Name="BorderMiddle"  BorderBrush="Black" BorderThickness="1" Grid.Row="3" Background="#3f3f3f">
                 <Border.Style>
                     <Style TargetType="Border">
                         <Setter Property="Visibility" Value="Collapsed"/>
@@ -77,7 +86,7 @@
             </Border>
 
             <!-- Combo box - outputType selection -->
-            <Border x:Name="BorderDown"  BorderBrush="Black" BorderThickness="1" Grid.Row="3" Background="#3f3f3f">
+            <Border x:Name="BorderDown"  BorderBrush="Black" BorderThickness="1" Grid.Row="4" Background="#3f3f3f">
                 <StackPanel>
                     <Label HorizontalAlignment="Center" FontWeight="DemiBold"  Content="Output type:" IsHitTestVisible="False"/>
                     <ComboBox x:Name="outputType" Margin="5" SelectionChanged="outputType_SelectionChanged" Cursor="Arrow">
@@ -95,7 +104,7 @@
             <!-- OUTPUTS -->
 
             <!-- Normal dialogue output -->
-            <Border BorderBrush="Black" BorderThickness="1" Grid.Row="4" Background="#3f3f3f3f">
+            <Border BorderBrush="Black" BorderThickness="1" Grid.Row="5" Background="#3f3f3f3f">
                 <Border.Style>
                     <Style TargetType="Border">
                         <Setter Property="Visibility" Value="Collapsed"/>
@@ -116,7 +125,7 @@
             </Border>
 
             <!-- If player has item output -->
-            <Border BorderBrush="Black" BorderThickness="1" Grid.Row="4" Background="#3f3f3f3f">
+            <Border BorderBrush="Black" BorderThickness="1" Grid.Row="5" Background="#3f3f3f3f">
                 <Border.Style>
                     <Style TargetType="Border">
                         <Setter Property="Visibility" Value="Collapsed"/>
@@ -151,7 +160,7 @@
             </Border>
 
             <!-- Multiple choices output -->
-            <Border BorderBrush="Black" BorderThickness="1" Grid.Row="4" Background="#3f3f3f3f">
+            <Border BorderBrush="Black" BorderThickness="1" Grid.Row="5" Background="#3f3f3f3f">
                 <Border.Style>
                     <Style TargetType="Border">
                         <Setter Property="Visibility" Value="Collapsed"/>
@@ -187,7 +196,7 @@
             </Border>
 
             <!-- Call actor event output -->
-            <Border BorderBrush="Black" BorderThickness="1" Grid.Row="4" Background="#3f3f3f3f">
+            <Border BorderBrush="Black" BorderThickness="1" Grid.Row="5" Background="#3f3f3f3f">
                 <Border.Style>
                     <Style TargetType="Border">
                         <Setter Property="Visibility" Value="Collapsed"/>
@@ -218,7 +227,7 @@
             </Border>
 
             <!-- Call level event output -->
-            <Border BorderBrush="Black" BorderThickness="1" Grid.Row="4" Background="#3f3f3f3f">
+            <Border BorderBrush="Black" BorderThickness="1" Grid.Row="5" Background="#3f3f3f3f">
                 <Border.Style>
                     <Style TargetType="Border">
                         <Setter Property="Visibility" Value="Collapsed"/>
@@ -243,7 +252,7 @@
             </Border>
 
             <!-- Go to node -->
-            <Border BorderBrush="Black" BorderThickness="1" Grid.Row="4" Background="#3f3f3f3f">
+            <Border BorderBrush="Black" BorderThickness="1" Grid.Row="5" Background="#3f3f3f3f">
                 <Border.Style>
                     <Style TargetType="Border">
                         <Setter Property="Visibility" Value="Collapsed"/>

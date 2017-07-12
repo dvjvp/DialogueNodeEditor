@@ -5,13 +5,14 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using DialogueEditor.Files;
 using System.Windows.Media;
+using System.ComponentModel;
 
 namespace DialogueEditor
 {
 	/// <summary>
 	/// Interaction logic for Node.xaml
 	/// </summary>
-	public partial class Node : UserControl
+	public partial class Node : UserControl, INotifyPropertyChanged
 	{
 		public Vector dragOffset;
 		private static Action emptyDelegate = delegate { };
@@ -21,7 +22,8 @@ namespace DialogueEditor
 		//public List<Connection> allConnections = new List<Connection>();
 		public List<Connection> inputConnections = new List<Connection>();
 		public List<Connection> outputConnections = new List<Connection>();
-		
+
+		public event PropertyChangedEventHandler PropertyChanged;
 
 		public Node(DialogueDataLine sourceData)
 		{
@@ -30,6 +32,7 @@ namespace DialogueEditor
 			Height = grid.Height;
 			this.sourceData = sourceData;
 			LoadDataFromSource();
+			RecalculatePromptAreaVisibility();
 		}
 
 		public void LoadDataFromSource()
@@ -239,6 +242,9 @@ namespace DialogueEditor
 			to.inputConnections.Add(c);
 			outputConnections.Add(c);
 			(Parent as Canvas)?.Children.Add(c);
+
+			RecalculatePromptAreaVisibility();
+			to.RecalculatePromptAreaVisibility();
 		}
 
 		public void DeleteAllOutputConnections()
@@ -249,6 +255,8 @@ namespace DialogueEditor
 				c.parentTo.inputConnections.Remove(c);
 				(c.Parent as Canvas)?.Children.Remove(c);
 				outputConnections.Remove(c);
+
+				c.parentTo.RecalculatePromptAreaVisibility();
 			}
 		}
 
@@ -261,6 +269,8 @@ namespace DialogueEditor
 				(c.Parent as Canvas)?.Children.Remove(c);
 				inputConnections.Remove(c);
 			}
+
+			RecalculatePromptAreaVisibility();
 		}
 
 		public void DeleteAllConnections()
@@ -298,6 +308,8 @@ namespace DialogueEditor
 					c.parentTo.inputConnections.Remove(c);
 					(c.Parent as Canvas)?.Children.Remove(c);
 					outputConnections.Remove(c);
+
+					c.parentTo.RecalculatePromptAreaVisibility();
 				}
 			}
 		}
@@ -646,6 +658,20 @@ namespace DialogueEditor
 					}
 					break;
 			}
+		}
+
+		public void RecalculatePromptAreaVisibility()
+		{
+
+			foreach (var item in inputConnections)
+			{
+				if(item.parentFrom.outputType.Text == "Multiple choices")
+				{
+					BorderPrompt.Visibility = Visibility.Visible;
+					return;
+				}
+			}
+			BorderPrompt.Visibility = Visibility.Collapsed;
 		}
 
 		public void CreateUniqueID()
