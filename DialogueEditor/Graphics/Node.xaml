@@ -44,8 +44,8 @@
 
                         
                     </Grid>
-                    <Button Content="X" Width="20" Margin="5,0,0,0" Click="ButtonDelete_Click" Background="DarkRed" HorizontalAlignment="Right" Cursor="Hand"/>
-                </DockPanel>
+                <!--    <Button Content="X" Width="20" Margin="5,0,0,0" Click="ButtonDelete_Click" Background="DarkRed" HorizontalAlignment="Right" Cursor="Hand"/>
+            -->    </DockPanel>
             </Border>
 
             <!-- Dialogue text -->

@@ -526,7 +526,7 @@ namespace DialogueEditor
 					sourceData.command = "leave";
 					sourceData.commandArguments = string.Empty;
 					break;
-				case "":
+				case "Go to node":
 					sourceData.command = "go-to";
 					sourceData.commandArguments = string.Empty;
 					break;
