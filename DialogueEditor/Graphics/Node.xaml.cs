@@ -443,7 +443,10 @@ namespace DialogueEditor
 			//TODO: Change Data in switch below, not only color
 			Color c = new Color();
 			c.A = 255;
-			switch (outputType.Text)
+
+			string s = e.AddedItems[0].ToString().Substring("System.Windows.Controls.ComboBoxItem: ".Length);
+
+			switch (s)
 			{
 				case "End dialogue":
 					c.R = 128; c.G = 0; c.B = 0; //red
@@ -466,10 +469,7 @@ namespace DialogueEditor
 					break;
 			}
 
-			BorderUp.Background = new SolidColorBrush(c);
-			BorderMiddle.Background = new SolidColorBrush(c);
-			BorderDown.Background = new SolidColorBrush(c);
-			//TODO: Fix changing color manually. It doesn't work for some reason.
+			BorderUp.Background = BorderMiddle.Background = BorderDown.Background = new SolidColorBrush(c);
 		}
 
 		private void nodeNameField_TextChanged(object sender, TextChangedEventArgs e)
