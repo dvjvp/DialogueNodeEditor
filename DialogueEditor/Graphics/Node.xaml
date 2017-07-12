@@ -42,8 +42,7 @@
                         <Label Grid.Column="0" Grid.Row="0" FontWeight="DemiBold" IsHitTestVisible="False">Dialogue ID:</Label>
                         <Label x:Name="nodeNameField" Content="NodeName" Grid.Column="1" Grid.Row="0" IsHitTestVisible="False"/>
 
-                        <Label Grid.Column="0" Grid.Row="1" FontWeight="DemiBold" IsHitTestVisible="False">Actor name:</Label>
-                        <TextBox x:Name="actorName" Text="Alex" Grid.Column="1" Grid.Row="1" TextChanged="aactorName_TextChanged"/>
+                        
                     </Grid>
                     <Button Content="X" Width="20" Margin="5,0,0,0" Click="ButtonDelete_Click" Background="DarkRed" HorizontalAlignment="Right" Cursor="Hand"/>
                 </DockPanel>
@@ -51,7 +50,27 @@
 
             <!-- Dialogue text -->
             <Border x:Name="BorderMiddle"  BorderBrush="Black" BorderThickness="1" Grid.Row="2" Background="#3f3f3f">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=outputType, Path=SelectedItem.Content}" Value="Normal dialogue">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                            <!-- <DataTrigger Binding="{Binding ElementName=outputType, Path=SelectedItem.Content}" Value="Call actor event"> -->
+                            <!--                             <Setter Property="Visibility" Value="Visible"/> -->
+                            <!--                         </DataTrigger> -->
+                            <!--                         <DataTrigger Binding="{Binding ElementName=outputType, Path=SelectedItem.Content}" Value="Call level event"> -->
+                            <!--                             <Setter Property="Visibility" Value="Visible"/> -->
+                            <!--                         </DataTrigger> -->
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
                 <StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Label Grid.Column="0" Grid.Row="1" FontWeight="DemiBold" IsHitTestVisible="False">Actor name:</Label>
+                        <TextBox x:Name="actorName" Text="Alex" Grid.Column="1" Grid.Row="1" TextChanged="aactorName_TextChanged" Margin="5" MaxWidth="300"/>
+                    </StackPanel>
                     <Label HorizontalAlignment="Center" FontWeight="DemiBold" Content=" Dialogue text:" IsHitTestVisible="False"/>
                     <TextBox x:Name="dialogueText" Text="Dialogue Text" Margin="5" TextWrapping="Wrap" MaxWidth="300"  VerticalScrollBarVisibility="Auto"  SpellCheck.IsEnabled="True" Height="Auto"/>
                 </StackPanel>
@@ -62,13 +81,14 @@
                 <StackPanel>
                     <Label HorizontalAlignment="Center" FontWeight="DemiBold"  Content="Output type:" IsHitTestVisible="False"/>
                     <ComboBox x:Name="outputType" Margin="5" SelectionChanged="outputType_SelectionChanged" Cursor="Arrow">
-                    <ComboBoxItem Content="Normal dialogue" IsSelected="True"/>
-                    <ComboBoxItem Content="End dialogue"/>
-                    <ComboBoxItem Content="Multiple choices"/>
-                    <ComboBoxItem Content="If player has item"/>
-                    <ComboBoxItem Content="Call actor event"/>
-                    <ComboBoxItem Content="Call level event"/>
-                </ComboBox>
+                        <ComboBoxItem Content="Normal dialogue" IsSelected="True"/>
+                        <ComboBoxItem Content="End dialogue"/>
+                        <ComboBoxItem Content="Multiple choices"/>
+                        <ComboBoxItem Content="If player has item"/>
+                        <ComboBoxItem Content="Call actor event"/>
+                        <ComboBoxItem Content="Call level event"/>
+                        <ComboBoxItem Content="Go to node"/>
+                    </ComboBox>
                 </StackPanel>
             </Border>
 
@@ -142,7 +162,28 @@
                         </Style.Triggers>
                     </Style>
                 </Border.Style>
-                <RadioButton x:Name="outputPinMultipleChoices" LostMouseCapture="OnMouseControlLost" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="1" Background="#FF10EC4C" Click="OnPinMousedDown" Cursor="Hand"/>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Grid.Column="1">
+                        <Label Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center">After</Label>
+                        <TextBox x:Name="SecondsTextBox"/>
+                        <Label Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center">seconds play this:</Label>
+                    </StackPanel>
+                    <RadioButton x:Name="outputPinMultipleChoicesDefault" Grid.Row="1" Grid.Column="1" LostMouseCapture="OnMouseControlLost" VerticalAlignment="Center" HorizontalAlignment="Center" Click="OnPinMousedDown" Cursor="Hand"/>
+
+                    <Label Grid.Row="0" Grid.Column="0" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Bottom">Avaiable options</Label>
+                    <RadioButton Grid.Row="1" Grid.Column="0" x:Name="outputPinMultipleChoices" LostMouseCapture="OnMouseControlLost" VerticalAlignment="Center" HorizontalAlignment="Center"  Background="#FF10EC4C"  Click="OnPinMousedDown" Cursor="Hand"/>
+
+                </Grid>
             </Border>
 
             <!-- Call actor event output -->
@@ -198,6 +239,30 @@
                     <Label Grid.Row="0" Foreground="White" HorizontalAlignment="Center">Event name</Label>
                     <TextBox x:Name="levelEventName" Grid.Row="1" Margin="2"/>
                     <RadioButton x:Name="outputPinLevelEvent"  Grid.Row="2" HorizontalAlignment="Center" Click="OnPinMousedDown" LostMouseCapture="OnMouseControlLost" Cursor="Hand"/>
+                </Grid>
+            </Border>
+
+            <!-- Go to node -->
+            <Border BorderBrush="Black" BorderThickness="1" Grid.Row="4" Background="#3f3f3f3f">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=outputType, Path=SelectedItem.Content}" Value="Go to node">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Row="0" Foreground="White" HorizontalAlignment="Center">Target dialogue ID</Label>
+                    <TextBox x:Name="TargetDialogueID" Grid.Row="1" Margin="2"/>
                 </Grid>
             </Border>
         </Grid>

@@ -9,7 +9,7 @@ namespace DialogueEditor.Files
 	public class DialogueDataLine
 	{
 		public string rowName;
-		public string dialogueText;
+		public string prompt;
 		public string command;
 		public string commandArguments;
 		public string nextRowName;
@@ -20,16 +20,16 @@ namespace DialogueEditor.Files
 		public DialogueDataLine()
 		{
 			rowName = "NewNodeName";
-			dialogueText = "Hello world!";
+			prompt = "Hello world!";
 			command = "";
 			commandArguments = "";
 			nextRowName = "None";
 		}
 
-		public DialogueDataLine(string rowName, string dialogueText, string command, string commandArguments, string nextRowName)
+		public DialogueDataLine(string rowName, string prompt, string command, string commandArguments, string nextRowName)
 		{
 			this.rowName = rowName;
-			this.dialogueText = dialogueText;
+			this.prompt = prompt;
 			this.command = command;
 			this.commandArguments = commandArguments;
 			this.nextRowName = nextRowName;
@@ -50,13 +50,14 @@ namespace DialogueEditor.Files
 
 		public string ToUE4exportCSVrow()
 		{
-			string tempDialogueText = dialogueText.Replace("\"", "\"\"");
-			return rowName + ",\"" + tempDialogueText + "\",\"" + command + "\",\"" + commandArguments + "\",\"" + nextRowName + "\"";
+			string tempPrompt = prompt.Replace("\"", "\"\"");
+			string tempArgs = commandArguments.Replace("\"", "\"\"");
+			return rowName + ",\"" + tempPrompt + "\",\"" + command + "\",\"" + tempArgs + "\",\"" + nextRowName + "\"";
 		}
 
 		public override string ToString()
 		{
-			return "RowName: " + rowName + ", DialogueText: " + dialogueText + ", Command: " + command + ", CommandArgs:" + commandArguments + ", NextRow: " + nextRowName;
+			return "RowName: " + rowName + ", DialogueText: " + prompt + ", Command: " + command + ", CommandArgs:" + commandArguments + ", NextRow: " + nextRowName;
 		}
 
 	}

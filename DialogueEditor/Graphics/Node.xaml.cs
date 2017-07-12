@@ -35,7 +35,7 @@ namespace DialogueEditor
 		public void LoadDataFromSource()
 		{
 			nodeNameField.Content = sourceData.rowName;
-			dialogueText.Text = sourceData.dialogueText;
+			dialogueText.Text = sourceData.commandArguments;
 			SetPosition(sourceData.nodePositionX, sourceData.nodePositionY);
 			switch (sourceData.command)
 			{
@@ -73,6 +73,13 @@ namespace DialogueEditor
 				case "level-message":
 					outputType.Text = "Call level event";
 					levelEventName.Text = sourceData.commandArguments;
+					break;
+				case "dialogue":
+					outputType.Text = "Normal dialogue";
+					break;
+				case "go-to":
+					outputType.Text = "Go to node";
+					TargetDialogueID.Text = sourceData.nextRowName;
 					break;
 				default:
 					outputType.Text = "Normal dialogue";
@@ -132,6 +139,8 @@ namespace DialogueEditor
 			switch (sourceData.command)
 			{
 				case "leave":
+					break;
+				case "go-to":
 					break;
 				case "options":
 					{
@@ -194,6 +203,7 @@ namespace DialogueEditor
 						Console.WriteLine("Exception in LoadOutputConnectionDataFromSource():" + e);
 					}
 					break;
+				case "dialogue":
 				default:
 					try{
 						Node target = MainWindow.instance.nodeMap[sourceData.nextRowName];
@@ -285,6 +295,9 @@ namespace DialogueEditor
 
 					case "End dialogue":
 						return;
+					case "Go to node":
+						other.TargetDialogueID.Text = sourceData.rowName;
+						break;
 					case "Multiple choices":
 						other.MakeConnection(this, other);
 						break;
@@ -318,6 +331,9 @@ namespace DialogueEditor
 					case "End dialogue":
 						Console.WriteLine("Trying to connect input to \"End\" node. Aborting.");
 						return;
+					case "Go to node":
+						other.TargetDialogueID.Text = sourceData.rowName;
+						break;
 					case "Multiple choices":
 							TryConnecting(thisPin, other, other.outputPinMultipleChoices);
 						break;
@@ -451,6 +467,9 @@ namespace DialogueEditor
 				case "End dialogue":
 					c.R = 128; c.G = 0; c.B = 0; //red
 					break;
+				case "Go to node":
+					c.R = 196; c.G = 153; c.B = 0;	//orange
+					break;
 				case "Multiple choices":
 					c.R = 0; c.G = 128; c.B = 64; //green
 					break;
@@ -500,12 +519,15 @@ namespace DialogueEditor
 		public void ApplyChangesToSourceData()
 		{
 			sourceData.rowName = nodeNameField.Content.ToString();
-			sourceData.dialogueText = dialogueText.Text;
 
 			switch (outputType.Text)
 			{
 				case "End dialogue":
 					sourceData.command = "leave";
+					sourceData.commandArguments = string.Empty;
+					break;
+				case "":
+					sourceData.command = "go-to";
 					sourceData.commandArguments = string.Empty;
 					break;
 				case "Multiple choices":
@@ -525,8 +547,8 @@ namespace DialogueEditor
 					sourceData.commandArguments = levelEventName.Text;
 					break;
 				case "Normal dialogue":
-					sourceData.command = "";
-					sourceData.commandArguments = string.Empty;
+					sourceData.command = "dialogue";
+					sourceData.commandArguments = dialogueText.Text;
 					break;
 				default:
 					break;
@@ -539,6 +561,9 @@ namespace DialogueEditor
 			{
 				case "End dialogue":
 					sourceData.nextRowName = "None";
+					break;
+				case "Go to node":
+					sourceData.nextRowName = TargetDialogueID.Text;
 					break;
 				case "Multiple choices":
 					{

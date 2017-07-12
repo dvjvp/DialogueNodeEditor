@@ -62,7 +62,7 @@ namespace DialogueEditor.Files
 			 * 0
 			 */ 
 			string rowName = s[0];
-			string dialogueText = s[1].Replace("\"\"", "\"");
+			string prompt = s[1].Replace("\"\"", "\"");
 			string command = s[s.Length - 5];
 			string commandArgs = s[s.Length - 4];
 			string next = s[s.Length - 3];
@@ -78,25 +78,36 @@ namespace DialogueEditor.Files
 			}
 
 			
-			if (dialogueText.StartsWith("\""))
+			if (prompt.StartsWith("\""))
 			{
-				//combine dialogue into single string
-				dialogueText = "";
+				//combine prompt into single string
+				prompt = "";
 				int index = 1;
-
 				for (; !s[index].EndsWith("\""); index++) 
 				{
-					dialogueText += s[index];
-					dialogueText += ',';
+					prompt += s[index];
+					prompt += ',';
 				}
-				dialogueText += s[index];
-				dialogueText = dialogueText.Replace("\"\"", "\"");
+				prompt += s[index];
+				index++;
+
+				command = s[index];
+				index++;
+
+				commandArgs = "";
+				for (; !s[index].EndsWith("\""); index++)
+				{
+					commandArgs += s[index];
+					commandArgs += ',';
+				}
+				commandArgs += s[index];
+				index++;
 			}
 
 			//remove unnecessary quote symbols
-			if(dialogueText.StartsWith("\""))
+			if(prompt.StartsWith("\""))
 			{
-				dialogueText = dialogueText.Substring(1, dialogueText.Length - 2);
+				prompt = prompt.Substring(1, prompt.Length - 2);
 			}
 			if (command.StartsWith("\""))
 			{
@@ -111,8 +122,12 @@ namespace DialogueEditor.Files
 				next = next.Substring(1, next.Length - 2);
 			}
 
-			
-			DialogueDataLine d = new DialogueDataLine(rowName, dialogueText, command, commandArgs, next);
+
+			prompt = prompt.Replace("\"\"", "\"");
+			commandArgs = commandArgs.Replace("\"\"", "\"");
+
+
+			DialogueDataLine d = new DialogueDataLine(rowName, prompt, command, commandArgs, next);
 			d.SetPosition(x, y);
 			return d;
 		}
@@ -169,7 +184,7 @@ namespace DialogueEditor.Files
 
 			using (StreamWriter outputFile = new StreamWriter(filepath))
 			{
-				outputFile.WriteLine("---,DialogueText,Command,CommandArguments,Next,X,Y");
+				outputFile.WriteLine("---,Prompt,Command,CommandArguments,Next,X,Y");
 				foreach (Node node in nodes)
 				{
 					outputFile.WriteLine(node.sourceData.ToCSVrow());
@@ -195,7 +210,7 @@ namespace DialogueEditor.Files
 
 			using (StreamWriter outputFile = new StreamWriter(filepath))
 			{
-				outputFile.WriteLine("---,DialogueText,Command,CommandArguments,Next");
+				outputFile.WriteLine("---,Prompt,Command,CommandArguments,Next");
 				foreach (Node node in nodes)
 				{
 					outputFile.WriteLine(node.sourceData.ToUE4exportCSVrow());
