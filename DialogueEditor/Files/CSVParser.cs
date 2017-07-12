@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
@@ -13,43 +14,106 @@ namespace DialogueEditor.Files
 			string[] lines = File.ReadAllLines(filepath);
 			List<DialogueDataLine> list = new List<DialogueDataLine>();
 
-			bool withCoordinates = lines[0].Contains("X,Y");
-
 			for (int i = 1 /*Ignore first line*/; i < lines.Length; i++)
 			{
-				Console.WriteLine("LineContent: " + lines[i]);
-
-				string[] s = lines[i].Split(',');
-				string dialogue = string.Empty;
-				int lastIndex = withCoordinates ? s.Length - 5 : s.Length - 3;
-				int j = 1;	//counts how many array elements are consumed by dialogueText.
-				for (; j < s.Length - 3; j++) 
-				{
-					dialogue += s[j];
-					dialogue += ',';
-				}
-				if (dialogue.Length > 2) 
-				{
-					dialogue = dialogue.Replace("\"\"", "\"");
-				}
-				//string dialogueText = s[1].Substring(1, s[1].Length - 2);   //don't take '"' signs at the beginning and on the end
-				DialogueDataLine d = new DialogueDataLine(s[0],
-					dialogue.Substring(1, dialogue.Length - 3),
-					s[0 + j].Length > 2 ? s[0 + j].Substring(1, s[0 + j].Length - 2) : "",
-					s[1 + j].Length > 2 ? s[1 + j].Substring(1, s[1 + j].Length - 2) : "",
-					s[2 + j].Length > 2 ? s[2 + j].Substring(1, s[2 + j].Length - 2) : "");
-				try
-				{
-					d.SetPosition(double.Parse(s[3 + j]), double.Parse(s[4 + j]));
-				}
-				catch (Exception)
-				{
-					d.SetPosition(0, 0);
-				}
-				list.Add(d);
+				list.Add(ReadCSVLine(lines[i]));
 			}
 
 			return list;
+		}
+
+		public static DialogueDataLine ReadCSVLine(string line)
+		{
+			/* Line samples:
+			 * RowName,"Przecinek, przecinek, przecinek","leave","","None"
+			 * RowName2,"Cudzyslow"" Cudzyslow"" Cudzyslow","","","None",100,345
+			 */
+
+			string[] s = line.Split(',');
+			try
+			{
+				double.Parse(s[s.Length - 1]);
+			}
+			catch (Exception)
+			{
+				s = s.Concat(new string[] { "0", "0" }).ToArray();
+			}
+			/* From:
+			 * 
+			 * RowName
+			 * "Przecinek
+			 *  przecinek
+			 *  przecinek"
+			 * "leave"
+			 * ""
+			 * "None"
+			 * 0 (maybe)
+			 * 0 (maybe)
+			 */
+
+			/* To:
+			 * 
+			 * RowName
+			 * Przecinek, przecinek, przecinek
+			 * leave
+			 * 
+			 * None
+			 * 0
+			 * 0
+			 */ 
+			string rowName = s[0];
+			string dialogueText = s[1];
+			string command = s[s.Length - 5];
+			string commandArgs = s[s.Length - 4];
+			string next = s[s.Length - 3];
+			double x = 0, y = 0;
+
+			try
+			{
+				x = double.Parse(s[s.Length-2]);
+				y = double.Parse(s[s.Length-1]);
+			}
+			catch (Exception)
+			{
+			}
+
+			
+			if (dialogueText.StartsWith("\""))
+			{
+				//combine dialogue into single string
+				dialogueText = "";
+				int index = 1;
+
+				for (; !s[index].EndsWith("\""); index++) 
+				{
+					dialogueText += s[index];
+					dialogueText += ',';
+				}
+				dialogueText += s[index];
+			}
+
+			//remove unnecessary quote symbols
+			if(dialogueText.StartsWith("\""))
+			{
+				dialogueText = dialogueText.Substring(1, dialogueText.Length - 2);
+			}
+			if (command.StartsWith("\""))
+			{
+				command = command.Substring(1, command.Length - 2);
+			}
+			if (commandArgs.StartsWith("\""))
+			{
+				commandArgs = commandArgs.Substring(1, commandArgs.Length - 2);
+			}
+			if (next.StartsWith("\""))
+			{
+				next = next.Substring(1, next.Length - 2);
+			}
+
+			
+			DialogueDataLine d = new DialogueDataLine(rowName, dialogueText, command, commandArgs, next);
+			d.SetPosition(x, y);
+			return d;
 		}
 
 		public static string GetFileOpenLocation()
