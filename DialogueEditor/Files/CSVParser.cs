@@ -235,10 +235,10 @@ namespace DialogueEditor.Files
 			}
 			using (StreamWriter outputFile = new StreamWriter(filepath))
 			{
-				outputFile.WriteLine("---,ParentActor,WidgetOffset,WidgetText,SequenceToPlay");
+				outputFile.WriteLine("---,ParentActor,WidgetOffset,SequenceToPlay");
 				foreach (Node node in nodes)
 				{
-					outputFile.WriteLine(node.sourceData.rowName + ",\"None\",\"(Rotation=(X=0.000000,Y=-0.000000,Z=0.000000,W=1.000000),Translation=(X=0.000000,Y=0.000000,Z=100.000000),Scale3D=(X=1.000000,Y=1.000000,Z=1.000000))\",\"\",\"None\"");
+					outputFile.WriteLine(node.sourceData.rowName + ",\"None\",\"(Rotation=(X=0.000000,Y=-0.000000,Z=0.000000,W=1.000000),Translation=(X=0.000000,Y=0.000000,Z=100.000000),Scale3D=(X=1.000000,Y=1.000000,Z=1.000000))\",\"None\"");
 				}
 			}
 		}
