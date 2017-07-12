@@ -616,5 +616,19 @@ namespace DialogueEditor
 
 		#endregion
 
+		private void ButtonLayoutVertical_Click(object sender, RoutedEventArgs e)
+		{
+			MessageBox.Show("Not implemented yet");
+		}
+
+		private void ButtonLayoutHorizontcal_Click(object sender, RoutedEventArgs e)
+		{
+			MessageBox.Show("Not implemented yet");
+		}
+
+		private void ButtonLayoutAuto_Click(object sender, RoutedEventArgs e)
+		{
+			MessageBox.Show("Not implemented yet");
+		}
 	}
 }

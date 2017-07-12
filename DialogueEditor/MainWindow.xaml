@@ -94,6 +94,8 @@
                                 <ColumnDefinition Width="80"/>
                                 <ColumnDefinition Width="80"/>
                                 <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="80"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <Button Grid.Column="0" Background="#FFc2c2c2" Margin="2.5" ToolTip="Adds new node and places it in up-left corner of the graph." Click="ButtonAddNode_Click">
@@ -130,6 +132,24 @@
                                 <StackPanel >
                                     <Image Source="Resources/DeselectAll.png" Width="40"/>
                                     <TextBlock HorizontalAlignment="Center"  LineStackingStrategy="BlockLineHeight">Deselect all</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="6" Background="#FFc2c2c2" Margin="2.5" ToolTip="Puts selected nodes in horizontal line." Click="ButtonLayoutHorizontcal_Click">
+                                <StackPanel >
+                                    <Image Source="Resources/LayoutHorizontal.png" Width="40"/>
+                                    <TextBlock HorizontalAlignment="Center" LineStackingStrategy="BlockLineHeight" LineHeight="10"  TextWrapping="Wrap">Layout horizontal</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="7" Background="#FFc2c2c2" Margin="2.5" ToolTip="Puts selected nodes in vertical line." Click="ButtonLayoutVertical_Click">
+                                <StackPanel >
+                                    <Image Source="Resources/LayoutVertical.png" Width="40"/>
+                                    <TextBlock HorizontalAlignment="Center" LineStackingStrategy="BlockLineHeight" LineHeight="10"  TextWrapping="Wrap">Layout vertical</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="8" Background="#FFc2c2c2" Margin="2.5" ToolTip="Tries to automatically layout selected nodes." Click="ButtonLayoutAuto_Click">
+                                <StackPanel >
+                                    <Image Source="Resources/LayoutAuto.png" Width="40"/>
+                                    <TextBlock HorizontalAlignment="Center"  LineStackingStrategy="BlockLineHeight">Layout auto</TextBlock>
                                 </StackPanel>
                             </Button>
                         </Grid>

@@ -20,7 +20,19 @@ namespace DialogueEditor
 		private PathFigure fig;
 		private PathGeometry path;
 		private Pen pen;
-		private Brush brush;
+		private Brush _brush;
+		public Brush brush
+		{
+			get
+			{
+				return _brush;
+			}
+			set
+			{
+				_brush = value;
+				pen = new Pen(brush, 5);
+			}
+		}
 
 		public Connection(Node parentFrom, FrameworkElement inputFrom, Node to)
 		{
@@ -30,7 +42,7 @@ namespace DialogueEditor
 			parentTo = to;
 			objTo = to.InputPin;
 			brush = new SolidColorBrush(Colors.Black);
-			pen = new Pen(brush, 5);
+			//pen = new Pen(brush, 5);
 		}
 
 		private static Point GetObjectPosition(FrameworkElement element)
