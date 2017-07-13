@@ -1,16 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace DialogueEditor.Testing
 {
@@ -42,10 +33,12 @@ namespace DialogueEditor.Testing
 			{
 				this.nodes.Add("errorNode2", errorNode2);
 			}
-			catch (System.Exception ex)
+			catch (Exception)
 			{
 			}
 		}
+
+		#region Button creating and deleting
 
 		public void DeleteAllButtons()
 		{
@@ -118,6 +111,10 @@ namespace DialogueEditor.Testing
 			Buttons.Columns = Buttons.Children.Count;
 		}
 
+		#endregion
+
+		#region On button(s) clicked
+
 		private void WaitedThroughOptionSelection(object sender, RoutedEventArgs e)
 		{
 			string[] s = currentNode.sourceData.commandArguments.Split(' ');
@@ -169,6 +166,10 @@ namespace DialogueEditor.Testing
 		{
 			Next();
 		}
+
+		#endregion
+
+		#region Dialogue System Interpreter
 
 		private void SetNextDataRow(string from)
 		{
@@ -222,5 +223,8 @@ namespace DialogueEditor.Testing
 					break;
 			}
 		}
+
+		#endregion
+
 	}
 }

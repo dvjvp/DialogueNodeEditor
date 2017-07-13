@@ -1,5 +1,6 @@
 ﻿using DialogueEditor.Files;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -27,6 +28,7 @@ namespace DialogueEditor
 		Vector panDragOffset;
 		Vector panStartCanvasTranslation;
 		Point selectionStartPoint;
+		Vector selectionStartMousePos;
 		Rect selectionRect;
 		Node connectionDrawSource;
 		FrameworkElement connectionDrawingLineStartPin;
@@ -137,34 +139,90 @@ namespace DialogueEditor
 					break;
 
 
+				case Key.Z:
+					if (Mouse.DirectlyOver != drawArea)
+					{
+						return;
+					}
+					if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
+					{
+						ButtonUndo_Click(null, null);
+						e.Handled = true;
+					}
+					break;
+				case Key.Y:
+					if (Mouse.DirectlyOver != drawArea)
+					{
+						return;
+					}
+					if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
+					{
+						ButtonRedo_Click(null, null);
+						e.Handled = true;
+					}
+					break;
+
+
 				case Key.Up:
+					if (Mouse.DirectlyOver != drawArea)
+					{
+						return;
+					}
 					PanCanvas(0, -30);
 					e.Handled = true;
 					break;
 				case Key.W:
+					if (Mouse.DirectlyOver != drawArea)
+					{
+						return;
+					}
 					PanCanvas(0, -30);
 					break;
 				case Key.Down:
+					if (Mouse.DirectlyOver != drawArea)
+					{
+						return;
+					}
 					PanCanvas(0, 30);
 					e.Handled = true;
 					break;
 				case Key.S:
+					if (Mouse.DirectlyOver != drawArea)
+					{
+						return;
+					}
 					PanCanvas(0, 30);
 					break;
 				case Key.Right:
+					if (Mouse.DirectlyOver != drawArea)
+					{
+						return;
+					}
 					PanCanvas(30, 0);
 					e.Handled = true;
 					break;
 				case Key.D:
+					if (Mouse.DirectlyOver != drawArea)
+					{
+						return;
+					}
 					PanCanvas(30, 0);
 					break;
 				case Key.Left:
+					if (Mouse.DirectlyOver != drawArea)
+					{
+						return;
+					}
 					PanCanvas(-30, 0);
 					e.Handled = true;
 					break;
 
 
 				case Key.A:
+					if (Mouse.DirectlyOver != drawArea)
+					{
+						return;
+					}
 					if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
 					{
 						ButtonSelectAll_Click(null, null);
@@ -292,6 +350,7 @@ namespace DialogueEditor
 
 		public void StartDragnDropSelected(Vector mousePos)
 		{
+			selectionStartMousePos = mousePos;
 			for (int i = 0; i < selection.Count; i++)
 			{
 				selection[i].dragOffset = (Vector)selection[i].GetPosition() - mousePos;
@@ -312,6 +371,17 @@ namespace DialogueEditor
 		public void EndDragnDropSelected()
 		{
 			drawArea.Cursor = Cursors.Arrow;
+			foreach (var item in selection)
+			{
+				item.ApplyChangesToSourceData();
+			}
+
+			string[] nodeIDs = selection.Select(n => n.sourceData.rowName).ToArray();
+			Point[] nodeStartingPositions = selection.Select(n =>(Point)(n.dragOffset + selectionStartMousePos)).ToArray();
+			Point[] nodeEndPositions = selection.Select(n => n.GetPosition()).ToArray();
+
+			History.Actions.Action_NodesMoved nodesMovedAction = new History.Actions.Action_NodesMoved(nodeIDs, nodeStartingPositions, nodeEndPositions);
+			History.History.Do(nodesMovedAction);
 		}
 
 
@@ -502,6 +572,8 @@ namespace DialogueEditor
 
 		#region Buttons
 
+		/* FILE */
+
 		private void ButtonNew_Click(object sender, RoutedEventArgs e)
 		{
 			string filePath = CSVParser.GetFileSaveLocation();
@@ -568,6 +640,39 @@ namespace DialogueEditor
 			CSVParser.ExportFile(filepath, nodes);
 		}
 
+		private void ButtonCreateMetadata_Click(object sender, RoutedEventArgs e)
+		{
+			string filepath = CSVParser.GetFileSaveLocation();
+			if (filepath == null)
+			{
+				return;
+			}
+			CSVParser.GenerateMetadata(filepath, nodes);
+		}
+
+		private void ButtonTest_Click(object sender, RoutedEventArgs e)
+		{
+			if (selection.Count != 1)
+			{
+				MessageBox.Show("Please, select a single node, from which to start the dialogue.");
+				return;
+			}
+
+			foreach (var node in nodes)
+			{
+				node.ApplyChangesToSourceData();
+			}
+			foreach (var node in nodes)
+			{
+				node.ApplyConnectionChangesToSourceData();
+			}
+
+			var window = new Testing.TestingWindow(nodeMap, selection[0]);
+			window.Show();
+		}
+
+		/* NODE */
+
 		private void ButtonDeleteConnections_Click(object sender, RoutedEventArgs e)
 		{
 			foreach (var node in selection)
@@ -598,48 +703,6 @@ namespace DialogueEditor
 			ClearSelection();
 		}
 
-		private void ButtonCreateMetadata_Click(object sender, RoutedEventArgs e)
-		{
-			string filepath = CSVParser.GetFileSaveLocation();
-			if (filepath == null) 
-			{
-				return;
-			}
-			CSVParser.GenerateMetadata(filepath, nodes);
-		}
-
-		private void ButtonTest_Click(object sender, RoutedEventArgs e)
-		{
-			if (selection.Count != 1) 
-			{
-				MessageBox.Show("Please, select a single node, from which to start the dialogue.");
-				return;
-			}
-
-			foreach (var node in nodes)
-			{
-				node.ApplyChangesToSourceData();
-			}
-			foreach (var node in nodes)
-			{
-				node.ApplyConnectionChangesToSourceData();
-			}
-
-			var window = new Testing.TestingWindow(nodeMap, selection[0]);
-			window.Show();
-		}
-
-		private void ButtonUndo_Click(object sender, RoutedEventArgs e)
-		{
-			MessageBox.Show("Not implemented yet");
-		}
-
-		private void ButtonRedo_Click(object sender, RoutedEventArgs e)
-		{
-			MessageBox.Show("Not implemented yet");
-		}
-
-
 		private void ButtonLayoutVertical_Click(object sender, RoutedEventArgs e)
 		{
 			MessageBox.Show("Not implemented yet");
@@ -654,6 +717,20 @@ namespace DialogueEditor
 		{
 			MessageBox.Show("Not implemented yet");
 		}
+
+		/* HISTORY */
+
+		private void ButtonUndo_Click(object sender, RoutedEventArgs e)
+		{
+			History.History.Undo();
+		}
+
+		private void ButtonRedo_Click(object sender, RoutedEventArgs e)
+		{
+			History.History.Redo();
+		}
+
+
 
 		#endregion
 

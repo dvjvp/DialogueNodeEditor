@@ -56,6 +56,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="History\Action.cs" />
+    <Compile Include="History\Actions\Action_NodesMoved.cs" />
+    <Compile Include="History\History.cs" />
     <Compile Include="Testing\TestingWindow.xaml.cs">
       <DependentUpon>TestingWindow.xaml</DependentUpon>
     </Compile>
@@ -198,9 +201,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="History\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Resources\LayoutAuto.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
