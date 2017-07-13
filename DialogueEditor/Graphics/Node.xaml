@@ -184,7 +184,7 @@
 
                     <StackPanel Grid.Row="0" Grid.Column="1">
                         <Label Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center">After</Label>
-                        <TextBox x:Name="SecondsTextBox" LostFocus="OnNodeDataChanged"/>
+                        <TextBox x:Name="SecondsTextBox" LostFocus="OnNodeDataChanged" Text="10"/>
                         <Label Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center">seconds play this:</Label>
                     </StackPanel>
                     <RadioButton x:Name="outputPinMultipleChoicesDefault" Grid.Row="1" Grid.Column="1" LostMouseCapture="OnMouseControlLost" VerticalAlignment="Center" HorizontalAlignment="Center" Click="OnPinMousedDown" MouseEnter="HighlightPinConnections" MouseLeave="UnhighlightPinConnections" Cursor="Hand"/>

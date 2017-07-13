@@ -506,7 +506,7 @@ namespace DialogueEditor
 			}
 			else
 			{
-				foreach(var c in outputConnections)
+				foreach (var c in outputConnections) 
 				{
 					if(c.objFrom == pin)
 					{
@@ -521,9 +521,8 @@ namespace DialogueEditor
 		{
 			List<Connection> connectionsToDelete = new List<Connection>();
 
-			for (int i = outputConnections.Count - 1; i >= 0; i--)
+			foreach (var c in outputConnections) 
 			{
-				Connection c = outputConnections[i];
 				if (c.objFrom == pin) 
 				{
 					connectionsToDelete.Add(c);
@@ -546,6 +545,13 @@ namespace DialogueEditor
 						//other.TargetDialogueID.Text = sourceData.rowName;
 						break;
 					case "Multiple choices":
+						if(otherPin == other.outputPinMultipleChoicesDefault)
+						{
+							if(other.PinHasConnection(otherPin))
+							{
+								other.DeleteAllOutputConnectionsFromPin(otherPin);
+							}
+						}
 						History.History.Do(new History.Actions.Action_ConnectionMade(other, otherPin, this));
 						//other.MakeConnection(this, otherPin);
 						break;

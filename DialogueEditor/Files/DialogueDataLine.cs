@@ -19,10 +19,10 @@ namespace DialogueEditor.Files
 
 		public DialogueDataLine()
 		{
-			rowName = "NewNodeName";
-			prompt = "Hello world!";
-			command = "";
-			commandArguments = "";
+			rowName = Guid.NewGuid().ToString();
+			prompt = "Sample answer";
+			command = "dialogue";
+			commandArguments = "Sample text";
 			nextRowName = "None";
 		}
 

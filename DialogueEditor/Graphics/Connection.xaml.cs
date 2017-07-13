@@ -42,6 +42,19 @@ namespace DialogueEditor
 			objTo = to.InputPin;
 			Brush = new SolidColorBrush(Colors.Black);
 			//pen = new Pen(brush, 5);
+
+			MouseEnter += Connection_MouseEnter;
+			MouseLeave += Connection_MouseLeave;
+		}
+
+		private void Connection_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+		{
+			SetHighlightEnabled(false);
+		}
+
+		private void Connection_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+		{
+			SetHighlightEnabled(true);
 		}
 
 		public void SetHighlightEnabled(bool highlighted)
