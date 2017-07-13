@@ -5,8 +5,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace DialogueEditor
 {
@@ -15,21 +14,29 @@ namespace DialogueEditor
     /// </summary>
     public partial class MainWindow : Window
     {
-		//Nodes & System variables
+		const double BasicallyInfinity = 99999999999;	//I mean, it's infinity, right? Who even has a screen that big?
+
+		//System variables
 		public static MainWindow instance;
+		DispatcherTimer autoSaveTimer;
+
+		//Node-related variables
 		public List<Node> nodes = new List<Node>();
 		public Dictionary<string, Node> nodeMap = new Dictionary<string, Node>();
 		public List<Node> selection = new List<Node>();
 
-		//Zoom, pan & selection
+		//Zoom
 		const double zoomSpeed = .025;
-		bool selectionInProgress = false;
+		//Pan
 		bool panInProgress = false;
 		Vector panDragOffset;
 		Vector panStartCanvasTranslation;
+		//Selection
+		bool selectionInProgress = false;
 		Point selectionStartPoint;
 		Vector selectionStartMousePos;
 		Rect selectionRect;
+		//Connection drawing
 		Node connectionDrawSource;
 		FrameworkElement connectionDrawingLineStartPin;
 
@@ -38,12 +45,24 @@ namespace DialogueEditor
 			instance = this;
             InitializeComponent();
 			KeyDown += MainWindow_KeyDown;
-			//Based loosely on: https://forum.unity3d.com/threads/simple-node-editor.189230/
 
-			drawArea.Width = 99999999999;	//it's basically infinity right? Who even has screen that big?
-			drawArea.Height = 99999999999;
+			drawArea.Width = BasicallyInfinity;
+			drawArea.Height = BasicallyInfinity;
+
+			autoSaveTimer = new DispatcherTimer();
+			autoSaveTimer.Tick += AutoSaveTimer_Tick;
+			autoSaveTimer.Interval = new TimeSpan(0, 10, 0);	//ask to save every 10 minutes
+			autoSaveTimer.Start();
 		}
-		
+
+		private void AutoSaveTimer_Tick(object sender, EventArgs e)
+		{
+			if (MessageBox.Show("Would you like to save?", "Auto save", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+			{
+				ButtonSave_Click(sender, null);
+			}
+		}
+
 		private void OpenFile(string filePath)
 		{
 			DeleteAllNodes();
