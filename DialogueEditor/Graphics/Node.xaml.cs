@@ -622,17 +622,6 @@ namespace DialogueEditor
 			//Console.WriteLine("selected node: " + nodeNameField.Text);
 		}
 
-		private void ButtonDelete_Click(object sender, RoutedEventArgs e)
-		{
-			Delete();
-		}
-
-		public void Delete()
-		{
-			Console.WriteLine("Deleting node: " + nodeNameField.Text);
-			MainWindow.instance.DeleteNode(this);
-		}
-
 		private void outputType_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			DeleteAllOutputConnections();

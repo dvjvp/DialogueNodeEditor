@@ -23,7 +23,8 @@ namespace DialogueEditor.History.Actions
 			{
 				c.parentTo.outputConnections.Remove(c);
 				c.parentFrom.outputConnections.Remove(c);
-				(c.Parent as Canvas)?.Children.Remove(c);
+				MainWindow.instance.drawArea.Children.Remove(c);
+				//(c.Parent as Canvas)?.Children.Remove(c);
 				c.parentTo.RecalculatePromptAreaVisibility();
 			}
 		}
@@ -34,7 +35,14 @@ namespace DialogueEditor.History.Actions
 			{
 				c.parentTo.inputConnections.Add(c);
 				c.parentFrom.outputConnections.Add(c);
-				(c.parentFrom.Parent as Canvas)?.Children.Add(c);
+				try
+				{
+					MainWindow.instance.drawArea.Children.Add(c);
+				}
+				catch (System.Exception)
+				{
+					Console.WriteLine("Error 0x00001");
+				}
 				c.parentTo.RecalculatePromptAreaVisibility();
 			}
 		}

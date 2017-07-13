@@ -17,7 +17,7 @@ namespace DialogueEditor
     {
 		//Nodes & System variables
 		public static MainWindow instance;
-		protected List<Node> nodes = new List<Node>();
+		public List<Node> nodes = new List<Node>();
 		public Dictionary<string, Node> nodeMap = new Dictionary<string, Node>();
 		public List<Node> selection = new List<Node>();
 
@@ -260,7 +260,9 @@ namespace DialogueEditor
 
 		private void ButtonAddNode_Click(object sender, RoutedEventArgs e)
 		{
-			AddNode(new DialogueDataLine()).CreateUniqueID();
+			var node = AddNode(new DialogueDataLine());
+			node.CreateUniqueID();
+			History.History.Instance.undoHistory.Push(new History.Actions.Action_NodeAdded(node));
 		}
 
 		private void drawArea_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
@@ -269,6 +271,7 @@ namespace DialogueEditor
 			var node = AddNode(new DialogueDataLine());
 			node.SetPosition(mousePos.X, mousePos.Y);
 			node.CreateUniqueID();
+			History.History.Instance.undoHistory.Push(new History.Actions.Action_NodeAdded(node));
 		}
 
 		private Node AddNode(DialogueDataLine data)
@@ -297,24 +300,16 @@ namespace DialogueEditor
 
 		private void DeleteAllNodes()
 		{
-			for (int i = nodes.Count - 1; i >= 0; i--)
-			{
-				nodes[i].Delete();
-			}
+			selection = nodes;
+
+			DeleteSelectedNodes();
+			
 			nodes.Clear();
 			nodeMap.Clear();
+			selection = new List<Node>();
 		}
 
 		private void DeleteSelectedNodes()
-		{
-			for (int i = selection.Count - 1; i >= 0; i--)
-			{
-				selection[i].Delete();
-			}
-			selection.Clear();
-		}
-
-		public void DeleteNode(Node node)
 		{
 			foreach (var n in nodes)
 			{
@@ -325,19 +320,33 @@ namespace DialogueEditor
 				n.ApplyConnectionChangesToSourceData();
 			}
 
-			node.DeleteAllConnections();
-			drawArea.Children.Remove(node);
-			nodeMap.Remove(node.nodeNameField.Text.ToString());
-			nodes.Remove(node);
-			RefreshNodeConnections();
+			HashSet<Connection> connectionsToDelete = new HashSet<Connection>();
+
+			foreach (var n in selection)
+			{
+				n.inputConnections.ForEach(c => connectionsToDelete.Add(c));
+				n.outputConnections.ForEach(c => connectionsToDelete.Add(c));
+			}
+
+			History.History.Do(new History.Actions.Action_ConnectionsRemoved(connectionsToDelete.ToArray()));
+
+			History.History.Do(new History.Actions.Action_NodesDeleted(selection.ToArray()));
+			
+			selection.Clear();
 		}
 
-		protected void RefreshNodeConnections()
+		public void RefreshNodeConnections()
 		{
+			//Delete all connections:
+			HashSet<Connection> connectionsToDelete = new HashSet<Connection>();
 			foreach (var n in nodes)
 			{
-				n.DeleteAllConnections();
+				n.inputConnections.ForEach(c => connectionsToDelete.Add(c));
+				n.outputConnections.ForEach(c => connectionsToDelete.Add(c));
 			}
+			( new History.Actions.Action_ConnectionsRemoved(connectionsToDelete.ToArray()) ).Do();
+
+			//And create them anew
 			foreach (var n in nodes)
 			{
 				n.LoadOutputConnectionDataFromSource();

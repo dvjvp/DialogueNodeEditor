@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace DialogueEditor.History.Actions
 {
 	class Action_NodeTypeChanged : Action
@@ -23,7 +18,6 @@ namespace DialogueEditor.History.Actions
 		public override void Do()
 		{
 			node.outputType.Text = newType;
-			//History.Instance.undoHistory.Pop();	//otherwise it's gonna be added twice, yo
 		}
 
 		public override void Undo()
