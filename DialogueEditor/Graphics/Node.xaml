@@ -78,10 +78,10 @@
                 <StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <Label Grid.Column="0" Grid.Row="1" FontWeight="DemiBold" IsHitTestVisible="False">Actor name:</Label>
-                        <TextBox x:Name="actorName" Text="Alex" Grid.Column="1" Grid.Row="1" TextChanged="aactorName_TextChanged" Margin="5" MaxWidth="300"/>
+                        <TextBox x:Name="actorName" Text="Alex" Grid.Column="1" Grid.Row="1" TextChanged="aactorName_TextChanged" Margin="5" MaxWidth="300" LostFocus="OnNodeDataChanged"/>
                     </StackPanel>
                     <Label HorizontalAlignment="Center" FontWeight="DemiBold" Content=" Dialogue text:" IsHitTestVisible="False"/>
-                    <TextBox x:Name="dialogueText" Text="Dialogue Text" Margin="5" TextWrapping="Wrap" MaxWidth="300"  VerticalScrollBarVisibility="Auto"  SpellCheck.IsEnabled="True" Height="Auto"/>
+                    <TextBox x:Name="dialogueText" Text="Dialogue Text" Margin="5" TextWrapping="Wrap" MaxWidth="300"  VerticalScrollBarVisibility="Auto"  SpellCheck.IsEnabled="True" Height="Auto" LostFocus="OnNodeDataChanged"/>
                 </StackPanel>
             </Border>
 
@@ -150,8 +150,8 @@
 
                     <Label Grid.Column="0" Grid.Row="0" Foreground="White" HorizontalAlignment="Center">Item name</Label>
                     <Label Grid.Column="1" Grid.Row="0" Foreground="White" HorizontalAlignment="Center">Count</Label>
-                    <TextBox x:Name="itemName"  Grid.Column="0" Grid.Row="1" Margin="2" TextChanged="RemoveSpacesFromSender"/>
-                    <TextBox x:Name="itemCount"  Grid.Column="1" Grid.Row="1" Margin="2"/>
+                    <TextBox x:Name="itemName"  Grid.Column="0" Grid.Row="1" Margin="2" TextChanged="RemoveSpacesFromSender" LostFocus="OnNodeDataChanged"/>
+                    <TextBox x:Name="itemCount"  Grid.Column="1" Grid.Row="1" Margin="2" LostFocus="OnNodeDataChanged"/>
                     <Label Grid.Column="0" Grid.Row="2" Foreground="White" HorizontalAlignment="Center">True</Label>
                     <Label Grid.Column="1" Grid.Row="2" Foreground="White" HorizontalAlignment="Center">False</Label>
                     <RadioButton x:Name="outputPinItemTrue"  Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" Click="OnPinMousedDown" LostMouseCapture="OnMouseControlLost" MouseEnter="HighlightPinConnections" MouseLeave="UnhighlightPinConnections" Cursor="Hand"/>
@@ -184,7 +184,7 @@
 
                     <StackPanel Grid.Row="0" Grid.Column="1">
                         <Label Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center">After</Label>
-                        <TextBox x:Name="SecondsTextBox"/>
+                        <TextBox x:Name="SecondsTextBox" LostFocus="OnNodeDataChanged"/>
                         <Label Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center">seconds play this:</Label>
                     </StackPanel>
                     <RadioButton x:Name="outputPinMultipleChoicesDefault" Grid.Row="1" Grid.Column="1" LostMouseCapture="OnMouseControlLost" VerticalAlignment="Center" HorizontalAlignment="Center" Click="OnPinMousedDown" MouseEnter="HighlightPinConnections" MouseLeave="UnhighlightPinConnections" Cursor="Hand"/>
@@ -220,8 +220,8 @@
 
                     <Label Grid.Column="0" Grid.Row="0" Foreground="White" HorizontalAlignment="Center">Actor name</Label>
                     <Label Grid.Column="1" Grid.Row="0" Foreground="White" HorizontalAlignment="Center">Event name</Label>
-                    <TextBox x:Name="eventActorName"  Grid.Column="0" Grid.Row="1" Margin="2" TextChanged="RemoveSpacesFromSender"/>
-                    <TextBox x:Name="eventActorEventName"  Grid.Column="1" Grid.Row="1" Margin="2" TextChanged="RemoveSpacesFromSender"/>
+                    <TextBox x:Name="eventActorName"  Grid.Column="0" Grid.Row="1" Margin="2" TextChanged="RemoveSpacesFromSender" LostFocus="OnNodeDataChanged"/>
+                    <TextBox x:Name="eventActorEventName"  Grid.Column="1" Grid.Row="1" Margin="2" TextChanged="RemoveSpacesFromSender" LostFocus="OnNodeDataChanged"/>
                     <RadioButton x:Name="outputPinActorEvent"  Grid.ColumnSpan="2" Grid.Column="0"  Grid.Row="2" HorizontalAlignment="Center" Click="OnPinMousedDown" LostMouseCapture="OnMouseControlLost" MouseEnter="HighlightPinConnections" MouseLeave="UnhighlightPinConnections" Cursor="Hand"/>
                 </Grid>
             </Border>
@@ -246,7 +246,7 @@
                     </Grid.RowDefinitions>
 
                     <Label Grid.Row="0" Foreground="White" HorizontalAlignment="Center">Event name</Label>
-                    <TextBox x:Name="levelEventName" Grid.Row="1" Margin="2"/>
+                    <TextBox x:Name="levelEventName" Grid.Row="1" Margin="2" LostFocus="OnNodeDataChanged"/>
                     <RadioButton x:Name="outputPinLevelEvent"  Grid.Row="2" HorizontalAlignment="Center" Click="OnPinMousedDown" LostMouseCapture="OnMouseControlLost" MouseEnter="HighlightPinConnections" MouseLeave="UnhighlightPinConnections" Cursor="Hand"/>
                 </Grid>
             </Border>
@@ -271,7 +271,7 @@
                     </Grid.RowDefinitions>
 
                     <Label Grid.Row="0" Foreground="White" HorizontalAlignment="Center">Target dialogue ID</Label>
-                    <TextBox x:Name="TargetDialogueID" Grid.Row="1" Margin="2"/>
+                    <TextBox x:Name="TargetDialogueID" Grid.Row="1" Margin="2" LostFocus="OnNodeDataChanged"/>
                 </Grid>
             </Border>
         </Grid>

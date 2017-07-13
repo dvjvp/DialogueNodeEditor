@@ -34,7 +34,7 @@ namespace DialogueEditor
 
 		#region Source data
 
-		public void LoadDataFromSource()
+		public void LoadDataFromSource(bool withoutOutputType = false)
 		{
 			nodeNameField.Text = sourceData.rowName;
 			dialogueText.Text = sourceData.commandArguments;
@@ -43,13 +43,22 @@ namespace DialogueEditor
 			switch (sourceData.command)
 			{
 				case "leave":
-					outputType.Text = "End dialogue";
+					if (!withoutOutputType) 
+					{
+						outputType.Text = "End dialogue";
+					}
 					break;
 				case "options":
-					outputType.Text = "Multiple choices";
+					if (!withoutOutputType)
+					{
+						outputType.Text = "Multiple choices";
+					}
 					break;
 				case "has-item":
-					outputType.Text = "If player has item";
+					if (!withoutOutputType)
+					{
+						outputType.Text = "If player has item";
+					}
 					string[] _s = sourceData.commandArguments.Split(' ');
 					itemName.Text = _s[0];
 					try
@@ -62,7 +71,10 @@ namespace DialogueEditor
 					}
 					break;
 				case "actor-message":
-					outputType.Text = "Call actor event";
+					if (!withoutOutputType)
+					{
+						outputType.Text = "Call actor event";
+					}
 					try
 					{
 						string[] s = sourceData.commandArguments.Split(' ');
@@ -74,18 +86,30 @@ namespace DialogueEditor
 					}
 					break;
 				case "level-message":
-					outputType.Text = "Call level event";
+					if (!withoutOutputType)
+					{
+						outputType.Text = "Call level event";
+					}
 					levelEventName.Text = sourceData.commandArguments;
 					break;
 				case "dialogue":
-					outputType.Text = "Normal dialogue";
+					if (!withoutOutputType)
+					{
+						outputType.Text = "Normal dialogue";
+					}
 					break;
 				case "go-to":
-					outputType.Text = "Go to node";
+					if (!withoutOutputType)
+					{
+						outputType.Text = "Go to node";
+					}
 					TargetDialogueID.Text = sourceData.nextRowName;
 					break;
 				default:
-					outputType.Text = "Normal dialogue";
+					if (!withoutOutputType)
+					{
+						outputType.Text = "Normal dialogue";
+					}
 					break;
 			}
 		}
@@ -132,6 +156,52 @@ namespace DialogueEditor
 				default:
 					break;
 			}
+		}
+
+		public DialogueDataLine ToDialogueDataLine()
+		{
+			DialogueDataLine d = new DialogueDataLine();
+
+			d.rowName = nodeNameField.Text;
+			d.prompt = PromptTextBox.Text;
+			Point p = GetPosition();
+			d.SetPosition(p.X, p.Y);
+
+			switch (outputType.Text)
+			{
+				case "End dialogue":
+					d.command = "leave";
+					d.commandArguments = string.Empty;
+					break;
+				case "Go to node":
+					d.command = "go-to";
+					d.commandArguments = string.Empty;
+					break;
+				case "Multiple choices":
+					d.command = "options";
+					d.commandArguments = string.Empty;
+					break;
+				case "If player has item":
+					d.command = "has-item";
+					d.commandArguments = itemName.Text + " " + itemCount.Text;
+					break;
+				case "Call actor event":
+					d.command = "actor-message";
+					d.commandArguments = eventActorName.Text + " " + eventActorEventName.Text;
+					break;
+				case "Call level event":
+					d.command = "level-message";
+					d.commandArguments = levelEventName.Text;
+					break;
+				case "Normal dialogue":
+					d.command = "dialogue";
+					d.commandArguments = dialogueText.Text;
+					break;
+				default:
+					break;
+			}
+
+			return d;
 		}
 
 		public void ApplyConnectionChangesToSourceData()
@@ -767,12 +837,15 @@ namespace DialogueEditor
 			}
 		}
 
+		private void OnNodeDataChanged(object sender, RoutedEventArgs e)
+		{
+			DialogueDataLine oldData = sourceData;
+			DialogueDataLine newData = ToDialogueDataLine();
+
+			History.History.Do(new History.Actions.Action_NodeDataChanged(this, oldData, newData));
+		}
 
 		#endregion
 
-		private void OnNodeDataChanged(object sender, RoutedEventArgs e)
-		{
-			Console.WriteLine(PromptTextBox.Text);
-		}
 	}
 }

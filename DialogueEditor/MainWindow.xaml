@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DialogueEditor"
         mc:Ignorable="d"
-        Title="Woodpecker Dialogue Editor v. 0.4 Alpha" Width="1024" Height="768" >
+        Title="Woodpecker Dialogue Editor v. 0.5 Alpha" Width="1024" Height="768" >
     <Grid Name="grid">
         <Grid.RowDefinitions>
             <RowDefinition Height="100"/>

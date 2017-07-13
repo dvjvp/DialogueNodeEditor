@@ -61,6 +61,7 @@
     <Compile Include="History\Actions\Action_ConnectionMadeGoTo.cs" />
     <Compile Include="History\Actions\Action_ConnectionsRemoved.cs" />
     <Compile Include="History\Actions\Action_NodeAdded.cs" />
+    <Compile Include="History\Actions\Action_NodeDataChanged.cs" />
     <Compile Include="History\Actions\Action_NodesDeleted.cs" />
     <Compile Include="History\Actions\Action_NodesMoved.cs" />
     <Compile Include="History\Actions\Action_NodeTypeChanged.cs" />
