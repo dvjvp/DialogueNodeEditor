@@ -89,6 +89,15 @@ namespace DialogueEditor
 			Node other = null;
 			FrameworkElement transform = mouseOverObject;
 
+			foreach (var item in nodes)
+			{
+				item.ApplyChangesToSourceData();
+			}
+			foreach (var item in nodes)
+			{
+				item.ApplyConnectionChangesToSourceData();
+			}
+
 			if (mouseOverObject is RadioButton)
 			{
 				connectionDrawSource.TryConnecting(connectionDrawingLineStartPin, other, mouseOverObject);
@@ -601,7 +610,23 @@ namespace DialogueEditor
 
 		private void ButtonTest_Click(object sender, RoutedEventArgs e)
 		{
-			MessageBox.Show("Not implemented yet!");
+			if (selection.Count != 1) 
+			{
+				MessageBox.Show("Please, select a single node, from which to start the dialogue.");
+				return;
+			}
+
+			foreach (var node in nodes)
+			{
+				node.ApplyChangesToSourceData();
+			}
+			foreach (var node in nodes)
+			{
+				node.ApplyConnectionChangesToSourceData();
+			}
+
+			var window = new Testing.TestingWindow(nodeMap, selection[0]);
+			window.Show();
 		}
 
 		private void ButtonUndo_Click(object sender, RoutedEventArgs e)
@@ -614,7 +639,6 @@ namespace DialogueEditor
 			MessageBox.Show("Not implemented yet");
 		}
 
-		#endregion
 
 		private void ButtonLayoutVertical_Click(object sender, RoutedEventArgs e)
 		{
@@ -630,5 +654,8 @@ namespace DialogueEditor
 		{
 			MessageBox.Show("Not implemented yet");
 		}
+
+		#endregion
+
 	}
 }

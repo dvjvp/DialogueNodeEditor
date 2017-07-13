@@ -91,8 +91,12 @@ namespace DialogueEditor
 
 		public void ApplyChangesToSourceData()
 		{
+			MainWindow.instance.nodeMap.Remove(sourceData.rowName);
+
 			sourceData.rowName = nodeNameField.Text.ToString();
 			sourceData.prompt = PromptTextBox.Text;
+
+			MainWindow.instance.nodeMap.Add(sourceData.rowName, this);
 
 			switch (outputType.Text)
 			{
