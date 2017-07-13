@@ -166,6 +166,49 @@
                                 <ColumnDefinition Width="80"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
+
+                            <Button Grid.Column="0" Background="#FFc2c2c2" Margin="2.5" ToolTip="">
+                                <StackPanel>
+                                    <Image Source="Resources/HelpNavigation.png" Width="40"/>
+                                    <TextBlock HorizontalAlignment="Center">Navigation</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="1" Background="#FFc2c2c2" Margin="2.5" ToolTip="">
+                                <StackPanel>
+                                    <Image Source="Resources/HelpNodes.png" Width="40"/>
+                                    <TextBlock HorizontalAlignment="Center">Nodes</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="2" Background="#FFc2c2c2" Margin="2.5" ToolTip="">
+                                <StackPanel>
+                                    <Image Source="Resources/HelpConnections.png" Width="40"/>
+                                    <TextBlock HorizontalAlignment="Center">Connections</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="3" Background="#FFc2c2c2" Margin="2.5" ToolTip="">
+                                <StackPanel>
+                                    <Image Source="Resources/HelpExport.png" Width="40"/>
+                                    <TextBlock HorizontalAlignment="Center">Exporting</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="4" Background="#FFc2c2c2" Margin="2.5" ToolTip="Write message on spark to person that created this application." Click="SendSparkMessage_Click">
+                                <StackPanel>
+                                    <Image Source="Resources/HelpSpark.png" Width="40"/>
+                                    <TextBlock HorizontalAlignment="Center">Spark contact</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="5" Background="#FFc2c2c2" Margin="2.5" ToolTip="Write an e-mail to person that created this application." Click="SendEMailButton_Click">
+                                <StackPanel>
+                                    <Image Source="Resources/HelpEmail.png" Width="40"/>
+                                    <TextBlock HorizontalAlignment="Center">Mail contact</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="6" Background="#FFc2c2c2" Margin="2.5" ToolTip="Basic info on this application" Click="AboutInfoButton_Click">
+                                <StackPanel>
+                                    <Image Source="Resources/HelpAbout.png" Width="40"/>
+                                    <TextBlock HorizontalAlignment="Center">About app</TextBlock>
+                                </StackPanel>
+                            </Button>
                         </Grid>
                     </TabItem>
                 </TabControl>

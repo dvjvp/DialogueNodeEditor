@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
+using System.Diagnostics;
 
 namespace DialogueEditor
 {
@@ -747,5 +748,28 @@ namespace DialogueEditor
 
 		#endregion
 
+		private void SendEMailButton_Click(object sender, RoutedEventArgs e)
+		{
+			Process.Start("mailto:daniel.janowski@thefarm51.com");
+		}
+
+		private void AboutInfoButton_Click(object sender, RoutedEventArgs e)
+		{
+			MessageBox.Show("\"Woodpecker\" Dialogue editor for Chernobyl Game by The Farm 51.\n"
+				+"Creator: Daniel Janowski\n"
+				+"Version: 0.5 Alpha\n"
+				+"Last changes: 13-07-2017"
+				,"Application Info"
+				);
+		}
+
+		private void SendSparkMessage_Click(object sender, RoutedEventArgs e)
+		{
+			var result = MessageBox.Show("Write on Spark to daniel.janowski@thefarm51.com\nor press OK to open Spark automatically (experimental).", "Spark message", MessageBoxButton.OKCancel);
+			if(result == MessageBoxResult.OK)
+			{
+				Process.Start("xmpp:daniel.janowski@thefarm51.com");
+			}
+		}
 	}
 }
