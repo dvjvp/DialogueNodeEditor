@@ -53,7 +53,7 @@
             <Border x:Name="BorderPrompt" BorderBrush="Black" BorderThickness="1" Grid.Row="2" Background="#FF4C8D46">
                 <StackPanel>
                     <Label HorizontalAlignment="Center" FontWeight="DemiBold">Prompt:</Label>
-                    <TextBox x:Name="PromptTextBox" Margin="5"/>
+                    <TextBox x:Name="PromptTextBox" Margin="5" LostFocus="OnNodeDataChanged"/>
                 </StackPanel>
             </Border>
             

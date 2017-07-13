@@ -769,5 +769,10 @@ namespace DialogueEditor
 
 
 		#endregion
+
+		private void OnNodeDataChanged(object sender, RoutedEventArgs e)
+		{
+			Console.WriteLine(PromptTextBox.Text);
+		}
 	}
 }

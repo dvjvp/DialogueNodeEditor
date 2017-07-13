@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace DialogueEditor.History.Actions
 {
 	class Action_NodesDeleted : Action
@@ -17,8 +12,6 @@ namespace DialogueEditor.History.Actions
 
 		public override void Do()
 		{
-			
-
 			foreach (var n in nodes)
 			{
 				MainWindow.instance.drawArea.Children.Remove(n);

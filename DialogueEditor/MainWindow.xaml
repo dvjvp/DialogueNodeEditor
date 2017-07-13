@@ -194,7 +194,7 @@
         <!-- Draw area -->
 
         <Border BorderBrush="Black" BorderThickness="1"  Grid.Row="1" Margin="5" ClipToBounds="True">
-            <Canvas Name="drawArea" Background="#8f8f8f"
+            <Canvas Name="drawArea" Background="#8f8f8f" Focusable="True"
                     MouseWheel="Canvas_MouseWheel" MouseDown="drawArea_MouseDown" MouseUp="drawArea_MouseUp" MouseMove="drawArea_MouseMove"
                     MouseRightButtonDown="drawArea_MouseRightButtonDown"
                     >

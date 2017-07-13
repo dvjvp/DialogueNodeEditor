@@ -132,6 +132,11 @@ namespace DialogueEditor
 
 		private void MainWindow_KeyDown(object sender, KeyEventArgs e)
 		{
+			if (Keyboard.FocusedElement != drawArea)
+			{
+				return;
+			}
+
 			switch(e.Key)
 			{
 				case Key.Back:
@@ -142,10 +147,6 @@ namespace DialogueEditor
 
 
 				case Key.Z:
-					if (Mouse.DirectlyOver != drawArea)
-					{
-						return;
-					}
 					if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
 					{
 						ButtonUndo_Click(null, null);
@@ -153,10 +154,6 @@ namespace DialogueEditor
 					}
 					break;
 				case Key.Y:
-					if (Mouse.DirectlyOver != drawArea)
-					{
-						return;
-					}
 					if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
 					{
 						ButtonRedo_Click(null, null);
@@ -166,65 +163,33 @@ namespace DialogueEditor
 
 
 				case Key.Up:
-					if (Mouse.DirectlyOver != drawArea)
-					{
-						return;
-					}
 					PanCanvas(0, -30);
 					e.Handled = true;
 					break;
 				case Key.W:
-					if (Mouse.DirectlyOver != drawArea)
-					{
-						return;
-					}
 					PanCanvas(0, -30);
 					break;
 				case Key.Down:
-					if (Mouse.DirectlyOver != drawArea)
-					{
-						return;
-					}
 					PanCanvas(0, 30);
 					e.Handled = true;
 					break;
 				case Key.S:
-					if (Mouse.DirectlyOver != drawArea)
-					{
-						return;
-					}
 					PanCanvas(0, 30);
 					break;
 				case Key.Right:
-					if (Mouse.DirectlyOver != drawArea)
-					{
-						return;
-					}
 					PanCanvas(30, 0);
 					e.Handled = true;
 					break;
 				case Key.D:
-					if (Mouse.DirectlyOver != drawArea)
-					{
-						return;
-					}
 					PanCanvas(30, 0);
 					break;
 				case Key.Left:
-					if (Mouse.DirectlyOver != drawArea)
-					{
-						return;
-					}
 					PanCanvas(-30, 0);
 					e.Handled = true;
 					break;
 
 
 				case Key.A:
-					if (Mouse.DirectlyOver != drawArea)
-					{
-						return;
-					}
 					if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
 					{
 						ButtonSelectAll_Click(null, null);
@@ -544,9 +509,13 @@ namespace DialogueEditor
 
 		#region Mouse Interaction
 
-
 		private void drawArea_MouseDown(object sender, MouseButtonEventArgs e)
 		{
+			if (Mouse.DirectlyOver == drawArea)
+			{
+				Keyboard.Focus(drawArea);
+			}
+
 			if (e.LeftButton == MouseButtonState.Pressed)
 			{
 				StartRubberbandSelection(sender, e);
