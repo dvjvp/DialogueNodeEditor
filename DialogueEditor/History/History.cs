@@ -51,6 +51,7 @@ namespace DialogueEditor.History
 		}
 		public static void Do(Action a)
 		{
+			Instance.redoHistory.Clear();
 			a.Do();
 			Instance.undoHistory.Push(a);
 		}

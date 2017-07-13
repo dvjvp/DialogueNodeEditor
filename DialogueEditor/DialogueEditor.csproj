@@ -57,6 +57,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="History\Action.cs" />
+    <Compile Include="History\Actions\Action_ConnectionMade.cs" />
+    <Compile Include="History\Actions\Action_ConnectionMadeGoTo.cs" />
+    <Compile Include="History\Actions\Action_ConnectionsRemoved.cs" />
     <Compile Include="History\Actions\Action_NodesMoved.cs" />
     <Compile Include="History\History.cs" />
     <Compile Include="Testing\TestingWindow.xaml.cs">

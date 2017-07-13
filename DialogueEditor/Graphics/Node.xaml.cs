@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -370,47 +371,61 @@ namespace DialogueEditor
 			}
 		}
 
-		public void MakeConnection(Node to, FrameworkElement pinFrom)
+		public Connection MakeConnection(Node to, FrameworkElement pinFrom)
 		{
 			Connection c = new Connection(this, pinFrom, to);
 			to.inputConnections.Add(c);
 			outputConnections.Add(c);
 			(Parent as Canvas)?.Children.Add(c);
-
-			RecalculatePromptAreaVisibility();
+			
 			to.RecalculatePromptAreaVisibility();
+
+			return c;
 		}
 
 		public void DeleteAllOutputConnections()
 		{
-			for (int i = outputConnections.Count - 1; i >= 0; i--)
+			// 			for (int i = outputConnections.Count - 1; i >= 0; i--)
+			// 			{
+			// 				Connection c = outputConnections[i];
+			// 				c.parentTo.inputConnections.Remove(c);
+			// 				(c.Parent as Canvas)?.Children.Remove(c);
+			// 				outputConnections.Remove(c);
+			// 
+			// 				c.parentTo.RecalculatePromptAreaVisibility();
+			// 			}
+			if (outputConnections.Count > 0) 
 			{
-				Connection c = outputConnections[i];
-				c.parentTo.inputConnections.Remove(c);
-				(c.Parent as Canvas)?.Children.Remove(c);
-				outputConnections.Remove(c);
-
-				c.parentTo.RecalculatePromptAreaVisibility();
+				History.History.Do(new History.Actions.Action_ConnectionsRemoved(outputConnections.ToArray()));
 			}
 		}
 
 		public void DeleteAllInputConnections()
 		{
-			for (int i = inputConnections.Count - 1; i >= 0; i--)
+			// 			for (int i = inputConnections.Count - 1; i >= 0; i--)
+			// 			{
+			// 				Connection c = inputConnections[i];
+			// 				c.parentFrom.outputConnections.Remove(c);
+			// 				(c.Parent as Canvas)?.Children.Remove(c);
+			// 				inputConnections.Remove(c);
+			// 			}
+			// 
+			// 			RecalculatePromptAreaVisibility();
+			if (inputConnections.Count > 0) 
 			{
-				Connection c = inputConnections[i];
-				c.parentTo.outputConnections.Remove(c);
-				(c.Parent as Canvas)?.Children.Remove(c);
-				inputConnections.Remove(c);
+				History.History.Do(new History.Actions.Action_ConnectionsRemoved(inputConnections.ToArray()));
 			}
-
-			RecalculatePromptAreaVisibility();
 		}
 
 		public void DeleteAllConnections()
 		{
-			DeleteAllInputConnections();
-			DeleteAllOutputConnections();
+			if (inputConnections.Count > 0 || outputConnections.Count > 0)
+			{
+				History.History.Do(new History.Actions.Action_ConnectionsRemoved(inputConnections.Concat(outputConnections).ToArray()));
+			}
+
+			// 			DeleteAllInputConnections();
+			// 			DeleteAllOutputConnections();
 		}
 
 		public bool PinHasConnection(FrameworkElement pin)
@@ -434,18 +449,18 @@ namespace DialogueEditor
 
 		private void DeleteAllOutputConnectionsFromPin(FrameworkElement pin)
 		{
+			List<Connection> connectionsToDelete = new List<Connection>();
+
 			for (int i = outputConnections.Count-1; i >= 0; i--)
 			{
 				Connection c = outputConnections[i];
 				if (c.objFrom == pin) 
 				{
-					c.parentTo.inputConnections.Remove(c);
-					(c.Parent as Canvas)?.Children.Remove(c);
-					outputConnections.Remove(c);
-
-					c.parentTo.RecalculatePromptAreaVisibility();
+					connectionsToDelete.Add(c);
 				}
 			}
+
+			History.History.Do(new History.Actions.Action_ConnectionsRemoved(connectionsToDelete.ToArray()));
 		}
 
 		public void TryConnecting(FrameworkElement thisPin, Node other, FrameworkElement otherPin)
@@ -454,14 +469,15 @@ namespace DialogueEditor
 			{
 				switch (other.outputType.Text)
 				{
-
 					case "End dialogue":
 						return;
 					case "Go to node":
-						other.TargetDialogueID.Text = sourceData.rowName;
+						History.History.Do(new History.Actions.Action_ConnectionMadeGoTo(other, this));
+						//other.TargetDialogueID.Text = sourceData.rowName;
 						break;
 					case "Multiple choices":
-						other.MakeConnection(this, otherPin);
+						History.History.Do(new History.Actions.Action_ConnectionMade(other, otherPin, this));
+						//other.MakeConnection(this, otherPin);
 						break;
 					case "Call actor event":
 					case "Call level event":
@@ -471,7 +487,8 @@ namespace DialogueEditor
 						{
 							other.DeleteAllOutputConnectionsFromPin(otherPin);
 						}
-						other.MakeConnection(this, otherPin);
+						History.History.Do(new History.Actions.Action_ConnectionMade(other, otherPin, this));
+						//other.MakeConnection(this, otherPin);
 						break;
 					default:
 						break;
@@ -494,7 +511,8 @@ namespace DialogueEditor
 						Console.WriteLine("Trying to connect input to \"End\" node. Aborting.");
 						return;
 					case "Go to node":
-						other.TargetDialogueID.Text = sourceData.rowName;
+						TryConnecting(thisPin, other, null);
+						//other.TargetDialogueID.Text = sourceData.rowName;
 						break;
 					case "Multiple choices":
 							TryConnecting(thisPin, other, other.outputPinMultipleChoices);

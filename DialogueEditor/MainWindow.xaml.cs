@@ -375,12 +375,11 @@ namespace DialogueEditor
 			{
 				item.ApplyChangesToSourceData();
 			}
-
-			string[] nodeIDs = selection.Select(n => n.sourceData.rowName).ToArray();
+			
 			Point[] nodeStartingPositions = selection.Select(n =>(Point)(n.dragOffset + selectionStartMousePos)).ToArray();
 			Point[] nodeEndPositions = selection.Select(n => n.GetPosition()).ToArray();
 
-			History.Actions.Action_NodesMoved nodesMovedAction = new History.Actions.Action_NodesMoved(nodeIDs, nodeStartingPositions, nodeEndPositions);
+			History.Actions.Action_NodesMoved nodesMovedAction = new History.Actions.Action_NodesMoved(selection.ToArray(), nodeStartingPositions, nodeEndPositions);
 			History.History.Do(nodesMovedAction);
 		}
 
