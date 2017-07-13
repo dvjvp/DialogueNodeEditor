@@ -32,6 +32,7 @@ namespace DialogueEditor.History.Actions
 			parentTo.inputConnections.Remove(connection);
 			(connection.Parent as Canvas)?.Children.Remove(connection);
 			parentTo.RecalculatePromptAreaVisibility();
+			parentFrom.RecalculatePromptAreaVisibility();
 		}
 	}
 }

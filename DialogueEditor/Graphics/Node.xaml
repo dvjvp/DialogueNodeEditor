@@ -89,7 +89,7 @@
             <Border x:Name="BorderDown"  BorderBrush="Black" BorderThickness="1" Grid.Row="4" Background="#3f3f3f">
                 <StackPanel>
                     <Label HorizontalAlignment="Center" FontWeight="DemiBold"  Content="Output type:" IsHitTestVisible="False"/>
-                    <ComboBox x:Name="outputType" Margin="5" SelectionChanged="outputType_SelectionChanged" Cursor="Arrow">
+                    <ComboBox x:Name="outputType" Margin="5" SelectionChanged="outputType_SelectionChanged" Cursor="Arrow" Text="Normal dialogue">
                         <ComboBoxItem Content="Normal dialogue" IsSelected="True"/>
                         <ComboBoxItem Content="End dialogue"/>
                         <ComboBoxItem Content="Multiple choices"/>

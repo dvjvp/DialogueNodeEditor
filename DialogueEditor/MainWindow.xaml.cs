@@ -54,6 +54,8 @@ namespace DialogueEditor
 				AddNode(line);
 			}
 			RefreshNodeConnections();
+
+			History.History.ClearHistory();
 		}
 
 		#region Connection creating
@@ -379,8 +381,17 @@ namespace DialogueEditor
 			Point[] nodeStartingPositions = selection.Select(n =>(Point)(n.dragOffset + selectionStartMousePos)).ToArray();
 			Point[] nodeEndPositions = selection.Select(n => n.GetPosition()).ToArray();
 
-			History.Actions.Action_NodesMoved nodesMovedAction = new History.Actions.Action_NodesMoved(selection.ToArray(), nodeStartingPositions, nodeEndPositions);
-			History.History.Do(nodesMovedAction);
+			if (selection.Count > 0)
+			{
+				double deltaMovement = ((Vector)(nodeEndPositions[0] - (Vector)nodeStartingPositions[0])).Length;
+				//to fix a bug, where just clicking on a node would add a record in history "moved by 0".
+				if(deltaMovement > 0)
+				{
+					History.Actions.Action_NodesMoved nodesMovedAction = new History.Actions.Action_NodesMoved(selection.ToArray(), nodeStartingPositions, nodeEndPositions);
+					History.History.Do(nodesMovedAction);
+				}
+			}
+
 		}
 
 

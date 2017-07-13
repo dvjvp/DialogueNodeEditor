@@ -451,7 +451,7 @@ namespace DialogueEditor
 		{
 			List<Connection> connectionsToDelete = new List<Connection>();
 
-			for (int i = outputConnections.Count-1; i >= 0; i--)
+			for (int i = outputConnections.Count - 1; i >= 0; i--)
 			{
 				Connection c = outputConnections[i];
 				if (c.objFrom == pin) 
@@ -619,7 +619,7 @@ namespace DialogueEditor
 		public void SetSelected(bool selected)
 		{
 			selectionBorder.Background = selected ? new SolidColorBrush(Color.FromRgb(224, 224, 128)) : null;
-			Console.WriteLine("selected node: " + nodeNameField.Text);
+			//Console.WriteLine("selected node: " + nodeNameField.Text);
 		}
 
 		private void ButtonDelete_Click(object sender, RoutedEventArgs e)
@@ -640,7 +640,15 @@ namespace DialogueEditor
 			Color c = new Color();
 			c.A = 255;
 
-			string s = e.AddedItems[0].ToString().Substring("System.Windows.Controls.ComboBoxItem: ".Length);
+			string s;
+			try
+			{
+				s = e.AddedItems[0].ToString().Substring("System.Windows.Controls.ComboBoxItem: ".Length);
+			}
+			catch (Exception)
+			{
+				return;
+			}
 
 			switch (s)
 			{
@@ -669,6 +677,11 @@ namespace DialogueEditor
 			}
 
 			BorderUp.Background = BorderMiddle.Background = BorderDown.Background = new SolidColorBrush(c);
+
+			if (s != outputType.Text)
+			{
+				History.History.Instance.undoHistory.Push(new History.Actions.Action_NodeTypeChanged(this, outputType.Text, s));
+			}
 		}
 
 		private void nodeNameField_TextChanged(object sender, TextChangedEventArgs e)
