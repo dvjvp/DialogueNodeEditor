@@ -1,6 +1,0 @@
----,DialogueText,Command,CommandArguments,Next,X,Y
-1,Tis' a normal dialogue,,,2,225,48
-4,Goodbye!,leave,,None,525,812
-2,Tis' multiple choices yo',options,,3 4,219,207
-5,Gib me wine!,actor-message,Player GiveWine,4,58,650
-3,Does he have wine?,has-item,Wine 9001,5 None,146,411

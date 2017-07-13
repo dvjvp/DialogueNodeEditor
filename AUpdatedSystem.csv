@@ -1,0 +1,22 @@
+---,Prompt,Command,CommandArguments,Next,X,Y
+Row1,"","dialogue","This is sample dialogue","Row2",1674,77
+Row2,"","dialogue","Now it ends.","Row3",1679,315
+Row3,"","leave","","None",1682,578
+SecondDialogue1,"","dialogue","This dialogue shows usage of message system","SecondDialogue2",221,29
+SecondDialogue2,"","dialogue","Now i'll trigger level event","SecondDialogue3",261,284
+SecondDialogue3,"","level-message","MyEvent","SecondDialogue4",262,519
+SecondDialogue4,"","dialogue","Now i'll trigger actor event","SecondDialogue5",261,716
+SecondDialogue5,"","actor-message","MyActor MyEvent","SecondDialogue6",261,959
+SecondDialogue6,"","dialogue","Now i'm gonna check for item in player's inventory","SecondDialogue7",212,1175
+SecondDialogue7,"","has-item","SampleItem 5","SecondDialogue7true1 SecondDialogue7false1",264,1436
+SecondDialogue7true1,"","dialogue","Player had item ""Sample item"" (at least 5 of them)","SecondDialogue7true2",46,1761
+SecondDialogue7true2,"","leave","","None",113,2056
+SecondDialogue7false1,"","dialogue","Player didn't have ""Sample item"" or had less than 5 of them","SecondDialogue7false2",364,1752
+SecondDialogue7false2,"","leave","","None",364,2060
+1,"","options","10 5","2 3 4 GoToNextRow",903,172
+2,"Choose me! I'm number 1!","dialogue","You selected number 1","6",623,587
+3,"Or me! I'm number 2!","dialogue","You selected number 2","6",787,578
+4,"I'm number 3.","dialogue","You selected number 3","6",938,581
+GoToNextRow,"This is the same as number 3","go-to","","4",1094,603
+5,"","dialogue","You waited 10 seconds and got hidden option!","6",1282,557
+6,"","leave","","None",1044,1057
