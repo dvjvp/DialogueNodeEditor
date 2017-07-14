@@ -807,8 +807,8 @@ namespace DialogueEditor
 		{
 			MessageBox.Show("\"Woodpecker\" Dialogue editor for Chernobyl Game by The Farm 51.\n"
 				+"Creator: Daniel Janowski\n"
-				+"Version: 0.5 Alpha\n"
-				+"Last changes: 13-07-2017"
+				+"Version: 0.6 Beta\n"
+				+"Last changes: 14-07-2017"
 				,"Application Info"
 				);
 		}
@@ -835,5 +835,43 @@ namespace DialogueEditor
 
 		#endregion
 
+		private void HelpNavigation_Click(object sender, RoutedEventArgs e)
+		{
+			MessageBox.Show(
+				"You can move around the canvas (gray area) by dragging with middle mouse button\n" +
+				"or with arrows/WSAD keys, when there's no textbox selected.\n" +
+				"To deselect any textbox, just click anywhere on empty space on canvas.",
+				"Moving around");
+			MessageBox.Show(
+				"You can select a node by clicking on it with left mouse button\n" +
+				"or a group of nodes by drawing selection box. To start drawing selection box " +
+				"click and hold left mouse button anywhere on the canvas, to stop drawing selection box," +
+				" simply release the button.\n\n" +
+				"Selecting with Ctrl will add selected nodes to your current selection, while selecting with shift " +
+				"will subtract them from current selection.\n" +
+				"Additionally \"Node\" tab near the top of the window contains various options regarding selection.",
+				"Selection");
+			MessageBox.Show(
+				"To create a node, press anywhere on the canvas with your right mouse button.\n" +
+				"You can also do this by pressing \"Add node\" button in \"Node\" tab.\n\n" +
+				"To delete selected node or nodes, press \"Delete\" or \"Backspace\" button on your keyboard " +
+				"or use \"Delete\" button in the \"Node\" tab.",
+				"Creating and deleting nodes");
+		}
+
+		private void HelpNodes_Click(object sender, RoutedEventArgs e)
+		{
+			MessageBox.Show("To be implemented");
+		}
+
+		private void HelpConnections_Click(object sender, RoutedEventArgs e)
+		{
+			MessageBox.Show("To be implemented");
+		}
+
+		private void HelpExporting_Click(object sender, RoutedEventArgs e)
+		{
+			MessageBox.Show("To be implemented");
+		}
 	}
 }
