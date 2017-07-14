@@ -745,7 +745,10 @@ namespace DialogueEditor
 		{
 			if (selection.Count > 1) 
 			{
+				Point[] previousLocations = selection.Select(n => n.GetPosition()).ToArray();
 				LayoutManager.LayoutVertical(selection);
+				Point[] newLocations = selection.Select(n => n.GetPosition()).ToArray();
+				History.History.Do(new History.Actions.Action_NodesMoved(selection.ToArray(), previousLocations, newLocations));
 			}
 		}
 
@@ -753,7 +756,10 @@ namespace DialogueEditor
 		{
 			if (selection.Count > 1)
 			{
+				Point[] previousLocations = selection.Select(n => n.GetPosition()).ToArray();
 				LayoutManager.LayoutHorizontal(selection);
+				Point[] newLocations = selection.Select(n => n.GetPosition()).ToArray();
+				History.History.Do(new History.Actions.Action_NodesMoved(selection.ToArray(), previousLocations, newLocations));
 			}
 		}
 
@@ -761,7 +767,10 @@ namespace DialogueEditor
 		{
 			if (selection.Count > 1)
 			{
+				Point[] previousLocations = selection.Select(n => n.GetPosition()).ToArray();
 				LayoutManager.LayoutAuto(selection);
+				Point[] newLocations = selection.Select(n => n.GetPosition()).ToArray();
+				History.History.Do(new History.Actions.Action_NodesMoved(selection.ToArray(), previousLocations, newLocations));
 			}
 		}
 
