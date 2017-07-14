@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DialogueEditor"
         mc:Ignorable="d"
-        Title="Woodpecker Dialogue Editor v. 0.5 Alpha" Width="1024" Height="768" >
+        Title="Woodpecker Dialogue Editor v. 0.5 Alpha" Width="1124" Height="768" >
     <Grid Name="grid">
         <Grid.RowDefinitions>
             <RowDefinition Height="100"/>
@@ -96,6 +96,8 @@
                                 <ColumnDefinition Width="80"/>
                                 <ColumnDefinition Width="80"/>
                                 <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="80"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <Button Grid.Column="0" Background="#FFc2c2c2" Margin="2.5" ToolTip="Adds new node and places it in up-left corner of the graph." Click="ButtonAddNode_Click">
@@ -146,10 +148,22 @@
                                     <TextBlock HorizontalAlignment="Center" LineStackingStrategy="BlockLineHeight" LineHeight="10"  TextWrapping="Wrap">Layout vertical</TextBlock>
                                 </StackPanel>
                             </Button>
-                            <Button Grid.Column="8" Background="#FFc2c2c2" Margin="2.5" ToolTip="Tries to automatically layout selected nodes." Click="ButtonLayoutAuto_Click">
+                            <Button Grid.Column="8" Background="#FFc2c2c2" Margin="2.5" ToolTip="Tries to automatically layout selected nodes. Warning! Works only if they all are connected." Click="ButtonLayoutAuto_Click">
                                 <StackPanel >
                                     <Image Source="Resources/LayoutAuto.png" Width="40"/>
                                     <TextBlock HorizontalAlignment="Center"  LineStackingStrategy="BlockLineHeight">Layout auto</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="9" Background="#FFc2c2c2" Margin="2.5" ToolTip="Separates groups of nodes which are not connected with each other into different stacks" Click="SplitIslands_Click">
+                                <StackPanel >
+                                    <Image Source="Resources/SplitIslands.png" Width="40"/>
+                                    <TextBlock HorizontalAlignment="Center"  LineStackingStrategy="BlockLineHeight">Split Islands</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="10" Background="#FFc2c2c2" Margin="2.5" ToolTip="Select all nodes in same 'island'. Selects all nodes that are connected with each other in some way." Click="SelectConnected_Click">
+                                <StackPanel >
+                                    <Image Source="Resources/SelectConnected.png" Width="40"/>
+                                    <TextBlock HorizontalAlignment="Center"  LineStackingStrategy="BlockLineHeight" TextWrapping="Wrap" LineHeight="10">Select connected</TextBlock>
                                 </StackPanel>
                             </Button>
                         </Grid>

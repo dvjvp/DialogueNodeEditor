@@ -83,6 +83,129 @@ namespace DialogueEditor
 			}
 		}
 
+		public static List<Node>[] SplitIslands(List<Node> nodes)
+		{
+			const double distanceBetweenIslands = 160;
+			Vector distanceBetweenNodesInIsland = new Vector(10, 10);
+
+			List<List<Node>> islands = new List<List<Node>>();
+			HashSet<Node> editableNodes = new HashSet<Node>(nodes);
+			Point initialCenter = GetCenter(nodes);
+
+			/* Step 1: Find strongly connected components (SCC) */
+
+			HashSet<Node> visited = new HashSet<Node>();
+			for (int i = 0; i < nodes.Count; i++)
+			{
+				if(visited.Contains(nodes[i]))
+				{
+					continue;
+				}
+
+				List<Node> newIsland = new List<Node>();
+				visited.Add(nodes[i]);
+				Stack<Node> toVisit = new Stack<Node>();
+				toVisit.Push(nodes[i]);
+
+				while(toVisit.Any())
+				{
+					Node currentNode = toVisit.Pop();
+					newIsland.Add(currentNode);
+					foreach (var connection in currentNode.inputConnections)
+					{
+						Node target = connection.parentFrom;
+						if(editableNodes.Contains(target))
+						{
+							if (visited.Add(target))
+							{
+								toVisit.Push(target);
+							}
+						}
+					}
+					foreach (var connection in currentNode.outputConnections)
+					{
+						Node target = connection.parentTo;
+						if (editableNodes.Contains(target))
+						{
+							if (visited.Add(target))
+							{
+								toVisit.Push(target);
+							}
+						}
+					}
+
+				}
+
+
+				islands.Add(newIsland);
+			}
+
+
+			/* Step 2: Put every node from the same SCC into the same place */
+
+			double totalIslandWidthUpToThisPoint = 0;
+			for (int i = 0; i < islands.Count; i++)
+			{
+				List<Node> currentIsland = islands[i];
+
+				for (int j = 0; j < currentIsland.Count; j++)
+				{
+					Point newPosition = (Point)(j * distanceBetweenNodesInIsland);
+					newPosition.X += totalIslandWidthUpToThisPoint;
+					currentIsland[j].SetPosition(newPosition.X, newPosition.Y);
+				}
+
+				totalIslandWidthUpToThisPoint += GetBounds(currentIsland).Width;
+				totalIslandWidthUpToThisPoint += distanceBetweenIslands;
+			}
+
+
+
+			/* Step 3: Move nodes back to the original place */
+
+			Point newCenter = GetCenter(nodes);
+			Vector offset = initialCenter - newCenter;
+			foreach (var n in nodes)
+			{
+				var newPosition = n.GetPosition() + offset;
+				n.SetPosition(newPosition.X, newPosition.Y);
+			}
+
+
+
+			return islands.ToArray();
+		}
+
+		public static List<Node> GetConnected(List<Node> nodes)
+		{
+			HashSet<Node> selected = new HashSet<Node>(nodes);
+			Stack<Node> toVisit = new Stack<Node>(nodes);
+
+			while (toVisit.Any())
+			{
+				Node node = toVisit.Pop();
+				foreach (var connection in node.inputConnections)
+				{
+					Node target = connection.parentFrom;
+					if (selected.Add(target))
+					{
+						toVisit.Push(target);
+					}
+				}
+				foreach (var connection in node.outputConnections)
+				{
+					Node target = connection.parentTo;
+					if(selected.Add(target))
+					{
+						toVisit.Push(target);
+					}
+				}
+			}
+
+
+			return selected.ToList();
+		}
+
 		protected struct NodeInfo
 		{
 			public Node node;
@@ -99,10 +222,8 @@ namespace DialogueEditor
 			const double distanceBetweenLayers = 80;
 			Point selectionCenter = GetCenter(nodes);
 
-			/* Step 0: Sort all nodes into Strongly connected components (look up Graph Theory) */
-			//TODO: @Up
-			HashSet<Node> nodeLookup = new HashSet<Node>(nodes);    //Just to make .Contains() a little bit faster -> From O(n) to O(1)
-
+			//Just to make .Contains() a little bit faster -> From O(n) to O(1)
+			HashSet<Node> nodeLookup = new HashSet<Node>(nodes);    //if node is selected
 
 			/* Step 1: Sort all nodes into layers (going trough graph) */
 
@@ -131,9 +252,8 @@ namespace DialogueEditor
 					Node from = connection.parentFrom;
 					if (nodeLookup.Contains(from)) 
 					{
-						if(nodesSeen.Contains(from) == false)
+						if(nodesSeen.Add(from))
 						{
-							nodesSeen.Add(from);
 							nodesToCheck.Push(new NodeInfo(from, currentNode.layer - 1));
 						}
 					}
@@ -143,9 +263,8 @@ namespace DialogueEditor
 					Node to = connection.parentTo;
 					if(nodeLookup.Contains(to))
 					{
-						if(nodesSeen.Contains(to) == false)
+						if(nodesSeen.Add(to))
 						{
-							nodesSeen.Add(to);
 							nodesToCheck.Push(new NodeInfo(to, currentNode.layer + 1));
 						}
 					}
@@ -194,19 +313,25 @@ namespace DialogueEditor
 		
 		private static Point GetCenter(List<Node> nodes)
 		{
-			double minX = double.PositiveInfinity, minY = double.PositiveInfinity;
-			double maxX = double.NegativeInfinity, maxY = double.NegativeInfinity;
+			Rect r = GetBounds(nodes);
+			return new Point(r.X + (r.Width * .5), r.Y + (r.Height * .5));
+		}
+
+		private static Rect GetBounds(List<Node> nodes)
+		{
+			double xMin = double.PositiveInfinity, yMin = double.PositiveInfinity;
+			double xMax = double.NegativeInfinity, yMax = double.NegativeInfinity;
 
 			foreach (var node in nodes)
 			{
 				Point p = node.GetPosition();
-				minX = Math.Min(minX, p.X);
-				minY = Math.Min(minY, p.Y);
-				maxX = Math.Max(maxX, p.X + node.ActualWidth);
-				maxY = Math.Max(maxY, p.X + node.ActualHeight);
+				xMin = Math.Min(xMin, p.X);
+				yMin = Math.Min(yMin, p.Y);
+				xMax = Math.Max(xMax, p.X + node.ActualWidth);
+				yMax = Math.Max(yMax, p.X + node.ActualHeight);
 			}
 
-			return new Point((minX + maxX) / 2, (minY + maxY) / 2);
+			return new Rect(xMin, yMin, xMax - xMin, yMax - yMin);
 		}
 
 	}

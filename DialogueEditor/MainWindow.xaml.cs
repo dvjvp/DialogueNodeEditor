@@ -774,6 +774,17 @@ namespace DialogueEditor
 			}
 		}
 
+		private void SplitIslands_Click(object sender, RoutedEventArgs e)
+		{
+			if (selection.Count > 1)
+			{
+				Point[] previousLocations = selection.Select(n => n.GetPosition()).ToArray();
+				LayoutManager.SplitIslands(selection);
+				Point[] newLocations = selection.Select(n => n.GetPosition()).ToArray();
+				History.History.Do(new History.Actions.Action_NodesMoved(selection.ToArray(), previousLocations, newLocations));
+			}
+		}
+
 		/* HISTORY */
 
 		private void ButtonUndo_Click(object sender, RoutedEventArgs e)
@@ -810,8 +821,19 @@ namespace DialogueEditor
 				Process.Start("xmpp:daniel.janowski@thefarm51.com");
 			}
 		}
+		
+		private void SelectConnected_Click(object sender, RoutedEventArgs e)
+		{
+			var newSelected = LayoutManager.GetConnected(selection);
+			selection.ForEach(n => n.SetSelected(false));
+			selection.Clear();
+			selection.AddRange(newSelected);
+			selection.ForEach(n => n.SetSelected(true));
+
+		}
 
 
 		#endregion
+
 	}
 }
