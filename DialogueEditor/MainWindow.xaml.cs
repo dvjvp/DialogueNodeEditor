@@ -743,17 +743,26 @@ namespace DialogueEditor
 
 		private void ButtonLayoutVertical_Click(object sender, RoutedEventArgs e)
 		{
-			MessageBox.Show("Not implemented yet");
+			if (selection.Count > 1) 
+			{
+				LayoutManager.LayoutVertical(selection);
+			}
 		}
 
 		private void ButtonLayoutHorizontcal_Click(object sender, RoutedEventArgs e)
 		{
-			MessageBox.Show("Not implemented yet");
+			if (selection.Count > 1)
+			{
+				LayoutManager.LayoutHorizontal(selection);
+			}
 		}
 
 		private void ButtonLayoutAuto_Click(object sender, RoutedEventArgs e)
 		{
-			MessageBox.Show("Not implemented yet");
+			if (selection.Count > 1)
+			{
+				LayoutManager.LayoutAuto(selection);
+			}
 		}
 
 		/* HISTORY */
@@ -767,10 +776,7 @@ namespace DialogueEditor
 		{
 			History.History.Redo();
 		}
-
-
-
-		#endregion
+		
 
 		private void SendEMailButton_Click(object sender, RoutedEventArgs e)
 		{
@@ -795,5 +801,8 @@ namespace DialogueEditor
 				Process.Start("xmpp:daniel.janowski@thefarm51.com");
 			}
 		}
+
+
+		#endregion
 	}
 }

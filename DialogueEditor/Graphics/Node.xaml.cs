@@ -649,18 +649,34 @@ namespace DialogueEditor
 			base.OnMouseDown(e);
 			//Console.WriteLine("Down");
 
-			if(false == MainWindow.instance.selection.Contains(this))
+			if(Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
 			{
-				MainWindow.instance.ClearSelection();
-				MainWindow.instance.selection.Add(this);
-				SetSelected(true);
+				if (false == MainWindow.instance.selection.Contains(this))
+				{
+					MainWindow.instance.selection.Add(this);
+					SetSelected(true);
+				}
 			}
-
+			else if(Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+			{
+				MainWindow.instance.selection.Remove(this);
+				SetSelected(false);
+				return;
+			}
+			else
+			{
+				if (false == MainWindow.instance.selection.Contains(this))
+				{
+					MainWindow.instance.ClearSelection();
+					MainWindow.instance.selection.Add(this);
+					SetSelected(true);
+				}
+				
+			}
 			MainWindow.instance.StartDragnDropSelected((Vector)e.GetPosition((IInputElement)Parent));
 			CaptureMouse();
 			MouseMove += MainWindow.instance.DragnDropSelectedOnMove;
 		}
-
 
 		protected override void OnMouseUp(MouseButtonEventArgs e)
 		{
