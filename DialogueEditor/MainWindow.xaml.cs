@@ -428,7 +428,6 @@ namespace DialogueEditor
 			selectionRect.Height = 0;
 
 			selectionBox.Visibility = Visibility.Visible;
-			ClearSelection();
 		}
 		private void UpdateRubberbandSelection(object sender, MouseEventArgs e)
 		{
@@ -472,6 +471,23 @@ namespace DialogueEditor
 			selectionInProgress = false;
 			drawArea.ReleaseMouseCapture();
 
+			bool selectionAdditive;
+
+			if( Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl) )
+			{
+				selectionAdditive = true;
+			}
+			else if( Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift) )
+			{
+				selectionAdditive = false;
+			}
+			else
+			{
+				selectionAdditive = true;
+				ClearSelection();
+			}
+
+
 			Point mouseUpPos = e.GetPosition(drawArea);
 			selectionBox.Visibility = Visibility.Collapsed;
 
@@ -481,8 +497,16 @@ namespace DialogueEditor
 			{
 				if (AreIntersecting(selectionRect, node))
 				{
-					selection.Add(node);
-					node.SetSelected(true);
+					if(selectionAdditive)
+					{
+						selection.Add(node);
+						node.SetSelected(true);
+					}
+					else
+					{
+						selection.Remove(node);
+						node.SetSelected(false);
+					}
 				}
 			}
 

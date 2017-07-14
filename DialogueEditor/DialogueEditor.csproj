@@ -66,6 +66,7 @@
     <Compile Include="History\Actions\Action_NodesMoved.cs" />
     <Compile Include="History\Actions\Action_NodeTypeChanged.cs" />
     <Compile Include="History\History.cs" />
+    <Compile Include="LayoutManager.cs" />
     <Compile Include="Testing\TestingWindow.xaml.cs">
       <DependentUpon>TestingWindow.xaml</DependentUpon>
     </Compile>
