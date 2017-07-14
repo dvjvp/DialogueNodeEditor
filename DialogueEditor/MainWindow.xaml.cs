@@ -833,8 +833,6 @@ namespace DialogueEditor
 		}
 
 
-		#endregion
-
 		private void HelpNavigation_Click(object sender, RoutedEventArgs e)
 		{
 			MessageBox.Show(
@@ -866,12 +864,48 @@ namespace DialogueEditor
 
 		private void HelpConnections_Click(object sender, RoutedEventArgs e)
 		{
-			MessageBox.Show("To be implemented");
+			MessageBox.Show(
+				"To create connection, click on pin for one of the nodes you want to connect.\n" +
+				"A light-blue line will appear from that node. Now click on a node you want to connect this pin to.\n\n\n" +
+				"Currently there's a bug that makes system not see clicks on anything that is otherwise \"Clickable\" when" +
+				" drawing connection, so you have to click on an empty space on node.\n" +
+				"There's also another bug, that stops drawing connection line somewhere along the way. To solve it, " +
+				"click on the pin you're dragging the connection from, then click again to start making a valid connection."
+				, "Creating connections");
+			MessageBox.Show(
+				"Currently there are 3 ways of deleting connections: \n" +
+				"* Select node(-s) and press either \"Delete connections\" (which will delete ALL connections coming from or to " +
+				" these nodes) or \"Delete outputs\" (which will delete only connections coming from those nodes) button in \"Node\" tab.\n" +
+				"* Alt+Click on a pin with left mouse button to delete all connections coming from/to this pin.\n" +
+				"* Alt+Click on a connection (when it's highlighted) to delete this one specific connection."
+				, "Deleting connections");
 		}
 
 		private void HelpExporting_Click(object sender, RoutedEventArgs e)
 		{
-			MessageBox.Show("To be implemented");
+			MessageBox.Show(
+				"To export data table to Unreal Engine 4, press \"Export\" button in File tab.\n" +
+				"Then import created CSV in Unreal, selecting \"FDialogueData\" as Data Table Struct (You'll be prompt for it.)\n" +
+				"If you don't see \"FDialogueData\" on list of structs, it's because UE4 didn't load it yet (UE4 sometimes " +
+				"doesn't load some assets on start to save on starting time). To force loading it, click on it before importing " +
+				"dialogue data.\nIt can be found in \\Content\\djanowski\\Dialogues folder.\n\n\n" +
+				"Beware that in exported CSV all data on node positions is lost, so remember to save your progress beforehand in " +
+				"a separate file."
+				, "Exporting dialogue data table");
+			MessageBox.Show(
+				"Metadata is an array consisting of actor references (for displaying dialogue options), level sequence references" +
+				" (for playing animations during different dialogue phases) etc. A matching metadata file is REQUIRED for dialogue " +
+				"to work in Unreal Engine (it can consist of empty references though).\n\n" +
+				"To create metadata table from opened dialogue, press \"Create metadata\" button in File tab.\n" +
+				"When importing asset in Unreal Engine, select \"FDialogueMetadata\" as Data Table Struct."
+				, "Exporting metadata table");
+			MessageBox.Show(
+				"For info on how to use those tables, consult Dialogue System tutorial in Tutorial section of our project.",
+				"In Unreal");
 		}
+
+
+		#endregion
+
 	}
 }

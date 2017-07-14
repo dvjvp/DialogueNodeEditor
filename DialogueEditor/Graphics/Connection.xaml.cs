@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace DialogueEditor
@@ -45,6 +46,15 @@ namespace DialogueEditor
 
 			MouseEnter += Connection_MouseEnter;
 			MouseLeave += Connection_MouseLeave;
+			MouseLeftButtonDown += Connection_MouseLeftButtonDown;
+		}
+
+		private void Connection_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			if(Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt))
+			{
+				History.History.Do(new History.Actions.Action_ConnectionsRemoved(new Connection[] { this }));
+			}
 		}
 
 		private void Connection_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
