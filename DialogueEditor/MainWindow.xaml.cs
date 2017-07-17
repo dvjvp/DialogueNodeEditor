@@ -166,6 +166,7 @@ namespace DialogueEditor
 				e.Handled = true;
 			}
 
+			//Don't react to key presses when writing in a textbox
 			if (Keyboard.FocusedElement != drawArea)
 			{
 				return;
@@ -231,6 +232,17 @@ namespace DialogueEditor
 					else
 					{
 						PanCanvas(-30, 0);
+					}
+					break;
+
+				case Key.F:
+					if(Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
+					{
+						BringToViewportButton_Click(null, null);
+					}
+					else
+					{
+						FocusNodesButton_Click(null, null);
 					}
 					break;
 
@@ -831,7 +843,7 @@ namespace DialogueEditor
 		{
 			MessageBox.Show("\"Woodpecker\" Dialogue editor for Chernobyl Game by The Farm 51.\n"
 				+"Creator: Daniel Janowski\n"
-				+"Version: 0.6 Beta\n"
+				+"Version: 0.7 Beta\n"
 				+"Last changes: 14-07-2017"
 				,"Application Info"
 				);
@@ -951,7 +963,28 @@ namespace DialogueEditor
 			}
 		}
 
-		
-		#endregion
+
+		private void FocusNodesButton_Click(object sender, RoutedEventArgs e)
+		{
+			if (selection.Count >= 1) 
+			{
+				Vector offset = LayoutManager.GetCenter(selection) - GetDrawAreaViewCenter();
+				PanCanvas(offset.X, offset.Y);
+			}
+
+		}
+
+		private void BringToViewportButton_Click(object sender, RoutedEventArgs e)
+		{
+			if (selection.Count >= 1)
+			{
+				Point[] previousLocations = selection.Select(n => n.GetPosition()).ToArray();
+				LayoutManager.MoveCenterTo(selection, GetDrawAreaViewCenter());
+				Point[] newLocations = selection.Select(n => n.GetPosition()).ToArray();
+				History.History.Do(new History.Actions.Action_NodesMoved(selection.ToArray(), previousLocations, newLocations));
+			}
+		}
 	}
+
+	#endregion
 }

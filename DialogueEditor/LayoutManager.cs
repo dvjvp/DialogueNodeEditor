@@ -303,15 +303,7 @@ namespace DialogueEditor
 			}
 
 			/* Step 4: Move everything in the right place */
-			{
-				Point newCenter = GetCenter(nodes);
-				Vector offset = selectionCenter - newCenter;
-				foreach (var n in nodes)
-				{
-					var newPosition = n.GetPosition() + offset;
-					n.SetPosition(newPosition.X, newPosition.Y);
-				}
-			}
+			MoveCenterTo(nodes, selectionCenter);
 
 		}
 
@@ -331,10 +323,22 @@ namespace DialogueEditor
 
 		}
 
-		private static Point GetCenter(List<Node> nodes)
+		public static Point GetCenter(List<Node> nodes)
 		{
 			Rect r = GetBounds(nodes);
 			return new Point(r.X + (r.Width * .5), r.Y + (r.Height * .5));
+		}
+
+		public static void MoveCenterTo(List<Node> nodes, Point newCenter)
+		{
+			Point oldCenter = GetCenter(nodes);
+			Vector offset = newCenter - oldCenter;
+			Console.WriteLine("newCenter: " + newCenter + ", oldCenter: " + oldCenter + ", offset: " + offset);
+			foreach (var n in nodes)
+			{
+				var newPosition = n.GetPosition() + offset;
+				n.SetPosition(newPosition.X, newPosition.Y);
+			}
 		}
 
 		private static Rect GetBounds(List<Node> nodes)
@@ -348,7 +352,7 @@ namespace DialogueEditor
 				xMin = Math.Min(xMin, p.X);
 				yMin = Math.Min(yMin, p.Y);
 				xMax = Math.Max(xMax, p.X + node.ActualWidth);
-				yMax = Math.Max(yMax, p.X + node.ActualHeight);
+				yMax = Math.Max(yMax, p.Y + node.ActualHeight);
 			}
 
 			return new Rect(xMin, yMin, xMax - xMin, yMax - yMin);

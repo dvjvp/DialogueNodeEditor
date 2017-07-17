@@ -73,6 +73,16 @@ namespace DialogueEditor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap BringToViewport {
+            get {
+                object obj = ResourceManager.GetObject("BringToViewport", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap CreateMetadata {
             get {
                 object obj = ResourceManager.GetObject("CreateMetadata", resourceCulture);
@@ -126,6 +136,16 @@ namespace DialogueEditor.Properties {
         internal static System.Drawing.Bitmap Export {
             get {
                 object obj = ResourceManager.GetObject("Export", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FocusNodes {
+            get {
+                object obj = ResourceManager.GetObject("FocusNodes", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
