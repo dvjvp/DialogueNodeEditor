@@ -275,9 +275,9 @@ namespace DialogueEditor
 
 
 			/* Step 2: LayoutHorizontal() each layer (after putting them all on set height, to create sorta tree-like structure */
+			int[] layerIndices = layers.Keys.ToArray();
+			Array.Sort(layerIndices);
 			{
-				int[] layerIndices = layers.Keys.ToArray();
-				Array.Sort(layerIndices);
 				double heightUntilThisPoint = 0;
 				foreach (var layerIndex in layerIndices)
 				{
@@ -295,6 +295,10 @@ namespace DialogueEditor
 
 			/* Step 3: Fiddle around with node order in order to minimize line crossing */
 			{
+// 				for (int i = 0; i < layerIndices.Length - 1; i++)
+// 				{
+// 					MinimizeCrossing(  layers[ layerIndices[i] ], layers[ layerIndices[i + 1] ]  );
+// 				}
 
 			}
 
@@ -310,7 +314,23 @@ namespace DialogueEditor
 			}
 
 		}
-		
+
+		public static void MinimizeCrossing(List<Node> layerFrom, List<Node> layerTo)
+		{
+			List<Node> bestPermutation = layerTo;
+			int leastCrosses = int.MaxValue;
+
+			var permutations = GetPermutations(layerTo, layerTo.Count);
+
+			foreach (var perm in permutations)
+			{
+				SimpleConnection[] connections = null;
+				int numCrosses = NumCrosses(connections);
+				//i give up. I thought that made sense, but it doesn't.
+			}
+
+		}
+
 		private static Point GetCenter(List<Node> nodes)
 		{
 			Rect r = GetBounds(nodes);
@@ -334,5 +354,44 @@ namespace DialogueEditor
 			return new Rect(xMin, yMin, xMax - xMin, yMax - yMin);
 		}
 
+		public struct SimpleConnection
+		{
+			public int from;
+			public int to;
+			public SimpleConnection(int from, int to)
+			{
+				this.from = from;
+				this.to = to;
+			}
+		}
+
+		public static IEnumerable<IEnumerable<T>> GetPermutations<T>(IEnumerable<T> list, int length)
+		{
+			if (length == 1) return list.Select(t => new T[] { t });
+
+			return GetPermutations(list, length - 1)
+				.SelectMany(t => list.Where(e => !t.Contains(e)),
+					(t1, t2) => t1.Concat(new T[] { t2 }));
+		}
+
+		public static int NumCrosses(SimpleConnection[] connections)
+		{
+			int furthest = -1;
+			int counter = 0;
+
+			foreach (var c in connections)
+			{
+				if (c.to < furthest)
+				{
+					counter++;
+				}
+				else if (c.to > furthest) 
+				{
+					furthest = c.to;
+				}
+			}
+			
+			return counter;
+		}
 	}
 }
