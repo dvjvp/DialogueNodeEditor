@@ -297,7 +297,7 @@ namespace DialogueEditor
 			{
 // 				for (int i = 0; i < layerIndices.Length - 1; i++)
 // 				{
-// 					MinimizeCrossing(  layers[ layerIndices[i] ], layers[ layerIndices[i + 1] ]  );
+// 					MinimizeCrossing(layers[layerIndices[i]], layers[layerIndices[i + 1]]);
 // 				}
 
 			}
@@ -306,22 +306,62 @@ namespace DialogueEditor
 			MoveCenterTo(nodes, selectionCenter);
 
 		}
-
-		public static void MinimizeCrossing(List<Node> layerFrom, List<Node> layerTo)
-		{
-			List<Node> bestPermutation = layerTo;
-			int leastCrosses = int.MaxValue;
-
-			var permutations = GetPermutations(layerTo, layerTo.Count);
-
-			foreach (var perm in permutations)
-			{
-				SimpleConnection[] connections = null;
-				int numCrosses = NumCrosses(connections);
-				//i give up. I thought that made sense, but it doesn't.
-			}
-
-		}
+		
+// 		public static void MinimizeCrossing(List<Node> layerFrom, List<Node> layerTo)
+// 		{
+// 			List<Connection> validConnections = new List<Connection>();
+// 			HashSet<FrameworkElement> _pins = new HashSet<FrameworkElement>();
+// 			//map out connections
+// 			for (int i = 0; i < layerFrom.Count; i++)
+// 			{
+// 				foreach (var connection in layerFrom[i].outputConnections)
+// 				{
+// 					if (layerTo.Contains(connection.parentTo)) 
+// 					{
+// 						validConnections.Add(connection);
+// 						_pins.Add(connection.objFrom);
+// 					}
+// 				}
+// 			}
+// 
+// 			var pins = _pins.ToList();
+// 			pins.Sort((p1, p2) => (int)Math.Round(Canvas.GetLeft(p1) - Canvas.GetLeft(p2)));
+// 
+// 
+// 			List<SimpleConnection> connections = new List<SimpleConnection>();
+// 			foreach (var connection in validConnections)
+// 			{
+// 				connections.Add(new SimpleConnection(pins.IndexOf(connection.objFrom), connection.parentTo));
+// 			}
+// 
+// 			IEnumerable<int> bestPermutation = null;
+// 			int leastCrosses = int.MaxValue;
+// 
+// 			var permutations = GetPermutations(Enumerable.Range(0, layerTo.Count), layerTo.Count);
+// 
+// 			foreach (var perm in permutations)
+// 			{
+// 				int numCrosses = NumCrosses(connections, perm.ToArray());
+// 				if (numCrosses < leastCrosses) 
+// 				{
+// 					leastCrosses = numCrosses;
+// 					bestPermutation = perm;
+// 					if (numCrosses <= 0)
+// 					{
+// 						break;
+// 					}
+// 				}
+// 				//@up: Pseudo code: Find.Best(permutation d) Where Comparator((first,second) => GetCrosses(first, second)) ((best))
+// 			}
+// 
+// 
+// 			List<Node> newOrder = new List<Node>(layerTo.Count);
+// 			foreach (var item in bestPermutation)
+// 			{
+// 				newOrder.Add(layerTo[item]);
+// 			}
+// 			LayoutHorizontal(newOrder);
+// 		}
 
 		public static Point GetCenter(List<Node> nodes)
 		{
@@ -358,11 +398,11 @@ namespace DialogueEditor
 			return new Rect(xMin, yMin, xMax - xMin, yMax - yMin);
 		}
 
-		public struct SimpleConnection
+		private struct SimpleConnection
 		{
 			public int from;
-			public int to;
-			public SimpleConnection(int from, int to)
+			public Node to;
+			public SimpleConnection(int from, Node to)
 			{
 				this.from = from;
 				this.to = to;
@@ -378,24 +418,24 @@ namespace DialogueEditor
 					(t1, t2) => t1.Concat(new T[] { t2 }));
 		}
 
-		public static int NumCrosses(SimpleConnection[] connections)
-		{
-			int furthest = -1;
-			int counter = 0;
-
-			foreach (var c in connections)
-			{
-				if (c.to < furthest)
-				{
-					counter++;
-				}
-				else if (c.to > furthest) 
-				{
-					furthest = c.to;
-				}
-			}
-			
-			return counter;
-		}
+// 		private static int NumCrosses(IEnumerable<SimpleConnection> connections, int[] toLayerOrder)
+// 		{
+// 			int furthest = -1;
+// 			int counter = 0;
+// 
+// 			foreach (var c in connections)
+// 			{
+// 				if (toLayerOrder[c.to] < furthest)
+// 				{
+// 					counter++;
+// 				}
+// 				else if (toLayerOrder[c.to] > furthest) 
+// 				{
+// 					furthest = c.to;
+// 				}
+// 			}
+// 			
+// 			return counter;
+// 		}
 	}
 }
