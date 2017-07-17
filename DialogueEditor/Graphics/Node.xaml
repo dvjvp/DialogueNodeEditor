@@ -78,7 +78,7 @@
                 <StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <Label Grid.Column="0" Grid.Row="1" FontWeight="DemiBold" IsHitTestVisible="False">Actor name:</Label>
-                        <TextBox x:Name="actorName" Text="Alex" Grid.Column="1" Grid.Row="1" TextChanged="aactorName_TextChanged" Margin="5" MaxWidth="300" LostFocus="OnNodeDataChanged"/>
+                        <TextBox x:Name="actorName" Text="None" Grid.Column="1" Grid.Row="1" TextChanged="aactorName_TextChanged" Margin="5" MaxWidth="300" LostFocus="OnNodeDataChanged"/>
                     </StackPanel>
                     <Label HorizontalAlignment="Center" FontWeight="DemiBold" Content=" Dialogue text:" IsHitTestVisible="False"/>
                     <TextBox x:Name="dialogueText" Text="Dialogue Text" Margin="5" TextWrapping="Wrap" MaxWidth="300"  VerticalScrollBarVisibility="Auto"  SpellCheck.IsEnabled="True" Height="Auto" LostFocus="OnNodeDataChanged"/>

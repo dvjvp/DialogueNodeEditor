@@ -10,6 +10,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="100"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="27"/>
         </Grid.RowDefinitions>
 
         <!-- Toolbar-->
@@ -24,6 +25,7 @@
                     <TabItem Header="File">
                         <Grid Background="#FFE5E5E5">
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
                                 <ColumnDefinition Width="80"/>
                                 <ColumnDefinition Width="80"/>
                                 <ColumnDefinition Width="80"/>
@@ -80,6 +82,12 @@
                                 <StackPanel>
                                     <Image Source="Resources/CreateMetadata.png" Width="40"/>
                                     <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" LineHeight="9" LineStackingStrategy="BlockLineHeight">Create metadata</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="8" Background="#FFc2c2c2" Margin="2.5" ToolTip="Opens folder containing autosave files location in Explorer." Click="OpenAutosaveLocation_Button">
+                                <StackPanel>
+                                    <Image Source="Resources/OpenAutosave.png" Width="40"/>
+                                    <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" LineHeight="9" LineStackingStrategy="BlockLineHeight">Show autosaves</TextBlock>
                                 </StackPanel>
                             </Button>
                         </Grid>
@@ -264,8 +272,8 @@
                     >
                 <Canvas.RenderTransform>
                     <TransformGroup x:Name="canvasTotalTransform">
-                        <ScaleTransform x:Name="canvasZoom"/>
                         <TranslateTransform x:Name="canvasTranslation"/>
+                        <ScaleTransform x:Name="canvasZoom"/>
                     </TransformGroup>
                 </Canvas.RenderTransform>
             </Canvas>
@@ -280,5 +288,8 @@
             <Line x:Name="connectionDrawingLine" Visibility="Collapsed" Stroke="LightSteelBlue" StrokeThickness="5" IsHitTestVisible="False"/>
         </Canvas>
 
+        <Border Grid.Row="2" Margin="5,0,5,2" Background="#FFE5E5E5">
+            <Label Grid.Row="2" x:Name="MessageLabel" VerticalAlignment="Top">Ready</Label>
+        </Border>
     </Grid>
 </Window>

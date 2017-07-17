@@ -8,7 +8,23 @@ namespace DialogueEditor.Files
 {
 	static class CSVParser
 	{
-		public static string autosaveLocation;
+		public static string AutosaveLocation
+		{
+			get
+			{
+				string path = Path.Combine(
+					Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+					"Woodpecker dialogue editor",
+					"AutosaveData");
+
+				if(Directory.Exists(path) == false)
+				{
+					Directory.CreateDirectory(path);
+				}
+
+				return path;
+			}
+		}
 		public static string filePath;
 		public static List<DialogueDataLine> ReadCSV(string filepath)
 		{
@@ -239,19 +255,46 @@ namespace DialogueEditor.Files
 				outputFile.WriteLine("---,ParentActor,WidgetOffset,SequenceToPlay");
 				foreach (Node node in nodes)
 				{
-					outputFile.WriteLine(node.sourceData.rowName + ",\"None\",\"(Rotation=(X=0.000000,Y=-0.000000,Z=0.000000,W=1.000000),Translation=(X=0.000000,Y=0.000000,Z=100.000000),Scale3D=(X=1.000000,Y=1.000000,Z=1.000000))\",\"None\"");
+					outputFile.WriteLine(node.sourceData.rowName + ",\"" + node.actorName.Text 
+						+ "\",\"(Rotation=(X=0.000000,Y=-0.000000,Z=0.000000,W=1.000000),Translation=(X=0.000000,Y=0.000000,Z=100.000000),Scale3D=(X=1.000000,Y=1.000000,Z=1.000000))\",\"None\"");
 				}
 			}
 		}
 
-		public static string GetAutosaveLocation()
+		public static string GetAutosaveFilepath()
 		{
-			return Path.Combine(
-			Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-			"Woodpecker dialogue editor",
-			"AutosaveData",
-			Path.GetFileName(filePath)
-			);
+			string newSavePath = Path.Combine(
+				AutosaveLocation,
+				Path.GetFileName(filePath)
+				+ "__"
+				+ DateTime.Now.ToShortDateString()
+				+ "__"
+				+ DateTime.Now.ToShortTimeString()
+				+".csv"
+				);
+
+
+			List<string> s = new List<string>(Directory.GetFiles(AutosaveLocation));
+			while (s.Count > 0 && s.Count > (int)Properties.Settings.Default["AutosaveMaxFiles"])
+			{
+				string oldest = s[0];
+				DateTime oldestDate = DateTime.MaxValue;
+				foreach (string file in s)
+				{
+					DateTime createdAt = File.GetLastWriteTime(file);
+					if (createdAt < oldestDate)
+					{
+						oldestDate = createdAt;
+						oldest = file;
+					}
+				}
+
+				File.Delete(oldest);
+				s.Remove(oldest);
+			}
+			
+
+			return newSavePath;
 		}
 
 	}

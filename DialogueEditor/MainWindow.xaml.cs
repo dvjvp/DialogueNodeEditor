@@ -50,24 +50,30 @@ namespace DialogueEditor
 			drawArea.Width = BasicallyInfinity;
 			drawArea.Height = BasicallyInfinity;
 
-			autoSaveTimer = new DispatcherTimer();
-			autoSaveTimer.Tick += AutoSaveTimer_Tick;
-			autoSaveTimer.Interval = new TimeSpan(0, 10, 0);	//ask to save every 10 minutes
-			autoSaveTimer.Start();
+			int autoSaveFrequency = (int)Properties.Settings.Default["AutosaveFrequencyMins"];
+			if (autoSaveFrequency > 0) //if input is invalid, disable autosave
+			{
+				autoSaveTimer = new DispatcherTimer();
+				autoSaveTimer.Tick += AutoSaveTimer_Tick;
+				autoSaveTimer.Interval = new TimeSpan(0, autoSaveFrequency, 0); //ask to save every 10 or so minutes
+				autoSaveTimer.Start();
+			}
 
 			History.History.UpdateHistoryButtonsVisuals();
 		}
 
 		private void AutoSaveTimer_Tick(object sender, EventArgs e)
 		{
-			if (MessageBox.Show("Would you like to save?", "Auto save", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-			{
-				ButtonSave_Click(sender, null);
-			}
+			string initialFile = CSVParser.filePath;
+			CSVParser.SaveFile(CSVParser.GetAutosaveFilepath(), nodes);
+			CSVParser.filePath = initialFile;
+
+			MessageLabel.Content = "Finished autosave.";
 		}
 
 		private void OpenFile(string filePath)
 		{
+			MessageLabel.Content = "Opening file...";
 			DeleteAllNodes();
 
 			List<DialogueDataLine> lines = CSVParser.ReadCSV(filePath);
@@ -625,6 +631,8 @@ namespace DialogueEditor
 
 			CSVParser.SaveFile(filePath, new List<Node>());
 			OpenFile(filePath);
+
+			MessageLabel.Content = "Created file.";
 		}
 
 		private void ButtonOpen_Click(object sender, RoutedEventArgs e)
@@ -635,6 +643,8 @@ namespace DialogueEditor
 				return;
 			}
 			OpenFile(location);
+
+			MessageLabel.Content = "Opened file.";
 		}
 
 		private void ButtonReload_Click(object sender, RoutedEventArgs e)
@@ -645,6 +655,8 @@ namespace DialogueEditor
 				return;
 			}
 			OpenFile(CSVParser.filePath);
+
+			MessageLabel.Content = "Finished reload.";
 		}
 
 		private void ButtonSave_Click(object sender, RoutedEventArgs e)
@@ -655,6 +667,7 @@ namespace DialogueEditor
 				return;
 			}
 			CSVParser.SaveFile(CSVParser.filePath, nodes);
+			MessageLabel.Content = "File saved.";
 		}
 
 		private void ButtonSaveAs_Click(object sender, RoutedEventArgs e)
@@ -679,6 +692,7 @@ namespace DialogueEditor
 			}
 
 			CSVParser.ExportFile(filepath, nodes);
+			MessageLabel.Content = "Exported file.";
 		}
 
 		private void ButtonCreateMetadata_Click(object sender, RoutedEventArgs e)
@@ -689,6 +703,7 @@ namespace DialogueEditor
 				return;
 			}
 			CSVParser.GenerateMetadata(filepath, nodes);
+			MessageLabel.Content = "Created metadata.";
 		}
 
 		private void ButtonTest_Click(object sender, RoutedEventArgs e)
@@ -908,11 +923,29 @@ namespace DialogueEditor
 		}
 
 
-		#endregion
-
 		private void OpenSettings_Button(object sender, RoutedEventArgs e)
 		{
 			(new Properties.SettingsWindow()).ShowDialog();
 		}
+
+		private void OpenAutosaveLocation_Button(object sender, RoutedEventArgs e)
+		{
+			try
+			{
+				Process.Start(CSVParser.AutosaveLocation);
+			}
+			catch (System.IO.FileNotFoundException)
+			{
+				MessageBox.Show("Error: couldn't find autosave folder. Try running program as administrator.");
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show("Error: Unknown exception while trying to access autosave location.\n" +
+					"Please pass this data to your programmer:\n\n" + ex.Message);
+			}
+		}
+
+		
+		#endregion
 	}
 }
