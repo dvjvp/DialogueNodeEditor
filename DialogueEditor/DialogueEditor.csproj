@@ -56,6 +56,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Graphics\GreyableImage.cs" />
     <Compile Include="History\Action.cs" />
     <Compile Include="History\Actions\Action_ConnectionMade.cs" />
     <Compile Include="History\Actions\Action_ConnectionMadeGoTo.cs" />

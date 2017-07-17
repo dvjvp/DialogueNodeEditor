@@ -54,6 +54,8 @@ namespace DialogueEditor
 			autoSaveTimer.Tick += AutoSaveTimer_Tick;
 			autoSaveTimer.Interval = new TimeSpan(0, 10, 0);	//ask to save every 10 minutes
 			autoSaveTimer.Start();
+
+			History.History.UpdateHistoryButtonsVisuals();
 		}
 
 		private void AutoSaveTimer_Tick(object sender, EventArgs e)
@@ -253,7 +255,7 @@ namespace DialogueEditor
 		{
 			var node = AddNode(new DialogueDataLine());
 			node.CreateUniqueID();
-			History.History.Instance.undoHistory.Push(new History.Actions.Action_NodeAdded(node));
+			History.History.AddToUndoHistory(new History.Actions.Action_NodeAdded(node));
 		}
 
 		private void drawArea_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
@@ -262,7 +264,7 @@ namespace DialogueEditor
 			var node = AddNode(new DialogueDataLine());
 			node.SetPosition(mousePos.X, mousePos.Y);
 			node.CreateUniqueID();
-			History.History.Instance.undoHistory.Push(new History.Actions.Action_NodeAdded(node));
+			History.History.AddToUndoHistory(new History.Actions.Action_NodeAdded(node));
 		}
 
 		private Node AddNode(DialogueDataLine data)

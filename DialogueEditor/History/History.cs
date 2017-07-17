@@ -21,12 +21,17 @@ namespace DialogueEditor.History
 		public Stack<Action> undoHistory = new Stack<Action>();
 		public Stack<Action> redoHistory = new Stack<Action>();
 
-
+		public static void UpdateHistoryButtonsVisuals()
+		{
+			MainWindow.instance.UndoButton.IsEnabled = (Instance.undoHistory.Count > 0);
+			MainWindow.instance.RedoButton.IsEnabled = (Instance.redoHistory.Count > 0);
+		}
 
 		public static void ClearHistory()
 		{
 			Instance.undoHistory.Clear();
 			Instance.redoHistory.Clear();
+			UpdateHistoryButtonsVisuals();
 		}
 		public static void Undo()
 		{
@@ -36,6 +41,7 @@ namespace DialogueEditor.History
 				a.Undo();
 				Instance.redoHistory.Push(a);
 			}
+			UpdateHistoryButtonsVisuals();
 		}
 		public static void Redo()
 		{
@@ -45,12 +51,20 @@ namespace DialogueEditor.History
 				a.Do();
 				Instance.undoHistory.Push(a);
 			}
+			UpdateHistoryButtonsVisuals();
 		}
 		public static void Do(Action a)
 		{
 			Instance.redoHistory.Clear();
 			a.Do();
 			Instance.undoHistory.Push(a);
+			UpdateHistoryButtonsVisuals();
+		}
+		public static void AddToUndoHistory(Action a)
+		{
+			Instance.redoHistory.Clear();
+			Instance.undoHistory.Push(a);
+			UpdateHistoryButtonsVisuals();
 		}
 
 	}

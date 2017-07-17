@@ -761,7 +761,7 @@ namespace DialogueEditor
 
 			if (s != outputType.Text)
 			{
-				History.History.Instance.undoHistory.Push(new History.Actions.Action_NodeTypeChanged(this, outputType.Text, s));
+				History.History.AddToUndoHistory(new History.Actions.Action_NodeTypeChanged(this, outputType.Text, s));
 			}
 		}
 
