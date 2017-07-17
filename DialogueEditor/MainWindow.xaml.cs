@@ -253,6 +253,11 @@ namespace DialogueEditor
 			canvasZoom.ScaleY = Math.Max(canvasZoom.ScaleY, 0.025);
 		}
 
+		public Point GetDrawAreaViewCenter()
+		{
+			return canvasTotalTransform.Inverse.Transform(new Point(drawAreaBorder.ActualWidth / 2, drawAreaBorder.ActualHeight / 2));
+		}
+
 		#endregion
 
 		#region Node adding and deleting
@@ -261,6 +266,7 @@ namespace DialogueEditor
 		{
 			var node = AddNode(new DialogueDataLine());
 			node.CreateUniqueID();
+			node.SetPosition(GetDrawAreaViewCenter().X, GetDrawAreaViewCenter().Y);
 			History.History.AddToUndoHistory(new History.Actions.Action_NodeAdded(node));
 		}
 
