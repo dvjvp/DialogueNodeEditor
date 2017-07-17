@@ -209,7 +209,14 @@ namespace DialogueEditor
 					e.Handled = true;
 					break;
 				case Key.S:
-					PanCanvas(0, 30);
+					if(Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
+					{
+						ButtonSave_Click(null, null);
+					}
+					else
+					{
+						PanCanvas(0, 30);
+					}
 					break;
 				case Key.Right:
 					PanCanvas(30, 0);
@@ -222,8 +229,6 @@ namespace DialogueEditor
 					PanCanvas(-30, 0);
 					e.Handled = true;
 					break;
-
-
 				case Key.A:
 					if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
 					{
@@ -234,7 +239,6 @@ namespace DialogueEditor
 						PanCanvas(-30, 0);
 					}
 					break;
-
 				case Key.F:
 					if(Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
 					{
@@ -245,13 +249,32 @@ namespace DialogueEditor
 						FocusNodesButton_Click(null, null);
 					}
 					break;
+				case Key.O:
+					if(Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
+					{
+						ButtonOpen_Click(null, null);
+					}
+					break;
+				case Key.OemMinus:
+				case Key.Subtract:
+					Zoom(false);
+					break;
+				case Key.OemPlus:
+				case Key.Add:
+					Zoom(true);
+					break;
 
 			}
 		}
 
 		private void Canvas_MouseWheel(object sender, MouseWheelEventArgs e)
 		{
-			if (e.Delta > 0) 
+			Zoom(e.Delta > 0);
+		}
+
+		public void Zoom(bool zoomIn)
+		{
+			if (zoomIn)
 			{
 				canvasZoom.ScaleX += zoomSpeed;
 				canvasZoom.ScaleY += zoomSpeed;
@@ -269,6 +292,57 @@ namespace DialogueEditor
 		{
 			return canvasTotalTransform.Inverse.Transform(new Point(drawAreaBorder.ActualWidth / 2, drawAreaBorder.ActualHeight / 2));
 		}
+
+		#endregion
+
+		#region Mouse Interaction
+
+		private void drawArea_MouseDown(object sender, MouseButtonEventArgs e)
+		{
+			if (Mouse.DirectlyOver == drawArea)
+			{
+				Keyboard.Focus(drawArea);
+			}
+
+			if (e.LeftButton == MouseButtonState.Pressed && !Keyboard.IsKeyDown(Key.LeftAlt))
+			{
+				StartRubberbandSelection(sender, e);
+			}
+			else if (e.MiddleButton == MouseButtonState.Pressed
+				|| (Keyboard.IsKeyDown(Key.LeftAlt) && e.LeftButton == MouseButtonState.Pressed))
+			{
+				StartPanCanvas(sender, e);
+			}
+		}
+
+		private void drawArea_MouseUp(object sender, MouseButtonEventArgs e)
+		{
+			if (selectionInProgress)
+			{
+				EndRubberbandSelection(sender, e);
+			}
+			if (panInProgress)
+			{
+				EndPanCanvas(sender, e);
+			}
+
+		}
+
+		private void drawArea_MouseMove(object sender, MouseEventArgs e)
+		{
+			if (selectionInProgress)
+			{
+				UpdateRubberbandSelection(sender, e);
+			}
+			if (panInProgress)
+			{
+				UpdatePanCanvas(sender, e);
+			}
+
+
+		}
+
+
 
 		#endregion
 
@@ -580,58 +654,6 @@ namespace DialogueEditor
 			canvasTranslation.X = Math.Min(canvasTranslation.X - x, 0);
 			canvasTranslation.Y = Math.Min(canvasTranslation.Y - y, 0);
 		}
-
-		#endregion
-
-		#region Mouse Interaction
-
-		private void drawArea_MouseDown(object sender, MouseButtonEventArgs e)
-		{
-			if (Mouse.DirectlyOver == drawArea)
-			{
-				Keyboard.Focus(drawArea);
-			}
-
-			if (e.LeftButton == MouseButtonState.Pressed && !Keyboard.IsKeyDown(Key.LeftAlt))
-			{
-				StartRubberbandSelection(sender, e);
-			}
-			else if (e.MiddleButton == MouseButtonState.Pressed 
-				|| (Keyboard.IsKeyDown(Key.LeftAlt) && e.LeftButton == MouseButtonState.Pressed)) 
-			{
-				StartPanCanvas(sender, e);
-			}
-		}
-
-		private void drawArea_MouseUp(object sender, MouseButtonEventArgs e)
-		{
-			if (selectionInProgress)
-			{
-				EndRubberbandSelection(sender, e);
-			}
-			else if (panInProgress) 
-			{
-				EndPanCanvas(sender, e);
-			}
-			
-		}
-
-
-		private void drawArea_MouseMove(object sender, MouseEventArgs e)
-		{
-			if(selectionInProgress)
-			{
-				UpdateRubberbandSelection(sender, e);
-			}
-			if(panInProgress)
-			{
-				UpdatePanCanvas(sender, e);
-			}
-
-			
-		}
-
-
 
 		#endregion
 

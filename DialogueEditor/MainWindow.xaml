@@ -30,6 +30,7 @@
                                 <ColumnDefinition Width="80"/>
                                 <ColumnDefinition Width="80"/>
                                 <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="20"/>
                                 <ColumnDefinition Width="80"/>
                                 <ColumnDefinition Width="80"/>
                                 <ColumnDefinition Width="80"/>
@@ -60,22 +61,16 @@
                                     <TextBlock HorizontalAlignment="Center">Open</TextBlock>
                                 </StackPanel>
                             </Button>
-                            <Button Grid.Column="4" Background="#FFc2c2c2" Margin="2.5" ToolTip="Exports this dialogue as .csv for usage in UE4 (without unnecessary things like node positions)" Click="ButtonExport_Click">
-                                <StackPanel Width="40">
-                                    <Image Source="Resources/Export.png"/>
-                                    <TextBlock HorizontalAlignment="Center">Export</TextBlock>
-                                </StackPanel>
-                            </Button>
-                            <Button Grid.Column="5" Background="#FFc2c2c2" Margin="2.5" ToolTip="Aborts all changes and reloads file." Click="ButtonReload_Click">
+                            <Button Grid.Column="4" Background="#FFc2c2c2" Margin="2.5" ToolTip="Aborts all changes and reloads file." Click="ButtonReload_Click">
                                 <StackPanel Width="40">
                                     <Image Source="Resources/Reload.png"/>
                                     <TextBlock HorizontalAlignment="Center">Reload</TextBlock>
                                 </StackPanel>
                             </Button>
-                            <Button Grid.Column="6" Background="#FFc2c2c2" Margin="2.5" ToolTip="Runs dialogue in console, allowing you to test it." Click="ButtonTest_Click">
+                            <Button Grid.Column="6" Background="#FFc2c2c2" Margin="2.5" ToolTip="Exports this dialogue as .csv for usage in UE4 (without unnecessary things like node positions)" Click="ButtonExport_Click">
                                 <StackPanel Width="40">
-                                    <Image Source="Resources/Test.png"/>
-                                    <TextBlock HorizontalAlignment="Center">Test</TextBlock>
+                                    <Image Source="Resources/Export.png"/>
+                                    <TextBlock HorizontalAlignment="Center">Export</TextBlock>
                                 </StackPanel>
                             </Button>
                             <Button Grid.Column="7" Background="#FFc2c2c2" Margin="2.5" ToolTip="Creates metadata for UE4 (csv containing widget locations, animation sequence references and all the other asset refs." Click="ButtonCreateMetadata_Click">
@@ -84,7 +79,13 @@
                                     <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" LineHeight="9" LineStackingStrategy="BlockLineHeight">Create metadata</TextBlock>
                                 </StackPanel>
                             </Button>
-                            <Button Grid.Column="8" Background="#FFc2c2c2" Margin="2.5" ToolTip="Opens folder containing autosave files location in Explorer." Click="OpenAutosaveLocation_Button">
+                            <Button Grid.Column="8" Background="#FFc2c2c2" Margin="2.5" ToolTip="Runs dialogue in console, allowing you to test it." Click="ButtonTest_Click">
+                                <StackPanel Width="40">
+                                    <Image Source="Resources/Test.png"/>
+                                    <TextBlock HorizontalAlignment="Center">Test</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="9" Background="#FFc2c2c2" Margin="2.5" ToolTip="Opens folder containing autosave files location in Explorer." Click="OpenAutosaveLocation_Button">
                                 <StackPanel>
                                     <Image Source="Resources/OpenAutosave.png" Width="40"/>
                                     <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" LineHeight="9" LineStackingStrategy="BlockLineHeight">Show autosaves</TextBlock>
@@ -97,10 +98,10 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="80"/>
                                 <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="20"/>
                                 <ColumnDefinition Width="80"/>
                                 <ColumnDefinition Width="80"/>
-                                <ColumnDefinition Width="80"/>
-                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="20"/>
                                 <ColumnDefinition Width="80"/>
                                 <ColumnDefinition Width="80"/>
                                 <ColumnDefinition Width="80"/>
@@ -120,37 +121,37 @@
                                     <TextBlock HorizontalAlignment="Center">Delete</TextBlock>
                                 </StackPanel>
                             </Button>
-                            <Button Grid.Column="2" Background="#FFc2c2c2" Margin="2.5" ToolTip="Deletes all connections coming to or from selected nodes." Click="ButtonDeleteConnections_Click">
+                            <Button Grid.Column="3" Background="#FFc2c2c2" Margin="2.5" ToolTip="Deletes all connections coming to or from selected nodes." Click="ButtonDeleteConnections_Click">
                                 <StackPanel>
                                     <Image Source="Resources/DeleteConnections.png" Width="40"/>
                                     <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" LineHeight="10" LineStackingStrategy="BlockLineHeight">Delete connections</TextBlock>
                                 </StackPanel>
                             </Button>
-                            <Button Grid.Column="3" Background="#FFc2c2c2" Margin="2.5" ToolTip="Deletes all outputs coming from selected nodes." Click="ButtonDeleteOutputs_Click">
+                            <Button Grid.Column="4" Background="#FFc2c2c2" Margin="2.5" ToolTip="Deletes all outputs coming from selected nodes." Click="ButtonDeleteOutputs_Click">
                                 <StackPanel >
                                     <Image Source="Resources/DeleteOutputs.png" Width="40"/>
                                     <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" LineHeight="9" LineStackingStrategy="BlockLineHeight">Delete outputs</TextBlock>
                                 </StackPanel>
                             </Button>
-                            <Button Grid.Column="4" Background="#FFc2c2c2" Margin="2.5" ToolTip="Selects all nodes in this graph." Click="ButtonSelectAll_Click">
+                            <Button Grid.Column="6" Background="#FFc2c2c2" Margin="2.5" ToolTip="Selects all nodes in this graph." Click="ButtonSelectAll_Click">
                                 <StackPanel >
                                     <Image Source="Resources/SelectAll.png" Width="40"/>
                                     <TextBlock HorizontalAlignment="Center"  LineStackingStrategy="BlockLineHeight">Select all</TextBlock>
                                 </StackPanel>
                             </Button>
-                            <Button Grid.Column="5" Background="#FFc2c2c2" Margin="2.5" ToolTip="Deselects all nodes in this graph" Click="ButtonDeselectAll_Click">
+                            <Button Grid.Column="7" Background="#FFc2c2c2" Margin="2.5" ToolTip="Deselects all nodes in this graph" Click="ButtonDeselectAll_Click">
                                 <StackPanel >
                                     <Image Source="Resources/DeselectAll.png" Width="40"/>
                                     <TextBlock HorizontalAlignment="Center"  LineStackingStrategy="BlockLineHeight">Deselect all</TextBlock>
                                 </StackPanel>
                             </Button>
-                            <Button Grid.Column="6" Background="#FFc2c2c2" Margin="2.5" ToolTip="Select all nodes in same 'island'. Selects all nodes that are connected with each other in some way." Click="SelectConnected_Click">
+                            <Button Grid.Column="8" Background="#FFc2c2c2" Margin="2.5" ToolTip="Select all nodes in same 'island'. Selects all nodes that are connected with each other in some way." Click="SelectConnected_Click">
                                 <StackPanel >
                                     <Image Source="Resources/SelectConnected.png" Width="40"/>
                                     <TextBlock HorizontalAlignment="Center"  LineStackingStrategy="BlockLineHeight" TextWrapping="Wrap" LineHeight="10">Select connected</TextBlock>
                                 </StackPanel>
                             </Button>
-                            <Button Grid.Column="7" Background="#FFc2c2c2" Margin="2.5" ToolTip="Snaps view to selected nodes" Click="FocusNodesButton_Click">
+                            <Button Grid.Column="9" Background="#FFc2c2c2" Margin="2.5" ToolTip="Snaps view to selected nodes" Click="FocusNodesButton_Click">
                                 <StackPanel >
                                     <Image Source="Resources/FocusNodes.png" Width="40"/>
                                     <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" LineHeight="10" LineStackingStrategy="BlockLineHeight">Focus on selected</TextBlock>
@@ -164,7 +165,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="80"/>
                                 <ColumnDefinition Width="80"/>
-                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="20"/>
                                 <ColumnDefinition Width="80"/>
                                 <ColumnDefinition Width="80"/>
                                 <ColumnDefinition Width="80"/>
@@ -182,36 +183,37 @@
                                     <TextBlock HorizontalAlignment="Center"  LineStackingStrategy="BlockLineHeight" TextWrapping="Wrap" LineHeight="10">Select connected</TextBlock>
                                 </StackPanel>
                             </Button>
-                            <Button Grid.Column="1" Background="#FFc2c2c2" Margin="2.5" ToolTip="Puts selected nodes in horizontal line." Click="ButtonLayoutHorizontcal_Click">
-                                <StackPanel >
-                                    <Image Source="Resources/LayoutHorizontal.png" Width="40"/>
-                                    <TextBlock HorizontalAlignment="Center" LineStackingStrategy="BlockLineHeight" LineHeight="10"  TextWrapping="Wrap">Layout horizontal</TextBlock>
-                                </StackPanel>
-                            </Button>
-                            <Button Grid.Column="2" Background="#FFc2c2c2" Margin="2.5" ToolTip="Puts selected nodes in vertical line." Click="ButtonLayoutVertical_Click">
-                                <StackPanel >
-                                    <Image Source="Resources/LayoutVertical.png" Width="40"/>
-                                    <TextBlock HorizontalAlignment="Center" LineStackingStrategy="BlockLineHeight" LineHeight="10"  TextWrapping="Wrap">Layout vertical</TextBlock>
-                                </StackPanel>
-                            </Button>
-                            <Button Grid.Column="3" Background="#FFc2c2c2" Margin="2.5" ToolTip="Tries to automatically layout selected nodes. Warning! Works only if they all are connected." Click="ButtonLayoutAuto_Click">
-                                <StackPanel >
-                                    <Image Source="Resources/LayoutAuto.png" Width="40"/>
-                                    <TextBlock HorizontalAlignment="Center"  LineStackingStrategy="BlockLineHeight">Layout auto</TextBlock>
-                                </StackPanel>
-                            </Button>
-                            <Button Grid.Column="4" Background="#FFc2c2c2" Margin="2.5" ToolTip="Separates groups of nodes which are not connected with each other into different stacks" Click="SplitIslands_Click">
-                                <StackPanel >
-                                    <Image Source="Resources/SplitIslands.png" Width="40"/>
-                                    <TextBlock HorizontalAlignment="Center"  LineStackingStrategy="BlockLineHeight">Split Islands</TextBlock>
-                                </StackPanel>
-                            </Button>
-                            <Button Grid.Column="5" Background="#FFc2c2c2" Margin="2.5" ToolTip="Moves nodes, so center of selection is in viewport" Click="BringToViewportButton_Click">
+                            <Button Grid.Column="1" Background="#FFc2c2c2" Margin="2.5" ToolTip="Moves nodes, so center of selection is in viewport" Click="BringToViewportButton_Click">
                                 <StackPanel >
                                     <Image Source="Resources/BringToViewport.png" Width="40"/>
                                     <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" LineHeight="10" LineStackingStrategy="BlockLineHeight">Bring to viewport</TextBlock>
                                 </StackPanel>
                             </Button>
+                            <Button Grid.Column="3" Background="#FFc2c2c2" Margin="2.5" ToolTip="Puts selected nodes in horizontal line." Click="ButtonLayoutHorizontcal_Click">
+                                <StackPanel >
+                                    <Image Source="Resources/LayoutHorizontal.png" Width="40"/>
+                                    <TextBlock HorizontalAlignment="Center" LineStackingStrategy="BlockLineHeight" LineHeight="10"  TextWrapping="Wrap">Layout horizontal</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="4" Background="#FFc2c2c2" Margin="2.5" ToolTip="Puts selected nodes in vertical line." Click="ButtonLayoutVertical_Click">
+                                <StackPanel >
+                                    <Image Source="Resources/LayoutVertical.png" Width="40"/>
+                                    <TextBlock HorizontalAlignment="Center" LineStackingStrategy="BlockLineHeight" LineHeight="10"  TextWrapping="Wrap">Layout vertical</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="5" Background="#FFc2c2c2" Margin="2.5" ToolTip="Tries to automatically layout selected nodes. Warning! Works only if they all are connected." Click="ButtonLayoutAuto_Click">
+                                <StackPanel >
+                                    <Image Source="Resources/LayoutAuto.png" Width="40"/>
+                                    <TextBlock HorizontalAlignment="Center"  LineStackingStrategy="BlockLineHeight">Layout auto</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="6" Background="#FFc2c2c2" Margin="2.5" ToolTip="Separates groups of nodes which are not connected with each other into different stacks" Click="SplitIslands_Click">
+                                <StackPanel >
+                                    <Image Source="Resources/SplitIslands.png" Width="40"/>
+                                    <TextBlock HorizontalAlignment="Center"  LineStackingStrategy="BlockLineHeight">Split Islands</TextBlock>
+                                </StackPanel>
+                            </Button>
+
                             
                             
                         </Grid>
