@@ -1,0 +1,64 @@
+﻿<Window x:Class="DialogueEditor.Properties.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DialogueEditor.Properties"
+        mc:Ignorable="d"
+        Title="Settings" Height="300" Width="400" ResizeMode="NoResize">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition Height=".4*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.ColumnSpan="2" Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Label FontWeight="Bold" Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center">Autosave</Label>
+            
+            <Label Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">Autosave frequency (minutes)</Label>
+            <TextBox x:Name="AutosaveFrequency" Grid.Row="1" Grid.Column="1" Height="30" Width="120" Text="10" TextAlignment="Center" VerticalAlignment="Center" PreviewTextInput="AllowOnlyIntegers"/>
+
+            <Label Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">Autosave max files number</Label>
+            <TextBox x:Name="AutosaveFileNum" Grid.Row="2" Grid.Column="1" Height="30" Width="120" Text="3" TextAlignment="Center" VerticalAlignment="Center" PreviewTextInput="AllowOnlyIntegers"/>
+        </Grid>
+
+        <Grid Grid.ColumnSpan="2" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Label FontWeight="Bold" Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center">History</Label>
+
+            <Label Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">Undo limit</Label>
+            <TextBox x:Name="UndoNum" Grid.Row="1" Grid.Column="1" Height="30" Width="120" Text="100" TextAlignment="Center" VerticalAlignment="Center" PreviewTextInput="AllowOnlyIntegers"/>
+
+            <Label Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">Redo limit</Label>
+            <TextBox x:Name="RedoNum" Grid.Row="2" Grid.Column="1" Height="30" Width="120" Text="100" TextAlignment="Center" VerticalAlignment="Center" PreviewTextInput="AllowOnlyIntegers"/>
+        </Grid>
+
+
+        <Button Grid.Row="2" Grid.Column="0" Content="Apply" Width="60" Height="30" Click="ApplyButton_Click"/>
+        <Button Grid.Row="2" Grid.Column="1" Content="Cancel" Width="60" Height="30" Click="CancelButton_Click"/>
+    </Grid>
+</Window>

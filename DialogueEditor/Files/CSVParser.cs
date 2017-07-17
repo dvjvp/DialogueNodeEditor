@@ -8,6 +8,7 @@ namespace DialogueEditor.Files
 {
 	static class CSVParser
 	{
+		public static string autosaveLocation;
 		public static string filePath;
 		public static List<DialogueDataLine> ReadCSV(string filepath)
 		{
@@ -242,5 +243,16 @@ namespace DialogueEditor.Files
 				}
 			}
 		}
+
+		public static string GetAutosaveLocation()
+		{
+			return Path.Combine(
+			Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+			"Woodpecker dialogue editor",
+			"AutosaveData",
+			Path.GetFileName(filePath)
+			);
+		}
+
 	}
 }

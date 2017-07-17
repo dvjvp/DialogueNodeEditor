@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 
-
 namespace DialogueEditor.History
 {
 	class History
@@ -18,8 +17,15 @@ namespace DialogueEditor.History
 			}
 		}
 
-		public Stack<Action> undoHistory = new Stack<Action>();
-		public Stack<Action> redoHistory = new Stack<Action>();
+		public LimitedSizeStack<Action> undoHistory;
+		public LimitedSizeStack<Action> redoHistory;
+
+
+		private History()
+		{
+			undoHistory = new LimitedSizeStack<Action>((int)Properties.Settings.Default["UndoDepth"]);
+			redoHistory = new LimitedSizeStack<Action>((int)Properties.Settings.Default["RedoDepth"]);
+		}
 
 		public static void UpdateHistoryButtonsVisuals()
 		{

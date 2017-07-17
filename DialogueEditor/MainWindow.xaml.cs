@@ -568,11 +568,12 @@ namespace DialogueEditor
 				Keyboard.Focus(drawArea);
 			}
 
-			if (e.LeftButton == MouseButtonState.Pressed)
+			if (e.LeftButton == MouseButtonState.Pressed && !Keyboard.IsKeyDown(Key.LeftAlt))
 			{
 				StartRubberbandSelection(sender, e);
 			}
-			else if (e.MiddleButton == MouseButtonState.Pressed) 
+			else if (e.MiddleButton == MouseButtonState.Pressed 
+				|| (Keyboard.IsKeyDown(Key.LeftAlt) && e.LeftButton == MouseButtonState.Pressed)) 
 			{
 				StartPanCanvas(sender, e);
 			}
@@ -909,5 +910,9 @@ namespace DialogueEditor
 
 		#endregion
 
+		private void OpenSettings_Button(object sender, RoutedEventArgs e)
+		{
+			(new Properties.SettingsWindow()).ShowDialog();
+		}
 	}
 }

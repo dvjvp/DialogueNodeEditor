@@ -178,6 +178,7 @@
                                 <ColumnDefinition Width="80"/>
                                 <ColumnDefinition Width="80"/>
                                 <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="80"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
@@ -221,6 +222,12 @@
                                 <StackPanel>
                                     <Image Source="Resources/HelpAbout.png" Width="40"/>
                                     <TextBlock HorizontalAlignment="Center">About app</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="7" Background="#FFc2c2c2" Margin="2.5" ToolTip="Basic info on this application" Click="OpenSettings_Button">
+                                <StackPanel>
+                                    <Image Source="Resources/Settings.png" Width="40"/>
+                                    <TextBlock HorizontalAlignment="Center">Settings</TextBlock>
                                 </StackPanel>
                             </Button>
                         </Grid>
