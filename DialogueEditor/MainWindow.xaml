@@ -226,6 +226,34 @@
                             
                         </Grid>
                     </TabItem>
+                    <TabItem Header="Node toolbar">
+                        <Grid Background="#FFE5E5E5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Button Grid.Column="0" Background="#FFc2c2c2" Margin="2.5" ToolTip="Select all nodes in same 'island'. Selects all nodes that are connected with each other in some way." Click="SelectConnected_Click">
+                                <StackPanel >
+                                    <Image Source="Resources/SelectConnected.png" Width="40"/>
+                                    <TextBlock HorizontalAlignment="Center"  LineStackingStrategy="BlockLineHeight" TextWrapping="Wrap" LineHeight="10">Select connected</TextBlock>
+                                </StackPanel>
+                            </Button>
+
+
+
+                        </Grid>
+                    </TabItem>
                     <TabItem Header="Help">
                         <Grid Background="#FFE5E5E5">
                             <Grid.ColumnDefinitions>

@@ -37,7 +37,24 @@ namespace DialogueEditor
 		public void LoadDataFromSource(bool withoutOutputType = false)
 		{
 			nodeNameField.Text = sourceData.rowName;
-			dialogueText.Text = sourceData.commandArguments;
+			string[] cmndArgs = sourceData.commandArguments.Split(new string[] { ": " }, StringSplitOptions.None);
+			try
+			{
+				actorName.Text = cmndArgs[0];
+				dialogueText.Text = "";
+				for (int i = 1; i < cmndArgs.Length - 1; i++)
+				{
+					dialogueText.Text += cmndArgs[i];
+					dialogueText.Text += ": ";
+				}
+				if (cmndArgs.Length > 1)
+				{
+					dialogueText.Text += cmndArgs[cmndArgs.Length - 1];
+				}
+			}
+			catch (Exception)
+			{
+			}
 			PromptTextBox.Text = sourceData.prompt;
 			SetPosition(sourceData.nodePositionX, sourceData.nodePositionY);
 			switch (sourceData.command)
@@ -152,7 +169,7 @@ namespace DialogueEditor
 					break;
 				case "Normal dialogue":
 					sourceData.command = "dialogue";
-					sourceData.commandArguments = dialogueText.Text;
+					sourceData.commandArguments = actorName.Text + ": " + dialogueText.Text;
 					break;
 				default:
 					break;
@@ -197,7 +214,7 @@ namespace DialogueEditor
 					break;
 				case "Normal dialogue":
 					d.command = "dialogue";
-					d.commandArguments = dialogueText.Text;
+					d.commandArguments = actorName.Text + ": " + dialogueText.Text;
 					break;
 				default:
 					break;
@@ -864,7 +881,6 @@ namespace DialogueEditor
 			History.History.Do(new History.Actions.Action_NodeDataChanged(this, oldData, newData));
 		}
 
-		#endregion
 
 		private void PromptActorsCombobox_LostFocus(object sender, RoutedEventArgs e)
 		{
@@ -886,7 +902,7 @@ namespace DialogueEditor
 
 		private void actorName_LostFocus(object sender, RoutedEventArgs e)
 		{
-			if (!AdditionalData.GetActorNames().Contains(actorName.Text) && actorName.Text.Length > 0 && actorName.Text != "None") 
+			if (!AdditionalData.GetActorNames().Contains(actorName.Text) && actorName.Text.Length > 0 && actorName.Text != "None")
 			{
 				AdditionalData.AddDialogueActor(actorName.Text);
 			}
@@ -913,5 +929,8 @@ namespace DialogueEditor
 		{
 			OnNodeDataChanged(sender, e);
 		}
+
+		#endregion
+
 	}
 }
