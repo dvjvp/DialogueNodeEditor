@@ -37,6 +37,7 @@ namespace DialogueEditor
 		public void LoadDataFromSource(bool withoutOutputType = false)
 		{
 			nodeNameField.Text = sourceData.rowName;
+			PromptActorsCombobox.Text = sourceData.boundToActor;
 			string[] cmndArgs = sourceData.commandArguments.Split(new string[] { ": " }, StringSplitOptions.None);
 			if (cmndArgs.Length == 1) 
 			{
@@ -143,6 +144,7 @@ namespace DialogueEditor
 
 			sourceData.rowName = nodeNameField.Text.ToString();
 			sourceData.prompt = PromptTextBox.Text;
+			sourceData.boundToActor = PromptActorsCombobox.Text;
 
 			MainWindow.instance.nodeMap.Add(sourceData.rowName, this);
 
@@ -188,6 +190,7 @@ namespace DialogueEditor
 
 			d.rowName = nodeNameField.Text;
 			d.prompt = PromptTextBox.Text;
+			d.boundToActor = PromptActorsCombobox.Text;
 			Point p = GetPosition();
 			d.SetPosition(p.X, p.Y);
 
@@ -891,10 +894,18 @@ namespace DialogueEditor
 
 		private void PromptActorsCombobox_LostFocus(object sender, RoutedEventArgs e)
 		{
-			if (!AdditionalData.GetWidgetAnchorNames().Contains(PromptActorsCombobox.Text) && PromptActorsCombobox.Text.Length > 0)
+			try
 			{
-				AdditionalData.AddWidgetAnchor(PromptActorsCombobox.Text);
+				if (!AdditionalData.GetWidgetAnchorNames().Contains(PromptActorsCombobox.Text) && PromptActorsCombobox.Text.Length > 0)
+				{
+					AdditionalData.AddWidgetAnchor(PromptActorsCombobox.Text);
+				}
 			}
+			catch (Exception)
+			{
+				
+			}
+			OnNodeDataChanged(sender, e);
 		}
 
 		private void PromptActorsCombobox_GotFocus(object sender, RoutedEventArgs e)
@@ -909,21 +920,31 @@ namespace DialogueEditor
 
 		private void actorName_LostFocus(object sender, RoutedEventArgs e)
 		{
-			if (!AdditionalData.GetActorNames().Contains(actorName.Text) && actorName.Text.Length > 0 && actorName.Text != "None")
-			{
-				AdditionalData.AddDialogueActor(actorName.Text);
+			try { 
+				if (!AdditionalData.GetActorNames().Contains(actorName.Text) && actorName.Text.Length > 0 && actorName.Text != "None")
+				{
+					AdditionalData.AddDialogueActor(actorName.Text);
+				}
 			}
-
+			catch (Exception)
+			{
+				
+			}
 			OnNodeDataChanged(sender, e);
 		}
 
 		private void itemName_LostFocus(object sender, RoutedEventArgs e)
 		{
-			if (!AdditionalData.GetItemNames().Contains(itemName.Text) && itemName.Text.Length > 0 && itemName.Text != "None")
-			{
-				AdditionalData.AddItemName(itemName.Text);
+			try { 
+				if (!AdditionalData.GetItemNames().Contains(itemName.Text) && itemName.Text.Length > 0 && itemName.Text != "None")
+				{
+					AdditionalData.AddItemName(itemName.Text);
+				}
 			}
-
+			catch (Exception)
+			{
+				
+			}
 			OnNodeDataChanged(sender, e);
 		}
 

@@ -27,8 +27,8 @@ namespace DialogueEditor.Testing
 			currentNode = first;
 			Next();
 
-			errorNode = new Node(new Files.DialogueDataLine("errorNode", "", "dialogue", "Error: couldn't find next row. Aborting.", "errorNode2"));
-			errorNode2 = new Node(new Files.DialogueDataLine("errorNode2", "", "leave", "", "None"));
+			errorNode = new Node(new Files.DialogueDataLine("errorNode", "", "dialogue", "Error: couldn't find next row. Aborting.", "errorNode2", ""));
+			errorNode2 = new Node(new Files.DialogueDataLine("errorNode2", "", "leave", "", "None", ""));
 			try
 			{
 				this.nodes.Add("errorNode2", errorNode2);

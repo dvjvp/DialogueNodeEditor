@@ -759,7 +759,7 @@ namespace DialogueEditor
 		private void ButtonExport_Click(object sender, RoutedEventArgs e)
 		{
 			string previousFilepath = CSVParser.filePath;
-			string filepath = CSVParser.GetFileSaveLocation();
+			string filepath = CSVParser.GetFileSaveLocation(true);
 
 			if (filepath == null)
 			{
@@ -773,7 +773,7 @@ namespace DialogueEditor
 
 		private void ButtonCreateMetadata_Click(object sender, RoutedEventArgs e)
 		{
-			string filepath = CSVParser.GetFileSaveLocation();
+			string filepath = CSVParser.GetFileSaveLocation(true);
 			if (filepath == null)
 			{
 				return;

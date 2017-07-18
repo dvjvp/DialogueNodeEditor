@@ -80,6 +80,7 @@ namespace DialogueEditor.Files
 			 */ 
 			string rowName = s[0];
 			string prompt = s[1].Replace("\"\"", "\"");
+			string boundTo = s[s.Length - 6];
 			string command = s[s.Length - 5];
 			string commandArgs = s[s.Length - 4];
 			string next = s[s.Length - 3];
@@ -106,6 +107,9 @@ namespace DialogueEditor.Files
 					prompt += ',';
 				}
 				prompt += s[index];
+				index++;
+
+				boundTo = s[index];
 				index++;
 
 				command = s[index];
@@ -139,12 +143,23 @@ namespace DialogueEditor.Files
 				next = next.Substring(1, next.Length - 2);
 			}
 
+			if (boundTo.StartsWith("\""))
+			{
+				try
+				{
+					boundTo = boundTo.Substring(1, boundTo.Length - 2);
+				}
+				catch (Exception)
+				{
+				}
+			}
+
 
 			prompt = prompt.Replace("\"\"", "\"");
 			commandArgs = commandArgs.Replace("\"\"", "\"");
 
 
-			DialogueDataLine d = new DialogueDataLine(rowName, prompt, command, commandArgs, next);
+			DialogueDataLine d = new DialogueDataLine(rowName, prompt, command, commandArgs, next, boundTo);
 			d.SetPosition(x, y);
 			return d;
 		}
@@ -268,7 +283,7 @@ namespace DialogueEditor.Files
 				outputFile.WriteLine("---,ParentActor,WidgetOffset,SequenceToPlay");
 				foreach (Node node in nodes)
 				{
-					outputFile.WriteLine(node.sourceData.rowName + ",\"" + node.actorName.Text 
+					outputFile.WriteLine(node.sourceData.rowName + ",\"" + node.PromptActorsCombobox.Text 
 						+ "\",\"(Rotation=(X=0.000000,Y=-0.000000,Z=0.000000,W=1.000000),Translation=(X=0.000000,Y=0.000000,Z=100.000000),Scale3D=(X=1.000000,Y=1.000000,Z=1.000000))\",\"None\"");
 				}
 			}

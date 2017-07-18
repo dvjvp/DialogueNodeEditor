@@ -13,6 +13,7 @@ namespace DialogueEditor.Files
 		public string command;
 		public string commandArguments;
 		public string nextRowName;
+		public string boundToActor;
 
 		public double nodePositionX;
 		public double nodePositionY;
@@ -24,15 +25,17 @@ namespace DialogueEditor.Files
 			command = "dialogue";
 			commandArguments = "Sample text";
 			nextRowName = "None";
+			boundToActor = "None";
 		}
 
-		public DialogueDataLine(string rowName, string prompt, string command, string commandArguments, string nextRowName)
+		public DialogueDataLine(string rowName, string prompt, string command, string commandArguments, string nextRowName, string boundToActor)
 		{
 			this.rowName = rowName;
 			this.prompt = prompt;
 			this.command = command;
 			this.commandArguments = commandArguments;
 			this.nextRowName = nextRowName;
+			this.boundToActor = boundToActor;
 			nodePositionX = 0.0;
 			nodePositionY = 0.0;
 		}
@@ -45,7 +48,11 @@ namespace DialogueEditor.Files
 
 		public string ToCSVrow()
 		{
-			return ToUE4exportCSVrow() + "," + (int)nodePositionX + "," + (int)nodePositionY;
+			string tempPrompt = prompt.Replace("\"", "\"\"");
+			string tempArgs = commandArguments.Replace("\"", "\"\"");
+			return rowName + ",\"" + tempPrompt + "\",\"" + boundToActor + "\",\"" 
+				+ command + "\",\"" + tempArgs + "\",\"" + nextRowName + "\""
+				+ "," + (int)nodePositionX + "," + (int)nodePositionY;
 		}
 
 		public string ToUE4exportCSVrow()
