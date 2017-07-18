@@ -35,6 +35,8 @@
                                 <ColumnDefinition Width="80"/>
                                 <ColumnDefinition Width="80"/>
                                 <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="80"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <Button Grid.Column="0" Background="#FFc2c2c2" Margin="2.5" ToolTip="Create new empty dialogue file" Click="ButtonNew_Click">
@@ -89,6 +91,12 @@
                                 <StackPanel>
                                     <Image Source="Resources/OpenAutosave.png" Width="40"/>
                                     <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" LineHeight="9" LineStackingStrategy="BlockLineHeight">Show autosaves</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="11" Background="#FFc2c2c2" Margin="2.5" ToolTip="Opens data editor, allowing to add actors, items and item descriptions." Click="OpenDialogueData">
+                                <StackPanel>
+                                    <Image Source="Resources/OpenDialogueData.png" Width="40"/>
+                                    <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" LineHeight="9" LineStackingStrategy="BlockLineHeight">Dialogue data</TextBlock>
                                 </StackPanel>
                             </Button>
                         </Grid>

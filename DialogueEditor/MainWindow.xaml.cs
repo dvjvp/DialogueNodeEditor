@@ -999,7 +999,12 @@ namespace DialogueEditor
 				History.History.Do(new History.Actions.Action_NodesMoved(selection.ToArray(), previousLocations, newLocations));
 			}
 		}
-		
+
 		#endregion
+
+		private void OpenDialogueData(object sender, RoutedEventArgs e)
+		{
+			(new AdditionalData()).ShowDialog();
+		}
 	}
 }

@@ -56,6 +56,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Files\AdditionalData.xaml.cs">
+      <DependentUpon>AdditionalData.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Graphics\GreyableImage.cs" />
     <Compile Include="History\Action.cs" />
     <Compile Include="History\Actions\Action_ConnectionMade.cs" />
@@ -75,6 +78,10 @@
     <Compile Include="Testing\TestingWindow.xaml.cs">
       <DependentUpon>TestingWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Files\AdditionalData.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Graphics\Connection.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -297,6 +304,11 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\FocusNodes.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\OpenDialogueData.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

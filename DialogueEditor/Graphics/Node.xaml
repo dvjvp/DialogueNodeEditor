@@ -71,6 +71,9 @@
                 <StackPanel>
                     <Label HorizontalAlignment="Center" FontWeight="DemiBold">Prompt:</Label>
                     <TextBox x:Name="PromptTextBox" Margin="5" LostFocus="OnNodeDataChanged"/>
+                    <Label HorizontalAlignment="Center" FontWeight="DemiBold">Bound to actor:</Label>
+                    <ComboBox x:Name="PromptActorsCombobox" IsEditable="True" Margin="5,0,5,5" 
+                              GotFocus="PromptActorsCombobox_GotFocus" LostFocus="PromptActorsCombobox_LostFocus"/>
                 </StackPanel>
             </Border>
             
@@ -95,7 +98,8 @@
                 <StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <Label Grid.Column="0" Grid.Row="1" FontWeight="DemiBold" IsHitTestVisible="False">Actor name:</Label>
-                        <TextBox x:Name="actorName" Text="None" Grid.Column="1" Grid.Row="1" TextChanged="aactorName_TextChanged" Margin="5" MaxWidth="300" LostFocus="OnNodeDataChanged"/>
+                        <ComboBox x:Name="actorName" IsEditable="True" Text="None" Grid.Column="1" Grid.Row="1" Margin="5" MaxWidth="300" 
+                                  LostFocus="actorName_LostFocus" GotFocus="actorName_GotFocus"/>
                     </StackPanel>
                     <Label HorizontalAlignment="Center" FontWeight="DemiBold" Content=" Dialogue text:" IsHitTestVisible="False"/>
                     <TextBox x:Name="dialogueText" Text="Dialogue Text" Margin="5" TextWrapping="Wrap" MaxWidth="300"  VerticalScrollBarVisibility="Auto"  SpellCheck.IsEnabled="True" Height="Auto" LostFocus="OnNodeDataChanged"/>
@@ -165,7 +169,7 @@
 
                     <Label Grid.Column="0" Grid.Row="0" Foreground="White" HorizontalAlignment="Center">Item name</Label>
                     <Label Grid.Column="1" Grid.Row="0" Foreground="White" HorizontalAlignment="Center">Count</Label>
-                    <TextBox x:Name="itemName"  Grid.Column="0" Grid.Row="1" Margin="2" TextChanged="RemoveSpacesFromSender" LostFocus="OnNodeDataChanged"/>
+                    <ComboBox x:Name="itemName" IsEditable="True" Grid.Column="0" Grid.Row="1" Margin="2" LostFocus="itemName_LostFocus" GotFocus="itemName_GotFocus" SelectionChanged="itemName_SelectionChanged"/>
                     <TextBox x:Name="itemCount"  Grid.Column="1" Grid.Row="1" Margin="2" LostFocus="OnNodeDataChanged"/>
                     <Label Grid.Column="0" Grid.Row="2" Foreground="White" HorizontalAlignment="Center">True</Label>
                     <Label Grid.Column="1" Grid.Row="2" Foreground="White" HorizontalAlignment="Center">False</Label>

@@ -814,16 +814,6 @@ namespace DialogueEditor
 			nodeNameField.Text = actorName.Text + Guid.NewGuid().ToString();
 		}
 
-		private void aactorName_TextChanged(object sender, TextChangedEventArgs e)
-		{
-			CreateUniqueID();
-		}
-
-		private void dialogueText_TextChanged(object sender, TextChangedEventArgs e)
-		{
-			CreateUniqueID();
-		}
-
 		private void HighlightPinConnections(object sender, MouseEventArgs e)
 		{
 			if (sender == InputPin) 
@@ -876,5 +866,52 @@ namespace DialogueEditor
 
 		#endregion
 
+		private void PromptActorsCombobox_LostFocus(object sender, RoutedEventArgs e)
+		{
+			if (!AdditionalData.GetWidgetAnchorNames().Contains(PromptActorsCombobox.Text) && PromptActorsCombobox.Text.Length > 0)
+			{
+				AdditionalData.AddWidgetAnchor(PromptActorsCombobox.Text);
+			}
+		}
+
+		private void PromptActorsCombobox_GotFocus(object sender, RoutedEventArgs e)
+		{
+			PromptActorsCombobox.ItemsSource = AdditionalData.GetWidgetAnchorNames();
+		}
+
+		private void actorName_GotFocus(object sender, RoutedEventArgs e)
+		{
+			actorName.ItemsSource = AdditionalData.GetActorNames();
+		}
+
+		private void actorName_LostFocus(object sender, RoutedEventArgs e)
+		{
+			if (!AdditionalData.GetActorNames().Contains(actorName.Text) && actorName.Text.Length > 0 && actorName.Text != "None") 
+			{
+				AdditionalData.AddDialogueActor(actorName.Text);
+			}
+
+			OnNodeDataChanged(sender, e);
+		}
+
+		private void itemName_LostFocus(object sender, RoutedEventArgs e)
+		{
+			if (!AdditionalData.GetItemNames().Contains(itemName.Text) && itemName.Text.Length > 0 && itemName.Text != "None")
+			{
+				AdditionalData.AddItemName(itemName.Text);
+			}
+
+			OnNodeDataChanged(sender, e);
+		}
+
+		private void itemName_GotFocus(object sender, RoutedEventArgs e)
+		{
+			itemName.ItemsSource = AdditionalData.GetItemNames();
+		}
+
+		private void itemName_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			OnNodeDataChanged(sender, e);
+		}
 	}
 }

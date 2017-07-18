@@ -1,0 +1,43 @@
+﻿<Window x:Class="DialogueEditor.Files.AdditionalData"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DialogueEditor.Files"
+        mc:Ignorable="d"
+        Title=" Additional dialogue data" Height="500" Width="500" WindowStyle="ToolWindow">
+    <Grid>
+        <TabControl>
+            <TabItem Header="Actors">
+                <Border Background="#FFE5E5E5">
+                    <DataGrid x:Name="ActorNames" AutoGenerateColumns="False" CanUserAddRows="True" CanUserDeleteRows="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Actor name" Binding="{Binding actorName}" Width="150"/>
+                            <DataGridTextColumn Header="Description" Binding="{Binding description}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Border>
+            </TabItem>
+            <TabItem Header="Widget Anchors">
+                <Border Background="#FFE5E5E5">
+                    <DataGrid x:Name="WidgetAnchorsDataGrid" AutoGenerateColumns="False" CanUserAddRows="True" CanUserDeleteRows="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Actor name" Binding="{Binding actorName}" Width="150"/>
+                            <DataGridTextColumn Header="Description" Binding="{Binding description}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                </Border>
+            </TabItem>
+            <TabItem Header="Inventory Items">
+                <Border Background="#FFE5E5E5">
+                    <DataGrid x:Name="InventoryItemNames" AutoGenerateColumns="False" CanUserAddRows="True" CanUserDeleteRows="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Item Name" Binding="{Binding Name}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Border>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
