@@ -129,6 +129,7 @@ namespace DialogueEditor
 					sourceData.command = "leave";
 					sourceData.commandArguments = string.Empty;
 					break;
+				case "Shortcut target":
 				case "Shortcut":
 					sourceData.command = "go-to";
 					sourceData.commandArguments = string.Empty;
@@ -176,6 +177,7 @@ namespace DialogueEditor
 				case "Shortcut":
 					d.command = "go-to";
 					d.commandArguments = string.Empty;
+					d.nextRowName = TargetDialogueID.Text;
 					break;
 				case "Multiple choices":
 					d.command = "options";
@@ -265,6 +267,7 @@ namespace DialogueEditor
 						sourceData.nextRowName = sTrue + " " + sFalse;
 					}
 					break;
+				case "Shortcut target":
 				case "Call actor event":
 				case "Call level event":
 				case "Normal dialogue":
@@ -555,6 +558,7 @@ namespace DialogueEditor
 						History.History.Do(new History.Actions.Action_ConnectionMade(other, otherPin, this));
 						//other.MakeConnection(this, otherPin);
 						break;
+					case "Shortcut target":
 					case "Call actor event":
 					case "Call level event":
 					case "Normal dialogue":
@@ -754,6 +758,9 @@ namespace DialogueEditor
 				case "Normal dialogue":
 				default:
 					c.R = 98; c.G = 110; c.B = 130; //gray
+					break;
+				case "Shortcut target":
+					c.R = 232; c.G = 225; c.B = 46;	//bright yellow
 					break;
 			}
 

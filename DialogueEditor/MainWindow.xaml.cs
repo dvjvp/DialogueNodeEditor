@@ -313,7 +313,7 @@ namespace DialogueEditor
 			{
 				EndRubberbandSelection(sender, e);
 			}
-			else if (panInProgress)
+			if (panInProgress)
 			{
 				EndPanCanvas(sender, e);
 			}

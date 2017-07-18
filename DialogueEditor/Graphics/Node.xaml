@@ -41,7 +41,24 @@
                         </Grid.RowDefinitions>
 
                         <Label Grid.Column="0" Grid.Row="0" FontWeight="DemiBold" IsHitTestVisible="False">Dialogue ID:</Label>
-                        <TextBox x:Name="nodeNameField" Text="NodeName" Grid.Column="1" Grid.Row="0" IsHitTestVisible="False" IsReadOnly="True" Background="Transparent" BorderThickness="0" VerticalAlignment="Center"/>
+                        <TextBox x:Name="nodeNameField" Text="NodeName" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center">
+                            <TextBox.Style>
+                                <Style TargetType="TextBox">
+                                    <Setter Property="IsHitTestVisible" Value="False"/>
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Setter Property="IsReadOnly" Value="True"/>
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ElementName=outputType, Path=SelectedItem.Content}" Value="Shortcut target">
+                                            <Setter Property="IsHitTestVisible" Value="True"/>
+                                            <Setter Property="Background" Value="White"/>
+                                            <Setter Property="IsReadOnly" Value="False"/>
+                                            <Setter Property="BorderThickness" Value="1"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
 
 
                     </Grid>
@@ -97,13 +114,14 @@
                         <ComboBoxItem Content="Call actor event"/>
                         <ComboBoxItem Content="Call level event"/>
                         <ComboBoxItem Content="Shortcut"/>
+                        <ComboBoxItem Content="Shortcut target"/>
                     </ComboBox>
                 </StackPanel>
             </Border>
 
             <!-- OUTPUTS -->
 
-            <!-- Normal dialogue output -->
+            <!-- Normal dialogue output &  -->
             <Border BorderBrush="Black" BorderThickness="1" Grid.Row="5" Background="#3f3f3f3f">
                 <Border.Style>
                     <Style TargetType="Border">
@@ -112,12 +130,9 @@
                             <DataTrigger Binding="{Binding ElementName=outputType, Path=SelectedItem.Content}" Value="Normal dialogue">
                                 <Setter Property="Visibility" Value="Visible"/>
                             </DataTrigger>
-                            <!-- <DataTrigger Binding="{Binding ElementName=outputType, Path=SelectedItem.Content}" Value="Call actor event"> -->
-                            <!--                             <Setter Property="Visibility" Value="Visible"/> -->
-                            <!--                         </DataTrigger> -->
-                            <!--                         <DataTrigger Binding="{Binding ElementName=outputType, Path=SelectedItem.Content}" Value="Call level event"> -->
-                            <!--                             <Setter Property="Visibility" Value="Visible"/> -->
-                            <!--                         </DataTrigger> -->
+                            <DataTrigger Binding="{Binding ElementName=outputType, Path=SelectedItem.Content}" Value="Shortcut target">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </Border.Style>
@@ -274,6 +289,7 @@
                     <TextBox x:Name="TargetDialogueID" Grid.Row="1" Margin="2" LostFocus="OnNodeDataChanged"/>
                 </Grid>
             </Border>
+            
         </Grid>
     </Border>
     
