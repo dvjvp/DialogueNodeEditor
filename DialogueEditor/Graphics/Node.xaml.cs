@@ -829,8 +829,11 @@ namespace DialogueEditor
 			{
 				if (item.parentFrom.outputType.Text == "Multiple choices")
 				{
-					BorderPrompt.Visibility = Visibility.Visible;
-					return;
+					if(!(item.parentFrom.outputPinMultipleChoicesDefault == item.objFrom))
+					{
+						BorderPrompt.Visibility = Visibility.Visible;
+						return;
+					}
 				}
 			}
 			BorderPrompt.Visibility = Visibility.Collapsed;
