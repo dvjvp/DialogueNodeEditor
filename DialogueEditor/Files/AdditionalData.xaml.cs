@@ -1,6 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Forms;
+using System;
+using System.Xml.Serialization;
 
 namespace DialogueEditor.Files
 {
@@ -9,10 +13,33 @@ namespace DialogueEditor.Files
 	/// </summary>
 	public partial class AdditionalData : Window
 	{
+		[Serializable]
 		public class DialogueActor
 		{
-			public string actorName { get; set; }
-			public string description { get; set; }
+			private string _actorName;
+			public string actorName
+			{
+				get
+				{
+					return _actorName;
+				}
+				set
+				{
+					_actorName = value;
+				}
+			}
+			private string _description;
+			public string description
+			{
+				get
+				{
+					return _description;
+				}
+				set
+				{
+					_description = value;
+				}
+			}
 
 			public DialogueActor(string objectName, string description)
 			{
@@ -22,9 +49,10 @@ namespace DialogueEditor.Files
 			public DialogueActor()
 			{
 				actorName = "<<Object name>>";
-				description = "<<Object description>>";
+				description = "<<Description>>";
 			}
 		}
+		[Serializable]
 		public class ItemName
 		{
 			public string Name { get; set; }
@@ -38,6 +66,26 @@ namespace DialogueEditor.Files
 			}
 		}
 
+		[Serializable]
+		public class SerializationData
+		{
+			public ItemName[] itemNames;
+			public DialogueActor[] actors;
+
+			public static SerializationData Create()
+			{
+				var s = new SerializationData();
+				s.itemNames = ItemNames.ToArray();
+				s.actors = Actors.ToArray();
+				return s;
+			}
+
+			public void Load()
+			{
+				AdditionalData.actors = this.actors.ToList();
+				AdditionalData.itemNames = this.itemNames.ToList();
+			}
+		}
 
 		private static List<DialogueActor> widgetAnchors;
 		private static List<DialogueActor> actors;
@@ -57,7 +105,7 @@ namespace DialogueEditor.Files
 		{
 			get
 			{
-				if(actors==null)
+				if (actors == null) 
 				{
 					actors = new List<DialogueActor>();
 				}
@@ -115,6 +163,49 @@ namespace DialogueEditor.Files
 			WidgetAnchorsDataGrid.ItemsSource = WidgetAnchors;
 			ActorNames.ItemsSource = Actors;
 			InventoryItemNames.ItemsSource = ItemNames;
+		}
+
+		private void LoadDataFromFileButton_Click(object sender, RoutedEventArgs e)
+		{
+			OpenFileDialog dialog = new OpenFileDialog();
+			dialog.Filter = "Dialogue extra data (*.dlgdt)|*.dlgdt|All files (*.*)|*.*";
+			dialog.Title = "Select file to open";
+			dialog.Multiselect = false;
+			dialog.CheckFileExists = true;
+			dialog.DefaultExt = ".dlgdt";
+
+			if (dialog.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+			{
+				return;
+			}
+
+			using (var stream = File.OpenRead(dialog.FileName))
+			{
+				var serializer = new XmlSerializer(typeof(SerializationData));
+				(serializer.Deserialize(stream) as SerializationData).Load();
+			}
+
+			SetupDataGridReferences();
+		}
+
+		private void SaveDataToFileButton_Click(object sender, RoutedEventArgs e)
+		{
+			SaveFileDialog dialog = new SaveFileDialog();
+			dialog.Filter = "Dialogue extra data (*.dlgdt)|*.dlgdt|All files (*.*)|*.*";
+			dialog.Title = "Select save location";
+			dialog.DefaultExt = ".dlgdt";
+
+			if (dialog.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+			{
+				return;
+			}
+
+
+			using (var stream = File.Create(dialog.FileName))
+			{
+				var serializer = new XmlSerializer(typeof(SerializationData));
+				serializer.Serialize(stream, SerializationData.Create());
+			}
 		}
 	}
 }

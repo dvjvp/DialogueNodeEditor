@@ -7,7 +7,20 @@
         mc:Ignorable="d"
         Title=" Additional dialogue data" Height="500" Width="500" WindowStyle="ToolWindow">
     <Grid>
-        <TabControl>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+
+        <UniformGrid Grid.Row="0" Columns="2" Background="#3f3f3f3f">
+            <Button Content="Load data from file" Width="150" Height="30" Click="LoadDataFromFileButton_Click"/>
+            <Button Content="Save data to file" Width="150" Height="30" Grid.Column="1" Click="SaveDataToFileButton_Click"/>
+        </UniformGrid>
+        
+        
+        
+        <TabControl Grid.Row="1">
             <TabItem Header="Actors">
                 <Border Background="#FFE5E5E5">
                     <DataGrid x:Name="ActorNames" AutoGenerateColumns="False" CanUserAddRows="True" CanUserDeleteRows="True">
