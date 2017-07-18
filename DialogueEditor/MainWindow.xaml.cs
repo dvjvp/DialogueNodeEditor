@@ -65,6 +65,7 @@ namespace DialogueEditor
 
 			AutoSaveTimer_Tick(null, null);
 		}
+		
 
 		private void AutoSaveTimer_Tick(object sender, EventArgs e)
 		{
@@ -295,7 +296,7 @@ namespace DialogueEditor
 		{
 			if (Mouse.DirectlyOver == drawArea)
 			{
-				Keyboard.Focus(drawArea);
+				drawArea.Focus();	//because of this application crashes on alt+tab. Fix it, yo!
 			}
 
 			if (e.LeftButton == MouseButtonState.Pressed && !Keyboard.IsKeyDown(Key.LeftAlt))
