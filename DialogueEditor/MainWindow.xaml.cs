@@ -65,10 +65,17 @@ namespace DialogueEditor
 		private void AutoSaveTimer_Tick(object sender, EventArgs e)
 		{
 			string initialFile = CSVParser.filePath;
-			CSVParser.SaveFile(CSVParser.GetAutosaveFilepath(), nodes);
-			CSVParser.filePath = initialFile;
+			if (initialFile != null)
+			{
+				CSVParser.SaveFile(CSVParser.GetAutosaveFilepath(), nodes);
+				CSVParser.filePath = initialFile;
 
-			MessageLabel.Content = "Finished autosave.";
+				MessageLabel.Content = "Finished autosave.";
+			}
+			else
+			{
+				MessageLabel.Content = "Autosave failed. File needs to be saved manually (or opened from file) before attempting to auto-save.";
+			}
 		}
 
 		private void OpenFile(string filePath)
