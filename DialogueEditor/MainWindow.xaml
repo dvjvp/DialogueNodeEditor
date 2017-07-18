@@ -234,23 +234,67 @@
                                 <ColumnDefinition Width="20"/>
                                 <ColumnDefinition Width="80"/>
                                 <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="20"/>
                                 <ColumnDefinition Width="80"/>
                                 <ColumnDefinition Width="80"/>
-                                <ColumnDefinition Width="80"/>
-                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="20"/>
                                 <ColumnDefinition Width="80"/>
                                 <ColumnDefinition Width="80"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
-                            <Button Grid.Column="0" Background="#FFc2c2c2" Margin="2.5" ToolTip="Select all nodes in same 'island'. Selects all nodes that are connected with each other in some way." Click="SelectConnected_Click">
+                            <Button Grid.Column="0" Background="#FFc2c2c2" Margin="2.5" ToolTip="Allows to specify actor and text he's saying." Click="ButtonAddNode_Click">
                                 <StackPanel >
-                                    <Image Source="Resources/SelectConnected.png" Width="40"/>
-                                    <TextBlock HorizontalAlignment="Center"  LineStackingStrategy="BlockLineHeight" TextWrapping="Wrap" LineHeight="10">Select connected</TextBlock>
+                                    <Image Source="Resources/NodeIcons/NormalDialogue.png" Width="40"/>
+                                    <TextBlock HorizontalAlignment="Center"  LineStackingStrategy="BlockLineHeight" TextWrapping="Wrap" LineHeight="10">Dialogue text</TextBlock>
                                 </StackPanel>
                             </Button>
 
+                            <Button Grid.Column="1" Background="#FFc2c2c2" Margin="2.5" ToolTip="Quits dialogue. Should be at the end of every dialogue." Click="ButtonAddEndDialogueNode_Click">
+                                <StackPanel >
+                                    <Image Source="Resources/NodeIcons/EndDialogue.png" Width="40"/>
+                                    <TextBlock HorizontalAlignment="Center"  LineStackingStrategy="BlockLineHeight" TextWrapping="Wrap" LineHeight="10">End dialogue</TextBlock>
+                                </StackPanel>
+                            </Button>
 
+                            <Button Grid.Column="3" Background="#FFc2c2c2" Margin="2.5" ToolTip="Checks if player has at least X of item Y in his inventory and allows you to act accordingly." Click="ButtonAddCheckForItemNode_Click">
+                                <StackPanel >
+                                    <Image Source="Resources/NodeIcons/IfPlayerHasItem.png" Width="40"/>
+                                    <TextBlock HorizontalAlignment="Center"  LineStackingStrategy="BlockLineHeight" TextWrapping="Wrap" LineHeight="10">Check for item</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="4" Background="#FFc2c2c2" Margin="2.5" ToolTip="Presents player with number of choices he can pick one from." Click="ButtonAddMultipleChoicesNode_Click">
+                                <StackPanel >
+                                    <Image Source="Resources/NodeIcons/MultipleChoices.png" Width="40"/>
+                                    <TextBlock HorizontalAlignment="Center"  LineStackingStrategy="BlockLineHeight" TextWrapping="Wrap" LineHeight="10">Player's choice</TextBlock>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Grid.Column="6" Background="#FFc2c2c2" Margin="2.5" ToolTip="Calls an event on Level Blueprint in Unreal Engine 4." Click="ButtonAddLevelEventNode_Click">
+                                <StackPanel >
+                                    <Image Source="Resources/NodeIcons/LevelEvent.png" Width="40"/>
+                                    <TextBlock HorizontalAlignment="Center"  LineStackingStrategy="BlockLineHeight" TextWrapping="Wrap" LineHeight="10">Level event</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="7" Background="#FFc2c2c2" Margin="2.5" ToolTip="Calls an event on an Actor in Unreal Engine 4." Click="ButtonAddActorEventNode_Click">
+                                <StackPanel >
+                                    <Image Source="Resources/NodeIcons/ActorEvent.png" Width="40"/>
+                                    <TextBlock HorizontalAlignment="Center"  LineStackingStrategy="BlockLineHeight" TextWrapping="Wrap" LineHeight="10">Actor event</TextBlock>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Grid.Column="9" Background="#FFc2c2c2" Margin="2.5" ToolTip="Allows you to jump to another node without making connection (to keep the graph clean)." Click="ButtonAddShortcutNode_Click">
+                                <StackPanel >
+                                    <Image Source="Resources/NodeIcons/Shortcut.png" Width="40"/>
+                                    <TextBlock HorizontalAlignment="Center"  LineStackingStrategy="BlockLineHeight" TextWrapping="Wrap">Shortcut</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="10" Background="#FFc2c2c2" Margin="2.5" ToolTip="Allows you to change it's name, making it clear and easy to see, where Shortcut node is making you go." Click="ButtonAddShortcutTargetNode_Click">
+                                <StackPanel >
+                                    <Image Source="Resources/NodeIcons/ShortcutTarget.png" Width="40"/>
+                                    <TextBlock HorizontalAlignment="Center"  LineStackingStrategy="BlockLineHeight" TextWrapping="Wrap" LineHeight="10">Shortcut target</TextBlock>
+                                </StackPanel>
+                            </Button>
 
                         </Grid>
                     </TabItem>

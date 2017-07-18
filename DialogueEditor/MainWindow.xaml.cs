@@ -343,10 +343,16 @@ namespace DialogueEditor
 
 		private void ButtonAddNode_Click(object sender, RoutedEventArgs e)
 		{
+			AddNodeImplementation();
+		}
+
+		private Node AddNodeImplementation()
+		{
 			var node = AddNode(new DialogueDataLine());
 			node.CreateUniqueID();
 			node.SetPosition(GetDrawAreaViewCenter().X, GetDrawAreaViewCenter().Y);
 			History.History.AddToUndoHistory(new History.Actions.Action_NodeAdded(node));
+			return node;
 		}
 
 		private void drawArea_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
@@ -435,6 +441,41 @@ namespace DialogueEditor
 			{
 				n.LoadOutputConnectionDataFromSource();
 			}
+		}
+
+		private void ButtonAddEndDialogueNode_Click(object sender, RoutedEventArgs e)
+		{
+			AddNodeImplementation().outputType.Text = "End dialogue";
+		}
+
+		private void ButtonAddCheckForItemNode_Click(object sender, RoutedEventArgs e)
+		{
+			AddNodeImplementation().outputType.Text = "If player has item";
+		}
+
+		private void ButtonAddMultipleChoicesNode_Click(object sender, RoutedEventArgs e)
+		{
+			AddNodeImplementation().outputType.Text = "Multiple choices";
+		}
+
+		private void ButtonAddLevelEventNode_Click(object sender, RoutedEventArgs e)
+		{
+			AddNodeImplementation().outputType.Text = "Call level event";
+		}
+
+		private void ButtonAddActorEventNode_Click(object sender, RoutedEventArgs e)
+		{
+			AddNodeImplementation().outputType.Text = "Call actor event";
+		}
+
+		private void ButtonAddShortcutNode_Click(object sender, RoutedEventArgs e)
+		{
+			AddNodeImplementation().outputType.Text = "Shortcut";
+		}
+
+		private void ButtonAddShortcutTargetNode_Click(object sender, RoutedEventArgs e)
+		{
+			AddNodeImplementation().outputType.Text = "Shortcut target";
 		}
 
 		#endregion
@@ -1000,11 +1041,13 @@ namespace DialogueEditor
 			}
 		}
 
-		#endregion
-
 		private void OpenDialogueData(object sender, RoutedEventArgs e)
 		{
 			(new AdditionalData()).ShowDialog();
 		}
+
+		#endregion
+
+
 	}
 }

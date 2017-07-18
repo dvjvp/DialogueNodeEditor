@@ -38,7 +38,12 @@ namespace DialogueEditor
 		{
 			nodeNameField.Text = sourceData.rowName;
 			string[] cmndArgs = sourceData.commandArguments.Split(new string[] { ": " }, StringSplitOptions.None);
-			try
+			if (cmndArgs.Length == 1) 
+			{
+				actorName.Text = "None";
+				dialogueText.Text = cmndArgs[0];
+			}
+			else try
 			{
 				actorName.Text = cmndArgs[0];
 				dialogueText.Text = "";
@@ -52,8 +57,9 @@ namespace DialogueEditor
 					dialogueText.Text += cmndArgs[cmndArgs.Length - 1];
 				}
 			}
-			catch (Exception)
+			catch (Exception e)
 			{
+					Console.WriteLine(e.Message);
 			}
 			PromptTextBox.Text = sourceData.prompt;
 			SetPosition(sourceData.nodePositionX, sourceData.nodePositionY);

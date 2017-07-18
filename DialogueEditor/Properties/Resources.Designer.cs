@@ -63,6 +63,16 @@ namespace DialogueEditor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ActorEvent {
+            get {
+                object obj = ResourceManager.GetObject("ActorEvent", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap AddNode {
             get {
                 object obj = ResourceManager.GetObject("AddNode", resourceCulture);
@@ -126,6 +136,16 @@ namespace DialogueEditor.Properties {
         internal static System.Drawing.Bitmap DeselectAll {
             get {
                 object obj = ResourceManager.GetObject("DeselectAll", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap EndDialogue {
+            get {
+                object obj = ResourceManager.GetObject("EndDialogue", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -223,6 +243,16 @@ namespace DialogueEditor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap IfPlayerHasItem {
+            get {
+                object obj = ResourceManager.GetObject("IfPlayerHasItem", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap LayoutAuto {
             get {
                 object obj = ResourceManager.GetObject("LayoutAuto", resourceCulture);
@@ -253,9 +283,39 @@ namespace DialogueEditor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap LevelEvent {
+            get {
+                object obj = ResourceManager.GetObject("LevelEvent", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap MultipleChoices {
+            get {
+                object obj = ResourceManager.GetObject("MultipleChoices", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap New {
             get {
                 object obj = ResourceManager.GetObject("New", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap NormalDialogue {
+            get {
+                object obj = ResourceManager.GetObject("NormalDialogue", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -356,6 +416,26 @@ namespace DialogueEditor.Properties {
         internal static System.Drawing.Bitmap Settings {
             get {
                 object obj = ResourceManager.GetObject("Settings", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Shortcut {
+            get {
+                object obj = ResourceManager.GetObject("Shortcut", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ShortcutTarget {
+            get {
+                object obj = ResourceManager.GetObject("ShortcutTarget", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
