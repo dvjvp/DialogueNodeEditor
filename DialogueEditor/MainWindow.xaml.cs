@@ -49,6 +49,8 @@ namespace DialogueEditor
 
 			drawArea.Width = BasicallyInfinity;
 			drawArea.Height = BasicallyInfinity;
+			CommentArea.Width = BasicallyInfinity;
+			CommentArea.Height = BasicallyInfinity;
 
 			int autoSaveFrequency = (int)Properties.Settings.Default["AutosaveFrequencyMins"];
 			if (autoSaveFrequency > 0) //if input is invalid, disable autosave
@@ -298,7 +300,18 @@ namespace DialogueEditor
 
 			if (e.LeftButton == MouseButtonState.Pressed && !Keyboard.IsKeyDown(Key.LeftAlt))
 			{
-				StartRubberbandSelection(sender, e);
+				if (e.ClickCount == 2) 
+				{
+					Point mousePos = e.GetPosition(drawArea);
+					var node = AddNode(new DialogueDataLine());
+					node.SetPosition(mousePos.X, mousePos.Y);
+					node.CreateUniqueID();
+					History.History.AddToUndoHistory(new History.Actions.Action_NodeAdded(node));
+				}
+				else
+				{
+					StartRubberbandSelection(sender, e);
+				}
 			}
 			else if (e.MiddleButton == MouseButtonState.Pressed
 				|| (Keyboard.IsKeyDown(Key.LeftAlt) && e.LeftButton == MouseButtonState.Pressed))
@@ -335,6 +348,10 @@ namespace DialogueEditor
 
 		}
 
+		private void drawArea_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			StartPanCanvas(sender, e);
+		}
 
 
 		#endregion
@@ -355,14 +372,6 @@ namespace DialogueEditor
 			return node;
 		}
 
-		private void drawArea_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
-		{
-			Point mousePos = e.GetPosition(drawArea);
-			var node = AddNode(new DialogueDataLine());
-			node.SetPosition(mousePos.X, mousePos.Y);
-			node.CreateUniqueID();
-			History.History.AddToUndoHistory(new History.Actions.Action_NodeAdded(node));
-		}
 
 		private Node AddNode(DialogueDataLine data)
 		{

@@ -390,7 +390,7 @@
         <Border x:Name="drawAreaBorder"  BorderBrush="Black" BorderThickness="1"  Grid.Row="1" Margin="5" ClipToBounds="True">
             <Canvas Name="drawArea" Background="#8f8f8f" Focusable="True"
                     MouseWheel="Canvas_MouseWheel" MouseDown="drawArea_MouseDown" MouseUp="drawArea_MouseUp" MouseMove="drawArea_MouseMove"
-                    MouseRightButtonDown="drawArea_MouseRightButtonDown"
+                    MouseRightButtonDown="drawArea_MouseRightButtonDown" 
                     >
                 <Canvas.RenderTransform>
                     <TransformGroup x:Name="canvasTotalTransform">
@@ -398,6 +398,9 @@
                         <ScaleTransform x:Name="canvasZoom"/>
                     </TransformGroup>
                 </Canvas.RenderTransform>
+
+                <Canvas x:Name="CommentArea" Background="Transparent" IsHitTestVisible="False"/>
+
             </Canvas>
 
         </Border>
