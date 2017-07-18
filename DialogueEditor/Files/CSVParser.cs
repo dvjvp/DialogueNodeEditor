@@ -153,11 +153,11 @@ namespace DialogueEditor.Files
 		public static string GetFileOpenLocation()
 		{
 			OpenFileDialog dialog = new OpenFileDialog();
-			dialog.Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
+			dialog.Filter = "Dialogue files (*.dlg)|*dlg|CSV files (*.csv)|*.csv|All files (*.*)|*.*";
 			dialog.Title = "Select file to open";
 			dialog.Multiselect = false;
 			dialog.CheckFileExists = true;
-			dialog.DefaultExt = ".csv";
+			dialog.DefaultExt = ".dlg";
 
 			if (dialog.ShowDialog() == DialogResult.OK)
 			{
@@ -168,12 +168,20 @@ namespace DialogueEditor.Files
 			return null;
 		}
 
-		public static string GetFileSaveLocation()
+		public static string GetFileSaveLocation(bool export = false)
 		{
 			SaveFileDialog dialog = new SaveFileDialog();
-			dialog.Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
 			dialog.Title = "Save dialogue as...";
-			dialog.DefaultExt = ".csv";
+			if(export)
+			{
+				dialog.Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
+				dialog.DefaultExt = ".csv";
+			}
+			else
+			{
+				dialog.Filter = "Dialogue files (*.dlg)|*dlg|CSV files (*.csv)|*.csv|All files (*.*)|*.*";
+				dialog.DefaultExt = ".dlg";
+			}
 
 			if (dialog.ShowDialog() == DialogResult.OK)
 			{
@@ -185,9 +193,14 @@ namespace DialogueEditor.Files
 
 		public static void SaveFile(string filepath, List<Node> nodes)
 		{
-			if (!filePath.EndsWith(".csv") && !filePath.EndsWith(".CSV"))
+			if (filepath == null) 
 			{
-				filePath += ".csv";
+				filepath = Path.Combine(AutosaveLocation, "autosave");
+			}
+
+			if (!filepath.EndsWith(".dlg"))
+			{
+				filepath += ".dlg";
 			}
 
 			foreach (var node in nodes)
@@ -265,12 +278,12 @@ namespace DialogueEditor.Files
 		{
 			string newSavePath = Path.Combine(
 				AutosaveLocation,
-				Path.GetFileName(filePath)
+				(filePath == null ? "autosave" : Path.GetFileName(filePath))
 				+ "__"
 				+ DateTime.Now.ToShortDateString()
 				+ "__"
-				+ DateTime.Now.ToShortTimeString()
-				+".csv"
+				+ DateTime.Now.ToShortTimeString().Replace(":", "..")
+				+".dlg"
 				);
 
 

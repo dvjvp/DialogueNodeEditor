@@ -60,22 +60,15 @@ namespace DialogueEditor
 			}
 
 			History.History.UpdateHistoryButtonsVisuals();
+
+			AutoSaveTimer_Tick(null, null);
 		}
 
 		private void AutoSaveTimer_Tick(object sender, EventArgs e)
 		{
 			string initialFile = CSVParser.filePath;
-			if (initialFile != null)
-			{
-				CSVParser.SaveFile(CSVParser.GetAutosaveFilepath(), nodes);
-				CSVParser.filePath = initialFile;
-
-				MessageLabel.Content = "Finished autosave.";
-			}
-			else
-			{
-				MessageLabel.Content = "Autosave failed. File needs to be saved manually (or opened from file) before attempting to auto-save.";
-			}
+			CSVParser.SaveFile(CSVParser.GetAutosaveFilepath(), nodes);
+			CSVParser.filePath = initialFile;
 		}
 
 		private void OpenFile(string filePath)
