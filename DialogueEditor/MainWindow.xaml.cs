@@ -717,6 +717,7 @@ namespace DialogueEditor
 
 		private void ButtonExport_Click(object sender, RoutedEventArgs e)
 		{
+			string previousFilepath = CSVParser.filePath;
 			string filepath = CSVParser.GetFileSaveLocation();
 
 			if (filepath == null)
@@ -725,6 +726,7 @@ namespace DialogueEditor
 			}
 
 			CSVParser.ExportFile(filepath, nodes);
+			CSVParser.filePath = previousFilepath;
 			MessageLabel.Content = "Exported file.";
 		}
 
