@@ -568,6 +568,7 @@ namespace DialogueEditor
 						return;
 					case "Shortcut":
 						History.History.Do(new History.Actions.Action_ConnectionMadeGoTo(other, this));
+						other.PromptTextBox.Text = this.PromptTextBox.Text;
 						//other.TargetDialogueID.Text = sourceData.rowName;
 						break;
 					case "Multiple choices":
@@ -938,5 +939,19 @@ namespace DialogueEditor
 
 		#endregion
 
+		private void TargetDialogueID_LostFocus(object sender, RoutedEventArgs e)
+		{
+			try
+			{
+				Node n = MainWindow.instance.nodeMap[TargetDialogueID.Text];
+				PromptTextBox.Text = n.PromptTextBox.Text;
+			}
+			catch (Exception)
+			{
+				
+			}
+
+			OnNodeDataChanged(sender, e);
+		}
 	}
 }

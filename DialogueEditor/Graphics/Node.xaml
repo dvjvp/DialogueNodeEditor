@@ -290,7 +290,7 @@
                     </Grid.RowDefinitions>
 
                     <Label Grid.Row="0" Foreground="White" HorizontalAlignment="Center">Target dialogue ID</Label>
-                    <TextBox x:Name="TargetDialogueID" Grid.Row="1" Margin="2" LostFocus="OnNodeDataChanged"/>
+                    <TextBox x:Name="TargetDialogueID" Grid.Row="1" Margin="2" LostFocus="TargetDialogueID_LostFocus"/>
                 </Grid>
             </Border>
             
