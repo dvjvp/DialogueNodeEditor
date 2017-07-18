@@ -101,7 +101,7 @@ namespace DialogueEditor
 				case "go-to":
 					if (!withoutOutputType)
 					{
-						outputType.Text = "Go to node";
+						outputType.Text = "Shortcut";
 					}
 					TargetDialogueID.Text = sourceData.nextRowName;
 					break;
@@ -129,7 +129,7 @@ namespace DialogueEditor
 					sourceData.command = "leave";
 					sourceData.commandArguments = string.Empty;
 					break;
-				case "Go to node":
+				case "Shortcut":
 					sourceData.command = "go-to";
 					sourceData.commandArguments = string.Empty;
 					break;
@@ -173,7 +173,7 @@ namespace DialogueEditor
 					d.command = "leave";
 					d.commandArguments = string.Empty;
 					break;
-				case "Go to node":
+				case "Shortcut":
 					d.command = "go-to";
 					d.commandArguments = string.Empty;
 					break;
@@ -211,7 +211,7 @@ namespace DialogueEditor
 				case "End dialogue":
 					sourceData.nextRowName = "None";
 					break;
-				case "Go to node":
+				case "Shortcut":
 					sourceData.nextRowName = TargetDialogueID.Text;
 					break;
 				case "Multiple choices":
@@ -540,7 +540,7 @@ namespace DialogueEditor
 				{
 					case "End dialogue":
 						return;
-					case "Go to node":
+					case "Shortcut":
 						History.History.Do(new History.Actions.Action_ConnectionMadeGoTo(other, this));
 						//other.TargetDialogueID.Text = sourceData.rowName;
 						break;
@@ -586,7 +586,7 @@ namespace DialogueEditor
 					case "End dialogue":
 						Console.WriteLine("Trying to connect input to \"End\" node. Aborting.");
 						return;
-					case "Go to node":
+					case "Shortcut":
 						TryConnecting(thisPin, other, null);
 						//other.TargetDialogueID.Text = sourceData.rowName;
 						break;
@@ -736,7 +736,7 @@ namespace DialogueEditor
 				case "End dialogue":
 					c.R = 128; c.G = 0; c.B = 0; //red
 					break;
-				case "Go to node":
+				case "Shortcut":
 					c.R = 196; c.G = 153; c.B = 0;	//orange
 					break;
 				case "Multiple choices":

@@ -166,7 +166,6 @@ namespace DialogueEditor
 				e.Handled = true;
 			}
 
-			//Don't react to key presses when writing in a textbox
 			if (Keyboard.FocusedElement != drawArea)
 			{
 				return;
@@ -209,7 +208,7 @@ namespace DialogueEditor
 					e.Handled = true;
 					break;
 				case Key.S:
-					if(Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
+					if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
 					{
 						ButtonSave_Click(null, null);
 					}
@@ -240,7 +239,7 @@ namespace DialogueEditor
 					}
 					break;
 				case Key.F:
-					if(Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
+					if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
 					{
 						BringToViewportButton_Click(null, null);
 					}
@@ -250,18 +249,10 @@ namespace DialogueEditor
 					}
 					break;
 				case Key.O:
-					if(Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
+					if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
 					{
 						ButtonOpen_Click(null, null);
 					}
-					break;
-				case Key.OemMinus:
-				case Key.Subtract:
-					Zoom(false);
-					break;
-				case Key.OemPlus:
-				case Key.Add:
-					Zoom(true);
 					break;
 
 			}
@@ -269,12 +260,9 @@ namespace DialogueEditor
 
 		private void Canvas_MouseWheel(object sender, MouseWheelEventArgs e)
 		{
-			Zoom(e.Delta > 0);
-		}
+			Point oldCenter = GetDrawAreaViewCenter();
 
-		public void Zoom(bool zoomIn)
-		{
-			if (zoomIn)
+			if (e.Delta > 0) 
 			{
 				canvasZoom.ScaleX += zoomSpeed;
 				canvasZoom.ScaleY += zoomSpeed;
@@ -286,6 +274,10 @@ namespace DialogueEditor
 			}
 			canvasZoom.ScaleX = Math.Max(canvasZoom.ScaleX, 0.025);
 			canvasZoom.ScaleY = Math.Max(canvasZoom.ScaleY, 0.025);
+
+			Vector offset = GetDrawAreaViewCenter() - oldCenter;
+
+			PanCanvas(offset.X, offset.Y);
 		}
 
 		public Point GetDrawAreaViewCenter()
@@ -321,12 +313,13 @@ namespace DialogueEditor
 			{
 				EndRubberbandSelection(sender, e);
 			}
-			if (panInProgress)
+			else if (panInProgress)
 			{
 				EndPanCanvas(sender, e);
 			}
 
 		}
+
 
 		private void drawArea_MouseMove(object sender, MouseEventArgs e)
 		{
@@ -865,7 +858,7 @@ namespace DialogueEditor
 		{
 			MessageBox.Show("\"Woodpecker\" Dialogue editor for Chernobyl Game by The Farm 51.\n"
 				+"Creator: Daniel Janowski\n"
-				+"Version: 0.7 Beta\n"
+				+"Version: 0.6 Beta\n"
 				+"Last changes: 14-07-2017"
 				,"Application Info"
 				);
@@ -985,20 +978,18 @@ namespace DialogueEditor
 			}
 		}
 
-
 		private void FocusNodesButton_Click(object sender, RoutedEventArgs e)
 		{
 			if (selection.Count >= 1) 
 			{
-				Vector offset = LayoutManager.GetCenter(selection) - GetDrawAreaViewCenter();
-				PanCanvas(offset.X, offset.Y);
+				Vector viewOffset = LayoutManager.GetCenter(selection) - GetDrawAreaViewCenter();
+				PanCanvas(viewOffset.X, viewOffset.Y);
 			}
-
 		}
 
 		private void BringToViewportButton_Click(object sender, RoutedEventArgs e)
 		{
-			if (selection.Count >= 1)
+			if (selection.Count >= 1) 
 			{
 				Point[] previousLocations = selection.Select(n => n.GetPosition()).ToArray();
 				LayoutManager.MoveCenterTo(selection, GetDrawAreaViewCenter());
@@ -1006,7 +997,7 @@ namespace DialogueEditor
 				History.History.Do(new History.Actions.Action_NodesMoved(selection.ToArray(), previousLocations, newLocations));
 			}
 		}
+		
+		#endregion
 	}
-
-	#endregion
 }

@@ -96,7 +96,7 @@
                         <ComboBoxItem Content="If player has item"/>
                         <ComboBoxItem Content="Call actor event"/>
                         <ComboBoxItem Content="Call level event"/>
-                        <ComboBoxItem Content="Go to node"/>
+                        <ComboBoxItem Content="Shortcut"/>
                     </ComboBox>
                 </StackPanel>
             </Border>
@@ -257,7 +257,7 @@
                     <Style TargetType="Border">
                         <Setter Property="Visibility" Value="Collapsed"/>
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding ElementName=outputType, Path=SelectedItem.Content}" Value="Go to node">
+                            <DataTrigger Binding="{Binding ElementName=outputType, Path=SelectedItem.Content}" Value="Shortcut">
                                 <Setter Property="Visibility" Value="Visible"/>
                             </DataTrigger>
                         </Style.Triggers>
