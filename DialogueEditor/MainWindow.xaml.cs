@@ -69,7 +69,7 @@ namespace DialogueEditor
 		private void AutoSaveTimer_Tick(object sender, EventArgs e)
 		{
 			string initialFile = CSVParser.filePath;
-			CSVParser.SaveFile(CSVParser.GetAutosaveFilepath(), nodes);
+			CSVParser.SaveFile(CSVParser.GetAutosaveFilepath(), nodes, comments);
 			CSVParser.filePath = initialFile;
 		}
 
@@ -77,11 +77,19 @@ namespace DialogueEditor
 		{
 			MessageLabel.Content = "Opening file...";
 			DeleteAllNodes();
+			DeleteAllComments();
 
 			List<DialogueDataLine> lines = CSVParser.ReadCSV(filePath);
 			foreach (var line in lines)
 			{
-				AddNode(line);
+				if (line.command == "Comment")
+				{
+					comments.Add(Graphics.Comment.FromDialogueDataLine(line));
+				}
+				else
+				{
+					AddNode(line);
+				}
 			}
 			RefreshNodeConnections();
 
@@ -368,6 +376,13 @@ namespace DialogueEditor
 			comments.Remove(commentToDelete);
 			drawArea.Children.Remove(commentToDelete);
 		}
+		private void DeleteAllComments()
+		{
+			for (int i = comments.Count - 1; i >= 0 ; i--)
+			{
+				DeleteComment(comments[i]);
+			}
+		}
 
 		private void ButtonAddNode_Click(object sender, RoutedEventArgs e)
 		{
@@ -497,12 +512,6 @@ namespace DialogueEditor
 		{
 			AddNodeImplementation().outputType.Text = "Shortcut target";
 		}
-
-		#endregion
-
-		#region Graphics.Comments
-
-
 
 		#endregion
 
@@ -729,7 +738,7 @@ namespace DialogueEditor
 				return;
 			}
 
-			CSVParser.SaveFile(filePath, new List<Node>());
+			CSVParser.SaveFile(filePath, new List<Node>(), new List<Graphics.Comment>());
 			OpenFile(filePath);
 
 			MessageLabel.Content = "Created file.";
@@ -766,7 +775,7 @@ namespace DialogueEditor
 				ButtonSaveAs_Click(sender, e);
 				return;
 			}
-			CSVParser.SaveFile(CSVParser.filePath, nodes);
+			CSVParser.SaveFile(CSVParser.filePath, nodes, comments);
 			MessageLabel.Content = "File saved.";
 		}
 
@@ -927,7 +936,7 @@ namespace DialogueEditor
 		{
 			MessageBox.Show("\"Woodpecker\" Dialogue editor for Chernobyl Game by The Farm 51.\n"
 				+"Creator: Daniel Janowski\n"
-				+"Version: 0.8 Beta\n"
+				+"Version: 0.8.1 Beta\n"
 				+"Last changes: 19-07-2017"
 				,"Application Info"
 				);

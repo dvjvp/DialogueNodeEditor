@@ -52,6 +52,43 @@ namespace DialogueEditor.Graphics
 			return c;
 		}
 
+		public static Comment FromDialogueDataLine(Files.DialogueDataLine line)
+		{
+			Rect r = new Rect();
+			r.X = line.nodePositionX;
+			r.Y = line.nodePositionY;
+			string[] s = line.commandArguments.Split(' ');
+			try
+			{
+				r.Width = double.Parse(s[0]);
+				r.Height = double.Parse(s[1]);
+			}
+			catch (Exception)
+			{
+				r.Width = 300;
+				r.Height = 300;
+			}
+
+			Comment c = Create(r);
+			c.CommentName.Text = line.prompt;
+			return c;
+		}
+		public Files.DialogueDataLine ToSavableData()
+		{
+			Files.DialogueDataLine d = new Files.DialogueDataLine();
+			d.command = "Comment";
+
+			var position = GetPosition();
+			d.nodePositionX = position.X;
+			d.nodePositionY = position.Y;
+
+			d.commandArguments = ((int)Width).ToString() + ' ' + ((int)Height).ToString();
+
+			d.prompt = CommentName.Text;
+
+			return d;
+		}
+
 		private void DeleteButton_Click(object sender, RoutedEventArgs e)
 		{
 			MainWindow.instance.DeleteComment(this);

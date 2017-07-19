@@ -336,7 +336,7 @@ namespace DialogueEditor.Files
 			return null;
 		}
 
-		public static void SaveFile(string filepath, List<Node> nodes)
+		public static void SaveFile(string filepath, List<Node> nodes, List<Graphics.Comment> comments)
 		{
 			if (filepath == null) 
 			{
@@ -365,6 +365,10 @@ namespace DialogueEditor.Files
 				foreach (Node node in nodes)
 				{
 					outputFile.WriteLine(node.sourceData.ToCSVrow());
+				}
+				foreach (Graphics.Comment comment in comments)
+				{
+					outputFile.WriteLine(comment.ToSavableData().ToCSVrow());
 				}
 			}
 		}
