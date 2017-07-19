@@ -49,8 +49,6 @@ namespace DialogueEditor
 
 			drawArea.Width = BasicallyInfinity;
 			drawArea.Height = BasicallyInfinity;
-			CommentArea.Width = BasicallyInfinity;
-			CommentArea.Height = BasicallyInfinity;
 
 			int autoSaveFrequency = (int)Properties.Settings.Default["AutosaveFrequencyMins"];
 			if (autoSaveFrequency > 0) //if input is invalid, disable autosave
@@ -64,6 +62,8 @@ namespace DialogueEditor
 			History.History.UpdateHistoryButtonsVisuals();
 
 			AutoSaveTimer_Tick(null, null);
+
+			drawArea.Children.Add(new Graphics.Comment());
 		}
 		
 
@@ -163,7 +163,7 @@ namespace DialogueEditor
 
 		private void MainWindow_KeyDown(object sender, KeyEventArgs e)
 		{
-			Console.WriteLine("Focus: " + Keyboard.FocusedElement);
+			//Console.WriteLine("Focus: " + Keyboard.FocusedElement);
 			//Do NOT run shortcut menu by pressing F10/alt (windows default), freezing whole application
 			if (e.SystemKey == Key.F10 || e.SystemKey == Key.LeftAlt) 
 			{
@@ -489,6 +489,12 @@ namespace DialogueEditor
 		{
 			AddNodeImplementation().outputType.Text = "Shortcut target";
 		}
+
+		#endregion
+
+		#region Graphics.Comments
+
+
 
 		#endregion
 

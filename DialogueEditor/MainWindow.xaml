@@ -398,9 +398,6 @@
                         <ScaleTransform x:Name="canvasZoom"/>
                     </TransformGroup>
                 </Canvas.RenderTransform>
-
-                <Canvas x:Name="CommentArea" Background="Transparent" IsHitTestVisible="False"/>
-
             </Canvas>
 
         </Border>

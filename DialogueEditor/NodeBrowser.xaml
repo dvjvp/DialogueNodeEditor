@@ -1,0 +1,26 @@
+﻿<Window x:Class="DialogueEditor.NodeBrowser"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DialogueEditor"
+        mc:Ignorable="d"
+        Title="NodeBrowser" Height="300" Width="300" WindowStyle="ToolWindow">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <UniformGrid Background="#3f3f3f3f">
+            <Button Content="Jump to node" Width="100" Height="30"/>
+        </UniformGrid>
+
+        <DataGrid Grid.Row="1">
+            <DataGrid.Columns>
+                
+            </DataGrid.Columns>
+        </DataGrid>
+        
+    </Grid>
+</Window>

@@ -62,6 +62,9 @@
     <Compile Include="Files\AdditionalData.xaml.cs">
       <DependentUpon>AdditionalData.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Graphics\Comment.xaml.cs">
+      <DependentUpon>Comment.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Graphics\GreyableImage.cs" />
     <Compile Include="History\Action.cs" />
     <Compile Include="History\Actions\Action_ConnectionMade.cs" />
@@ -75,6 +78,9 @@
     <Compile Include="History\History.cs" />
     <Compile Include="History\LimitedSizeStack.cs" />
     <Compile Include="LayoutManager.cs" />
+    <Compile Include="NodeBrowser.xaml.cs">
+      <DependentUpon>NodeBrowser.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -87,6 +93,10 @@
       <DependentUpon>TestingWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="Files\AdditionalData.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Graphics\Comment.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -112,6 +122,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Graphics\Node.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="NodeBrowser.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
