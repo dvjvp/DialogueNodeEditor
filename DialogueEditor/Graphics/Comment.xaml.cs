@@ -1,16 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace DialogueEditor.Graphics
@@ -20,19 +11,52 @@ namespace DialogueEditor.Graphics
 	/// </summary>
 	public partial class Comment : UserControl
 	{
+		const double CommentMinimalWidth = 40;
+		const double CommentMinimalHeight = 40;
+
 		bool dragndropInProgress = false;
 		Vector dragndropOffset;
 		Vector initialSize;
 
-		public Comment()
+		#region Creation and destruction
+		protected Comment()
 		{
 			InitializeComponent();
 
 			//position and size have to be set before retrieving it, otherwise it would be NaN
-			Width = 300;
-			Height = 300;
-			SetPosition(new Point(0, 0));
 		}
+				
+		public static Comment Create()
+		{
+			return Create(Rect.Empty);
+		}
+		public static Comment Create(Rect encapsulation)
+		{
+			if (encapsulation == Rect.Empty)
+			{
+				encapsulation = new Rect(MainWindow.instance.GetDrawAreaViewCenter(), new Size(300, 300));
+			}
+			encapsulation.Width = Math.Max(encapsulation.Width, CommentMinimalWidth);
+			encapsulation.Height = Math.Max(encapsulation.Height, CommentMinimalHeight);
+
+			Comment c = new Comment();
+			MainWindow.instance.drawArea.Children.Insert(0, c);
+
+			double heightOffset = /*c.DragndropBorder.ActualHeight*/ 20;
+			double margin = 5;
+			Point position = encapsulation.Location - new Vector(margin, heightOffset + margin);
+
+			c.SetPosition(position);
+			c.Width = encapsulation.Width + (margin * 2);
+			c.Height = encapsulation.Height + heightOffset + (margin * 2);
+			return c;
+		}
+
+		private void DeleteButton_Click(object sender, RoutedEventArgs e)
+		{
+			MainWindow.instance.DeleteComment(this);
+		}
+		#endregion
 
 		#region Transformations
 		public Point GetPosition()
@@ -80,14 +104,14 @@ namespace DialogueEditor.Graphics
 			dragndropInProgress = true;
 			r.CaptureMouse();
 			r.MouseMove += ResizeRight_MouseMove;
-			dragndropOffset = (Vector)e.GetPosition(MainWindow.instance.drawArea);
+			dragndropOffset = GetPosition() - e.GetPosition(MainWindow.instance.drawArea);
 			initialSize = new Vector(Width, Height);
 		}
 		private void ResizeRight_MouseMove(object sender, MouseEventArgs e)
 		{
 			Rectangle r = sender as Rectangle;
-			Point totalChange = e.GetPosition(MainWindow.instance.drawArea) - dragndropOffset + initialSize;
-			Width = totalChange.X;
+			Vector totalChange = e.GetPosition(MainWindow.instance.drawArea) + dragndropOffset + initialSize - GetPosition();
+			Width = Math.Max(totalChange.X, CommentMinimalWidth);
 		}
 		private void ResizeRight_MouseUp(object sender, MouseButtonEventArgs e)
 		{
@@ -108,14 +132,14 @@ namespace DialogueEditor.Graphics
 			dragndropInProgress = true;
 			r.CaptureMouse();
 			r.MouseMove += ResizeDown_MouseMove;
-			dragndropOffset = (Vector)e.GetPosition(MainWindow.instance.drawArea);
+			dragndropOffset = GetPosition() - e.GetPosition(MainWindow.instance.drawArea);
 			initialSize = new Vector(Width, Height);
 		}
 		private void ResizeDown_MouseMove(object sender, MouseEventArgs e)
 		{
 			Rectangle r = sender as Rectangle;
-			Point totalChange = e.GetPosition(MainWindow.instance.drawArea) - dragndropOffset + initialSize;
-			Height = totalChange.Y;
+			Vector totalChange = e.GetPosition(MainWindow.instance.drawArea) + dragndropOffset + initialSize - GetPosition();
+			Height = Math.Max(totalChange.Y, CommentMinimalHeight);
 		}
 		private void ResizeDown_MouseUp(object sender, MouseButtonEventArgs e)
 		{
@@ -137,7 +161,7 @@ namespace DialogueEditor.Graphics
 			r.CaptureMouse();
 			r.MouseMove += ResizeRight_MouseMove;
 			r.MouseMove += ResizeDown_MouseMove;
-			dragndropOffset = (Vector)e.GetPosition(MainWindow.instance.drawArea);
+			dragndropOffset = GetPosition() - e.GetPosition(MainWindow.instance.drawArea);
 			initialSize = new Vector(Width, Height);
 		}
 		private void ResizeDownRight_MouseUp(object sender, MouseButtonEventArgs e)
@@ -169,7 +193,7 @@ namespace DialogueEditor.Graphics
 			Point updatedPosition = e.GetPosition(MainWindow.instance.drawArea) + dragndropOffset;
 			double bottom = Canvas.GetTop(this) + Height;
 			Canvas.SetTop(this, updatedPosition.Y);
-			Height = bottom - updatedPosition.Y;
+			Height = Math.Max(bottom - updatedPosition.Y, CommentMinimalHeight);
 		}
 		private void ResizeUp_MouseUp(object sender, MouseButtonEventArgs e)
 		{
@@ -183,6 +207,111 @@ namespace DialogueEditor.Graphics
 			r.MouseMove -= ResizeUp_MouseMove;
 		}
 
+		/* UP-RIGHT */
+		private void ResizeUpRight_MouseDown(object sender, MouseButtonEventArgs e)
+		{
+			Rectangle r = sender as Rectangle;
+			dragndropInProgress = true;
+			r.CaptureMouse();
+			r.MouseMove += ResizeRight_MouseMove;
+			r.MouseMove += ResizeUp_MouseMove;
+			dragndropOffset = GetPosition() - e.GetPosition(MainWindow.instance.drawArea);
+			initialSize = new Vector(Width, Height);
+		}
+		private void ResizeUpRight_MouseUp(object sender, MouseButtonEventArgs e)
+		{
+			Rectangle r = sender as Rectangle;
+			if (!dragndropInProgress)
+			{
+				return;
+			}
+			dragndropInProgress = false;
+			r.ReleaseMouseCapture();
+			r.MouseMove -= ResizeRight_MouseMove;
+			r.MouseMove -= ResizeUp_MouseMove;
+		}
+
+		/* LEFT */
+		private void ResizeLeft_MouseDown(object sender, MouseButtonEventArgs e)
+		{
+			Rectangle r = sender as Rectangle;
+			dragndropInProgress = true;
+			r.CaptureMouse();
+			r.MouseMove += ResizeLeft_MouseMove;
+			dragndropOffset = GetPosition() - e.GetPosition(MainWindow.instance.drawArea);
+			initialSize = new Vector(Width, Height);
+		}
+		private void ResizeLeft_MouseMove(object sender, MouseEventArgs e)
+		{
+			Rectangle r = sender as Rectangle;
+			Point updatedPosition = e.GetPosition(MainWindow.instance.drawArea) + dragndropOffset;
+			double right = Canvas.GetLeft(this) + Width;
+			Canvas.SetLeft(this, updatedPosition.X);
+			Width = Math.Max(right - updatedPosition.X, CommentMinimalWidth);
+		}
+		private void ResizeLeft_MouseUp(object sender, MouseButtonEventArgs e)
+		{
+			Rectangle r = sender as Rectangle;
+			if (!dragndropInProgress)
+			{
+				return;
+			}
+			dragndropInProgress = false;
+			r.ReleaseMouseCapture();
+			r.MouseMove -= ResizeLeft_MouseMove;
+		}
+
+		/* UP-LEFT */
+		private void ResizeUpLeft_MouseDown(object sender, MouseButtonEventArgs e)
+		{
+			Rectangle r = sender as Rectangle;
+			dragndropInProgress = true;
+			r.CaptureMouse();
+			r.MouseMove += ResizeLeft_MouseMove;
+			r.MouseMove += ResizeUp_MouseMove;
+			dragndropOffset = GetPosition() - e.GetPosition(MainWindow.instance.drawArea);
+			initialSize = new Vector(Width, Height);
+		}
+		private void ResizeUpLeft_MouseUp(object sender, MouseButtonEventArgs e)
+		{
+			Rectangle r = sender as Rectangle;
+			if (!dragndropInProgress)
+			{
+				return;
+			}
+			dragndropInProgress = false;
+			r.ReleaseMouseCapture();
+			r.MouseMove -= ResizeLeft_MouseMove;
+			r.MouseMove -= ResizeUp_MouseMove;
+		}
+
+		/* DOWN-LEFT */
+		private void ResizeDownLeft_MouseDown(object sender, MouseButtonEventArgs e)
+		{
+			Rectangle r = sender as Rectangle;
+			dragndropInProgress = true;
+			r.CaptureMouse();
+			r.MouseMove += ResizeLeft_MouseMove;
+			r.MouseMove += ResizeDown_MouseMove;
+			dragndropOffset = GetPosition() - e.GetPosition(MainWindow.instance.drawArea);
+			initialSize = new Vector(Width, Height);
+		}
+		private void ResizeDownLeft_MouseUp(object sender, MouseButtonEventArgs e)
+		{
+			Rectangle r = sender as Rectangle;
+			if (!dragndropInProgress)
+			{
+				return;
+			}
+			dragndropInProgress = false;
+			r.ReleaseMouseCapture();
+			r.MouseMove -= ResizeLeft_MouseMove;
+			r.MouseMove -= ResizeDown_MouseMove;
+		}
+
+
 		#endregion
+
+
 	}
 }

@@ -240,6 +240,8 @@
                                 <ColumnDefinition Width="20"/>
                                 <ColumnDefinition Width="80"/>
                                 <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="80"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
@@ -293,6 +295,13 @@
                                 <StackPanel >
                                     <Image Source="Resources/NodeIcons/ShortcutTarget.png" Width="40"/>
                                     <TextBlock HorizontalAlignment="Center"  LineStackingStrategy="BlockLineHeight" TextWrapping="Wrap" LineHeight="10">Shortcut target</TextBlock>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Grid.Column="12" Background="#FFc2c2c2" Margin="2.5" ToolTip="Surrounds selected nodes with comment block. If no nodes selected, creates a comment block on screen center. Shortcut: 'C'." Click="ButtonAddComment_Click">
+                                <StackPanel >
+                                    <Image Source="Resources/NodeIcons/Comment.png" Width="40"/>
+                                    <TextBlock HorizontalAlignment="Center"  LineStackingStrategy="BlockLineHeight" TextWrapping="Wrap" LineHeight="10">Add comment</TextBlock>
                                 </StackPanel>
                             </Button>
 

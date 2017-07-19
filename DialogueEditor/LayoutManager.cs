@@ -381,7 +381,7 @@ namespace DialogueEditor
 			}
 		}
 
-		private static Rect GetBounds(List<Node> nodes)
+		public static Rect GetBounds(List<Node> nodes)
 		{
 			double xMin = double.PositiveInfinity, yMin = double.PositiveInfinity;
 			double xMax = double.NegativeInfinity, yMax = double.NegativeInfinity;

@@ -25,6 +25,7 @@ namespace DialogueEditor
 		public List<Node> nodes = new List<Node>();
 		public Dictionary<string, Node> nodeMap = new Dictionary<string, Node>();
 		public List<Node> selection = new List<Node>();
+		public List<Graphics.Comment> comments = new List<Graphics.Comment>();
 
 		//Zoom
 		const double zoomSpeed = .025;
@@ -62,8 +63,6 @@ namespace DialogueEditor
 			History.History.UpdateHistoryButtonsVisuals();
 
 			AutoSaveTimer_Tick(null, null);
-
-			drawArea.Children.Add(new Graphics.Comment());
 		}
 		
 
@@ -198,6 +197,9 @@ namespace DialogueEditor
 					}
 					break;
 
+				case Key.C:
+					ButtonAddComment_Click(null, null);
+					break;
 
 				case Key.Up:
 					PanCanvas(0, -30);
@@ -360,6 +362,12 @@ namespace DialogueEditor
 		#endregion
 
 		#region Node adding and deleting
+
+		public void DeleteComment(Graphics.Comment commentToDelete)
+		{
+			comments.Remove(commentToDelete);
+			drawArea.Children.Remove(commentToDelete);
+		}
 
 		private void ButtonAddNode_Click(object sender, RoutedEventArgs e)
 		{
@@ -1064,8 +1072,21 @@ namespace DialogueEditor
 			(new AdditionalData()).ShowDialog();
 		}
 
+
+		private void ButtonAddComment_Click(object sender, RoutedEventArgs e)
+		{
+			if (selection.Count > 0) 
+			{
+				comments.Add(Graphics.Comment.Create(LayoutManager.GetBounds(selection)));
+			}
+			else
+			{
+				comments.Add(Graphics.Comment.Create());
+			}
+		}
+
+
+
 		#endregion
-
-
 	}
 }

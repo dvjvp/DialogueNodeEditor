@@ -44,7 +44,7 @@
                     <TextBox x:Name="CommentName" Grid.Row="0" Background="Transparent" Text="Comment" 
                              Width="Auto" MaxWidth="250" Grid.Column="0" BorderBrush="Transparent" TextWrapping="Wrap"/>
 
-                    <Button Grid.Column="2" Background="Transparent"  BorderBrush="Transparent" Width="20" Cursor="Arrow">X</Button>                    
+                    <Button Grid.Column="2" Background="Transparent"  BorderBrush="Transparent" Width="20" Cursor="Arrow" Click="DeleteButton_Click">X</Button>                    
                 </Grid>
             </Border>
             <Border IsHitTestVisible="False" Grid.Row="1" Background="#33FFFFFF"/>
@@ -52,14 +52,14 @@
         
         
         <!-- BORDERS FOR RESIZING -->
-        <Rectangle Grid.Row="0" Grid.Column="0" Cursor="SizeNWSE"/>
+        <Rectangle Grid.Row="0" Grid.Column="0" Cursor="SizeNWSE" MouseDown="ResizeUpLeft_MouseDown" MouseUp="ResizeUpLeft_MouseUp"/>
         <Rectangle Grid.Row="0" Grid.Column="1" Cursor="SizeNS" MouseDown="ResizeUp_MouseDown" MouseUp="ResizeUp_MouseUp"/>
-        <Rectangle Grid.Row="0" Grid.Column="2" Cursor="SizeNESW"/>
+        <Rectangle Grid.Row="0" Grid.Column="2" Cursor="SizeNESW" MouseDown="ResizeUpRight_MouseDown" MouseUp="ResizeUpRight_MouseUp"/>
 
-        <Rectangle Grid.Row="1" Grid.Column="0" Cursor="SizeWE"/>
+        <Rectangle Grid.Row="1" Grid.Column="0" Cursor="SizeWE" MouseDown="ResizeLeft_MouseDown" MouseUp="ResizeLeft_MouseUp"/>
         <Rectangle Grid.Row="1" Grid.Column="2" Cursor="SizeWE" MouseDown="ResizeRight_MouseDown" MouseUp="ResizeRight_MouseUp"/>
 
-        <Rectangle Grid.Row="2" Grid.Column="0" Cursor="SizeNESW"/>
+        <Rectangle Grid.Row="2" Grid.Column="0" Cursor="SizeNESW" MouseDown="ResizeDownLeft_MouseDown" MouseUp="ResizeDownLeft_MouseUp"/>
         <Rectangle Grid.Row="2" Grid.Column="1" Cursor="SizeNS" MouseDown="ResizeDown_MouseDown" MouseUp="ResizeDown_MouseUp"/>
         <Rectangle Grid.Row="2" Grid.Column="2" Cursor="SizeNWSE" MouseDown="ResizeDownRight_MouseDown" MouseUp="ResizeDownRight_MouseUp"/>
 
