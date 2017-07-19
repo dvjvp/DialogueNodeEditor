@@ -31,15 +31,36 @@ namespace DialogueEditor.Files
 			string[] lines = File.ReadAllLines(filepath);
 			List<DialogueDataLine> list = new List<DialogueDataLine>();
 
-			for (int i = 1 /*Ignore first line*/; i < lines.Length; i++)
+			switch(lines[0])
 			{
-				list.Add(ReadCSVLine(lines[i]));
+				case "Woodpecker dialogue file":
+					//get version:
+					switch(lines[1])
+					{
+						case "v 0.8":
+							for (int i = 3 /*Ignore first 3 lines*/; i < lines.Length; i++)
+							{
+								list.Add(ReadCSVLine_0_8(lines[i]));
+							}
+							break;
+					}
+					break;
+				case "---,Prompt,Command,CommandArguments,Next":
+					//import file from engine: old file parser should do it.
+				case "---,Prompt,Command,CommandArguments,Next,X,Y":
+					//open old file
+					for (int i = 1 /*Ignore first line*/; i < lines.Length; i++)
+					{
+						list.Add(ReadCSVLine_0_6(lines[i]));
+					}
+					break;
 			}
+			
 
 			return list;
 		}
 
-		public static DialogueDataLine ReadCSVLine(string line)
+		public static DialogueDataLine ReadCSVLine_0_8(string line)
 		{
 			/* Line samples:
 			 * RowName,"Comma, Comma, Comma","leave","","None"
@@ -163,6 +184,115 @@ namespace DialogueEditor.Files
 			d.SetPosition(x, y);
 			return d;
 		}
+		public static DialogueDataLine ReadCSVLine_0_6(string line)
+		{
+			/* Line samples:
+			 * RowName,"Comma, Comma, Comma","leave","","None"
+			 * RowName2,"Quote"" Quote"" Quote","","","None",100,345
+			 */
+
+			string[] s = line.Split(',');
+			try
+			{
+				double.Parse(s[s.Length - 1]);
+			}
+			catch (Exception)
+			{
+				s = s.Concat(new string[] { "0", "0" }).ToArray();
+			}
+			/* From:
+			 * 
+			 * RowName
+			 * "Comma
+			 *  Comma
+			 *  Comma"
+			 * "leave"
+			 * ""
+			 * "None"
+			 * 0 (maybe)
+			 * 0 (maybe)
+			 */
+
+			/* To:
+			 * 
+			 * RowName
+			 * Comma, Comma, Comma
+			 * leave
+			 * 
+			 * None
+			 * 0
+			 * 0
+			 */
+			string rowName = s[0];
+			string prompt = s[1].Replace("\"\"", "\"");
+			string command = s[s.Length - 5];
+			string commandArgs = s[s.Length - 4];
+			string next = s[s.Length - 3];
+			double x = 0, y = 0;
+
+			try
+			{
+				x = double.Parse(s[s.Length - 2]);
+				y = double.Parse(s[s.Length - 1]);
+			}
+			catch (Exception)
+			{
+			}
+
+
+			if (prompt.StartsWith("\""))
+			{
+				//combine prompt into single string
+				prompt = "";
+				int index = 1;
+				for (; !s[index].EndsWith("\""); index++)
+				{
+					prompt += s[index];
+					prompt += ',';
+				}
+				prompt += s[index];
+				index++;
+
+				command = s[index];
+				index++;
+
+				commandArgs = "";
+				for (; !s[index].EndsWith("\""); index++)
+				{
+					commandArgs += s[index];
+					commandArgs += ',';
+				}
+				commandArgs += s[index];
+				index++;
+			}
+
+			//remove unnecessary quote symbols
+			if (prompt.StartsWith("\""))
+			{
+				prompt = prompt.Substring(1, prompt.Length - 2);
+			}
+			if (command.StartsWith("\""))
+			{
+				command = command.Substring(1, command.Length - 2);
+			}
+			if (commandArgs.StartsWith("\""))
+			{
+				commandArgs = commandArgs.Substring(1, commandArgs.Length - 2);
+			}
+			if (next.StartsWith("\""))
+			{
+				next = next.Substring(1, next.Length - 2);
+			}
+			
+
+			prompt = prompt.Replace("\"\"", "\"");
+			commandArgs = commandArgs.Replace("\"\"", "\"");
+
+
+			DialogueDataLine d = new DialogueDataLine(rowName, prompt, command, commandArgs, next, "None");
+			d.SetPosition(x, y);
+			return d;
+		}
 
 
 		public static string GetFileOpenLocation()
@@ -229,6 +359,8 @@ namespace DialogueEditor.Files
 
 			using (StreamWriter outputFile = new StreamWriter(filepath))
 			{
+				outputFile.WriteLine("Woodpecker dialogue file");
+				outputFile.WriteLine("v 0.8");
 				outputFile.WriteLine("---,Prompt,Command,CommandArguments,Next,X,Y");
 				foreach (Node node in nodes)
 				{

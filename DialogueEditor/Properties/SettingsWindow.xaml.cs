@@ -56,5 +56,10 @@ namespace DialogueEditor.Properties
 			isInputAllowed = !regex.IsMatch((sender as TextBox).Text);
 			e.Handled = !isInputAllowed;
 		}
+
+		private void AssignThisProgramToDlgFiles(object sender, RoutedEventArgs e)
+		{
+
+		}
 	}
 }

@@ -350,25 +350,25 @@ namespace DialogueEditor
 			}
 			else
 			{
-				RadioButton pin = sender as RadioButton;
+				FrameworkElement pin = sender as FrameworkElement;
 				MainWindow.instance.StartDrawingConnection(this, pin);
 				pin.CaptureMouse();
 				pin.MouseMove += MainWindow.instance.ConnnectionDrawingOnMouseMoved;
-				pin.Click -= OnPinMousedDown;
-				pin.Click += OnPinMousedUp;
+				pin.PreviewMouseDown -= OnPinMousedDown;
+				pin.PreviewMouseUp += OnPinMousedUp;
+				e.Handled = true;
 			}
 		}
 
 		private void OnPinMousedUp(object sender, RoutedEventArgs e)
 		{
-			RadioButton pin = sender as RadioButton;
+			FrameworkElement pin = sender as FrameworkElement;
 			pin.ReleaseMouseCapture();
 			pin.MouseMove -= MainWindow.instance.ConnnectionDrawingOnMouseMoved;
 			MainWindow.instance.EndDrawingConnection();
-			pin.MouseUp -= OnPinMousedUp;
-			pin.Click -= OnPinMousedUp;
-			pin.Click += OnPinMousedDown;
-			pin.IsChecked = false;
+			pin.PreviewMouseUp -= OnPinMousedUp;
+			pin.PreviewMouseDown += OnPinMousedDown;
+			e.Handled = true;
 		}
 
 		public void LoadOutputConnectionDataFromSource()

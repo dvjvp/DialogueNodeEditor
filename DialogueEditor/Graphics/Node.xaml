@@ -22,7 +22,7 @@
 
             <!-- Input pin -->
             <Border BorderBrush="Black" BorderThickness="1" Grid.Row="0" Background="#3f3f3f3f" x:Name="InputBorder">
-                <RadioButton VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="InputPin" LostMouseCapture="OnMouseControlLost" Click="OnPinMousedDown" MouseEnter="HighlightPinConnections" MouseLeave="UnhighlightPinConnections"  Cursor="Hand"/>
+                <Image Source="../Resources/NodeResources/PinInput.png"  VerticalAlignment="Center" HorizontalAlignment="Stretch" x:Name="InputPin" LostMouseCapture="OnMouseControlLost" PreviewMouseDown="OnPinMousedDown" MouseEnter="HighlightPinConnections" MouseLeave="UnhighlightPinConnections" Cursor="Hand" Height="40"/>
             </Border>
 
             <!-- BODY -->
@@ -140,7 +140,7 @@
                         </Style.Triggers>
                     </Style>
                 </Border.Style>
-                <RadioButton x:Name="outputPinNormal"  VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="1" Click="OnPinMousedDown" LostMouseCapture="OnMouseControlLost" MouseEnter="HighlightPinConnections" MouseLeave="UnhighlightPinConnections"  Cursor="Hand"/>
+                <Image Source="../Resources/NodeResources/PinOutput.png" x:Name="outputPinNormal" VerticalAlignment="Center" HorizontalAlignment="Stretch" Grid.Column="1" PreviewMouseDown="OnPinMousedDown" LostMouseCapture="OnMouseControlLost" MouseEnter="HighlightPinConnections" MouseLeave="UnhighlightPinConnections"  Cursor="Hand" Height="40"/>
             </Border>
 
             <!-- If player has item output -->
@@ -173,8 +173,8 @@
                     <TextBox x:Name="itemCount"  Grid.Column="1" Grid.Row="1" Margin="2" LostFocus="OnNodeDataChanged"/>
                     <Label Grid.Column="0" Grid.Row="2" Foreground="White" HorizontalAlignment="Center">True</Label>
                     <Label Grid.Column="1" Grid.Row="2" Foreground="White" HorizontalAlignment="Center">False</Label>
-                    <RadioButton x:Name="outputPinItemTrue"  Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" Click="OnPinMousedDown" LostMouseCapture="OnMouseControlLost" MouseEnter="HighlightPinConnections" MouseLeave="UnhighlightPinConnections" Cursor="Hand"/>
-                    <RadioButton x:Name="outputPinItemFalse"  Grid.Column="1" Grid.Row="3" HorizontalAlignment="Center" Click="OnPinMousedDown" LostMouseCapture="OnMouseControlLost" MouseEnter="HighlightPinConnections" MouseLeave="UnhighlightPinConnections" Cursor="Hand"/>
+                    <Image Source="../Resources/NodeResources/PinOutput.png" x:Name="outputPinItemTrue" VerticalAlignment="Center" HorizontalAlignment="Stretch" Grid.Column="0" Grid.Row="3"  PreviewMouseDown="OnPinMousedDown" LostMouseCapture="OnMouseControlLost" MouseEnter="HighlightPinConnections" MouseLeave="UnhighlightPinConnections"  Cursor="Hand" Height="40"/>
+                    <Image Source="../Resources/NodeResources/PinOutput.png" x:Name="outputPinItemFalse" VerticalAlignment="Center" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="3"  PreviewMouseDown="OnPinMousedDown" LostMouseCapture="OnMouseControlLost" MouseEnter="HighlightPinConnections" MouseLeave="UnhighlightPinConnections"  Cursor="Hand" Height="40"/>
                 </Grid>
             </Border>
 
@@ -206,10 +206,10 @@
                         <TextBox x:Name="SecondsTextBox" LostFocus="OnNodeDataChanged" Text="10"/>
                         <Label Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center">seconds play this:</Label>
                     </StackPanel>
-                    <RadioButton x:Name="outputPinMultipleChoicesDefault" Grid.Row="1" Grid.Column="1" LostMouseCapture="OnMouseControlLost" VerticalAlignment="Center" HorizontalAlignment="Center" Click="OnPinMousedDown" MouseEnter="HighlightPinConnections" MouseLeave="UnhighlightPinConnections" Cursor="Hand"/>
+                    <Image Source="../Resources/NodeResources/PinOutput.png" x:Name="outputPinMultipleChoicesDefault" VerticalAlignment="Center" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="1"  PreviewMouseDown="OnPinMousedDown" LostMouseCapture="OnMouseControlLost" MouseEnter="HighlightPinConnections" MouseLeave="UnhighlightPinConnections"  Cursor="Hand" Height="40"/>
 
                     <Label Grid.Row="0" Grid.Column="0" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Bottom">Avaiable options</Label>
-                    <RadioButton Grid.Row="1" Grid.Column="0" x:Name="outputPinMultipleChoices" LostMouseCapture="OnMouseControlLost" VerticalAlignment="Center" HorizontalAlignment="Center"  Background="#FF10EC4C"  Click="OnPinMousedDown" MouseEnter="HighlightPinConnections" MouseLeave="UnhighlightPinConnections" Cursor="Hand"/>
+                    <Image Source="../Resources/NodeResources/PinOutput.png" x:Name="outputPinMultipleChoices" VerticalAlignment="Center" HorizontalAlignment="Stretch" Grid.Column="0" Grid.Row="1"  PreviewMouseDown="OnPinMousedDown" LostMouseCapture="OnMouseControlLost" MouseEnter="HighlightPinConnections" MouseLeave="UnhighlightPinConnections"  Cursor="Hand" Height="40"/>
 
                 </Grid>
             </Border>
@@ -241,7 +241,7 @@
                     <Label Grid.Column="1" Grid.Row="0" Foreground="White" HorizontalAlignment="Center">Event name</Label>
                     <TextBox x:Name="eventActorName"  Grid.Column="0" Grid.Row="1" Margin="2" TextChanged="RemoveSpacesFromSender" LostFocus="OnNodeDataChanged"/>
                     <TextBox x:Name="eventActorEventName"  Grid.Column="1" Grid.Row="1" Margin="2" TextChanged="RemoveSpacesFromSender" LostFocus="OnNodeDataChanged"/>
-                    <RadioButton x:Name="outputPinActorEvent"  Grid.ColumnSpan="2" Grid.Column="0"  Grid.Row="2" HorizontalAlignment="Center" Click="OnPinMousedDown" LostMouseCapture="OnMouseControlLost" MouseEnter="HighlightPinConnections" MouseLeave="UnhighlightPinConnections" Cursor="Hand"/>
+                    <Image Source="../Resources/NodeResources/PinOutput.png" x:Name="outputPinActorEvent" VerticalAlignment="Center" HorizontalAlignment="Stretch" Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="2"  PreviewMouseDown="OnPinMousedDown" LostMouseCapture="OnMouseControlLost" MouseEnter="HighlightPinConnections" MouseLeave="UnhighlightPinConnections"  Cursor="Hand" Height="40"/>
                 </Grid>
             </Border>
 
@@ -266,7 +266,7 @@
 
                     <Label Grid.Row="0" Foreground="White" HorizontalAlignment="Center">Event name</Label>
                     <TextBox x:Name="levelEventName" Grid.Row="1" Margin="2" LostFocus="OnNodeDataChanged"/>
-                    <RadioButton x:Name="outputPinLevelEvent"  Grid.Row="2" HorizontalAlignment="Center" Click="OnPinMousedDown" LostMouseCapture="OnMouseControlLost" MouseEnter="HighlightPinConnections" MouseLeave="UnhighlightPinConnections" Cursor="Hand"/>
+                    <Image Source="../Resources/NodeResources/PinOutput.png" x:Name="outputPinLevelEvent" VerticalAlignment="Center" HorizontalAlignment="Stretch" Grid.Row="2"  PreviewMouseDown="OnPinMousedDown" LostMouseCapture="OnMouseControlLost" MouseEnter="HighlightPinConnections" MouseLeave="UnhighlightPinConnections"  Cursor="Hand" Height="40"/>
                 </Grid>
             </Border>
 
