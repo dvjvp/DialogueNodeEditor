@@ -263,7 +263,7 @@ namespace DialogueEditor
 
 		private void Canvas_MouseWheel(object sender, MouseWheelEventArgs e)
 		{
-			Point oldCenter = GetDrawAreaViewCenter();
+			Point oldCenter = e.Delta > 0 ? e.GetPosition(drawArea) : GetDrawAreaViewCenter();
 
 			if (e.Delta > 0) 
 			{
@@ -278,7 +278,7 @@ namespace DialogueEditor
 			canvasZoom.ScaleX = Math.Max(canvasZoom.ScaleX, 0.025);
 			canvasZoom.ScaleY = Math.Max(canvasZoom.ScaleY, 0.025);
 
-			Vector offset = GetDrawAreaViewCenter() - oldCenter;
+			Vector offset = e.Delta > 0 ? (oldCenter - e.GetPosition(drawArea)) : (oldCenter - GetDrawAreaViewCenter());
 
 			PanCanvas(offset.X, offset.Y);
 		}
