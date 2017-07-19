@@ -163,13 +163,13 @@ namespace DialogueEditor
 
 		private void MainWindow_KeyDown(object sender, KeyEventArgs e)
 		{
+			Console.WriteLine("Focus: " + Keyboard.FocusedElement);
 			//Do NOT run shortcut menu by pressing F10/alt (windows default), freezing whole application
 			if (e.SystemKey == Key.F10 || e.SystemKey == Key.LeftAlt) 
 			{
 				e.Handled = true;
 			}
-
-			if (Keyboard.FocusedElement != drawArea)
+			if (Keyboard.FocusedElement != drawArea && Keyboard.FocusedElement != this) 
 			{
 				return;
 			}
@@ -296,7 +296,9 @@ namespace DialogueEditor
 		{
 			if (Mouse.DirectlyOver == drawArea)
 			{
-				drawArea.Focus();	//because of this application crashes on alt+tab. Fix it, yo!
+				//drawArea.Focus();	//because of this application crashes on alt+tab. Fix it, yo!
+				//Keyboard.ClearFocus();	//fixed crash, but disables keyboard shortcuts :(
+				this.Focus();
 			}
 
 			if (e.LeftButton == MouseButtonState.Pressed && !Keyboard.IsKeyDown(Key.LeftAlt))
