@@ -410,8 +410,8 @@
                                         <RectangleGeometry Rect="0,0,1,1"/>
                                     </GeometryDrawing.Geometry>
                                 </GeometryDrawing>
-                                <GeometryDrawing Geometry="M0,0 L1,0 1,0.05, 0,0.05Z" Brush="Black" />
-                                <GeometryDrawing Geometry="M0,0 L0,1 0.1,1, 0.1,0Z" Brush="Black" />
+                                <GeometryDrawing Geometry="M0,0 L1,0 1,0.05, 0,0.05Z" Brush="#FF6f6f6f" />
+                                <GeometryDrawing Geometry="M0,0 L0,1 0.1,1, 0.1,0Z" Brush="#FF6f6f6f" />
                             </DrawingGroup>
                         </DrawingBrush.Drawing>
                     </DrawingBrush>

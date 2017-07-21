@@ -32,7 +32,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <Border x:Name="DragndropBorder" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="Auto" Background="#99FFFFFF"
+            <Border x:Name="DragndropBorder" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="Auto" Background="#eeFFFFFF"
                     Cursor="SizeAll" MouseDown="DragndropBorder_MouseDown" MouseUp="DragndropBorder_MouseUp">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -47,7 +47,7 @@
                     <Button Grid.Column="2" Background="Transparent"  BorderBrush="Transparent" Width="20" Cursor="Arrow" Click="DeleteButton_Click">X</Button>                    
                 </Grid>
             </Border>
-            <Border IsHitTestVisible="False" Grid.Row="1" Background="#33FFFFFF"/>
+            <Border IsHitTestVisible="False" Grid.Row="1" Background="#66FFFFFF"/>
         </Grid>
         
         

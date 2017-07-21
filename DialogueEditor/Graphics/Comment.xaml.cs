@@ -43,7 +43,7 @@ namespace DialogueEditor.Graphics
 			MainWindow.instance.drawArea.Children.Insert(0, c);
 
 			double heightOffset = /*c.DragndropBorder.ActualHeight*/ 20;
-			double margin = 5;
+			double margin = 25;
 			Point position = encapsulation.Location - new Vector(margin, heightOffset + margin);
 
 			c.SetPosition(position);
