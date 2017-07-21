@@ -739,7 +739,7 @@ namespace DialogueEditor
 			drawArea.Cursor = Cursors.Arrow;
 		}
 
-		private void PanCanvas(double x, double y)
+		public void PanCanvas(double x, double y)
 		{
 			canvasTranslation.X = Math.Min(canvasTranslation.X - x, 0);
 			canvasTranslation.Y = Math.Min(canvasTranslation.Y - y, 0);
@@ -1132,11 +1132,20 @@ namespace DialogueEditor
 
 		private void Window_MouseLeave(object sender, MouseEventArgs e)
 		{
-			Console.WriteLine(FocusManager.GetFocusedElement(this).ToString());
+			//Console.WriteLine(FocusManager.GetFocusedElement(this));
 			if (panInProgress)
 			{
 				EndPanCanvas(sender, null);
 			}
+		}
+
+		private void CopySelectedButton_Click(object sender, RoutedEventArgs e)
+		{
+
+		}
+		private void PasteSelectedButton_Click(object sender, RoutedEventArgs e)
+		{
+
 		}
 	}
 }

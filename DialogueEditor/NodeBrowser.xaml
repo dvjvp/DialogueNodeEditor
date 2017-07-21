@@ -95,6 +95,7 @@
                         <ComboBoxItem Content="Call level event"/>
                         <ComboBoxItem Content="Shortcut"/>
                         <ComboBoxItem Content="Shortcut target"/>
+                        <ComboBoxItem Content="Comment"/>
                     </ComboBox.Items>
                 </ComboBox>
                 <TextBox Grid.Row="1" Grid.Column="2" x:Name="Prompt_Textbox"/>

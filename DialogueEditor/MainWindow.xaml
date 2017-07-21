@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DialogueEditor"
         mc:Ignorable="d"
-        Title="Woodpecker Dialogue Editor v. 0.9 Beta" Width="1124" Height="768" 
+        Title="Woodpecker Dialogue Editor v. 0.9 Beta" Width="1200" Height="768" 
         MouseLeave="Window_MouseLeave"
         >
     <Grid Name="grid">
@@ -118,6 +118,8 @@
                                 <ColumnDefinition Width="80"/>
                                 <ColumnDefinition Width="20"/>
                                 <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="80"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <Button Grid.Column="0" Background="#FFc2c2c2" Margin="2.5" ToolTip="Adds new node and places it in up-left corner of the graph." Click="ButtonAddNode_Click">
@@ -172,6 +174,18 @@
                                 <StackPanel >
                                     <Image Source="Resources/Buttons/Node/Filter.png" Width="40"/>
                                     <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" LineHeight="10" LineStackingStrategy="BlockLineHeight">Filter/Search</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="12" Background="#FFc2c2c2" Margin="2.5" ToolTip="Copies selected nodes to buffer" Click="CopySelectedButton_Click">
+                                <StackPanel >
+                                    <Image Source="Resources/Buttons/Node/Copy.png" Width="40"/>
+                                    <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" LineStackingStrategy="BlockLineHeight">Copy</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="13" Background="#FFc2c2c2" Margin="2.5" ToolTip="Pastes copied nodes from buffer in exact place, they were copied from" Click="PasteSelectedButton_Click">
+                                <StackPanel >
+                                    <Image Source="Resources/Buttons/Node/Paste.png" Width="40"/>
+                                    <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" LineStackingStrategy="BlockLineHeight">Paste</TextBlock>
                                 </StackPanel>
                             </Button>
 

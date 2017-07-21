@@ -22,6 +22,7 @@ namespace DialogueEditor
 		[Serializable]
 		public class NodeData
 		{
+			public Graphics.Comment comment;
 			public Node node;
 			public string Id { get; set; }
 			public string Type { get; set; }
@@ -36,11 +37,13 @@ namespace DialogueEditor
 			public NodeData(Node from)
 			{
 				node = from;
+				comment = null;
 				Id = from.nodeNameField.Text;
 				Type = from.outputType.Text;
 				Prompt = from.PromptTextBox.Text;
 				BoundToActor = from.PromptActorsCombobox.Text;
 				DialogueText = from.dialogueText.Text;
+				ItemName = from.itemName.Text;
 
 				ActorName = string.Empty;
 				EventName = string.Empty;
@@ -59,7 +62,20 @@ namespace DialogueEditor
 						break;
 				}
 
-				ItemName = from.itemName.Text;
+			}
+
+			public NodeData(Graphics.Comment from)
+			{
+				node = null;
+				comment = from;
+				Id = comment.CommentName.Text;
+				Type = "Comment";
+				Prompt = string.Empty;
+				BoundToActor = string.Empty;
+				DialogueText = comment.CommentName.Text;
+				ActorName = string.Empty;
+				EventName = string.Empty;
+				ItemName = string.Empty;
 			}
 
 		}
@@ -109,6 +125,15 @@ namespace DialogueEditor
 				}
 			}
 
+			foreach (var comment in MainWindow.instance.comments)
+			{
+				NodeData n = new NodeData(comment);
+				if(MatchesWithFilters(n))
+				{
+					searchResults.Add(n);
+				}
+			}
+
 			Nodes.ItemsSource = searchResults;
 		}
 
@@ -135,10 +160,22 @@ namespace DialogueEditor
 			DataGridRow row = sender as DataGridRow;
 			NodeData data = row.Item as NodeData;
 
-			MainWindow.instance.ClearSelection();
-			MainWindow.instance.selection.Add(data.node);
-			MainWindow.instance.FocusNodesButton_Click(this, null);
-			data.node.SetSelected(true);
+			if (data.node != null)
+			{
+				MainWindow.instance.ClearSelection();
+				MainWindow.instance.selection.Add(data.node);
+				MainWindow.instance.FocusNodesButton_Click(this, null);
+				data.node.SetSelected(true);
+			}
+			else if (data.comment != null)
+			{
+				Point commentLeftUpCorner = data.comment.GetPosition();
+				Point commentCenter = new Point(commentLeftUpCorner.X + (data.comment.Width / 2), commentLeftUpCorner.Y + (data.comment.Height / 2));
+				Vector viewOffset = commentCenter - MainWindow.instance.GetDrawAreaViewCenter();
+				MainWindow.instance.PanCanvas(viewOffset.X, viewOffset.Y);
+			}
+
+
 		}
 	}
 }
