@@ -176,6 +176,7 @@ namespace DialogueEditor
 			{
 				e.Handled = true;
 			}
+			Console.WriteLine("Focused on: " + Keyboard.FocusedElement);
 			if (Keyboard.FocusedElement != drawArea && Keyboard.FocusedElement != this) 
 			{
 				return;
@@ -308,7 +309,10 @@ namespace DialogueEditor
 			{
 				//drawArea.Focus();	//because of this application crashes on alt+tab. Fix it, yo!
 				//Keyboard.ClearFocus();	//fixed crash, but disables keyboard shortcuts :(
-				this.Focus();
+				//drawArea.Focus();
+				//Console.WriteLine("Old: " + Keyboard.FocusedElement);
+				//this.Focus();
+				/*Console.WriteLine("New: " + */Keyboard.Focus(this);
 			}
 
 			if (e.LeftButton == MouseButtonState.Pressed && !Keyboard.IsKeyDown(Key.LeftAlt))
