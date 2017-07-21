@@ -311,10 +311,12 @@ namespace DialogueEditor
 				//Keyboard.ClearFocus();	//fixed crash, but disables keyboard shortcuts :(
 				//drawArea.Focus();
 				Console.WriteLine("Old: " + Keyboard.FocusedElement);
-				FocusManager.SetFocusedElement(this, drawArea);
-				this.Focus();
-				Console.WriteLine("New: " +
-				Keyboard.Focus(this));
+				Keyboard.ClearFocus();	//take focus from textboxes
+				Keyboard.Focus(this);
+				FocusManager.SetFocusedElement(this, this);	//take focus from buttons
+				//this.Focus();
+				//Keyboard.Focus(this);
+				Console.WriteLine("New: " + Keyboard.FocusedElement);
 			}
 
 			if (e.LeftButton == MouseButtonState.Pressed && !Keyboard.IsKeyDown(Key.LeftAlt))
