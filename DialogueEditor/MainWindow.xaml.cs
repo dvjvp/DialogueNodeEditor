@@ -1130,19 +1130,13 @@ namespace DialogueEditor
 
 		#endregion
 
-		private void drawArea_LostMouseCapture(object sender, MouseEventArgs e)
+		private void Window_MouseLeave(object sender, MouseEventArgs e)
 		{
-			Console.WriteLine("draw area lost capture.");
-
-			if(panInProgress)
+			Console.WriteLine(FocusManager.GetFocusedElement(this).ToString());
+			if (panInProgress)
 			{
 				EndPanCanvas(sender, null);
 			}
-		}
-
-		private void Window_MouseLeave(object sender, MouseEventArgs e)
-		{
-			drawArea_LostMouseCapture(sender, e);
 		}
 	}
 }

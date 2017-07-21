@@ -408,7 +408,7 @@
         <Border x:Name="drawAreaBorder"  BorderBrush="Black" BorderThickness="1"  Grid.Row="1" Margin="5" ClipToBounds="True">
             <Canvas Name="drawArea" Focusable="True" FocusManager.IsFocusScope="True"
                     MouseWheel="Canvas_MouseWheel" MouseDown="drawArea_MouseDown" MouseUp="drawArea_MouseUp" MouseMove="drawArea_MouseMove"
-                    MouseRightButtonDown="drawArea_MouseRightButtonDown" LostMouseCapture="drawArea_LostMouseCapture"
+                    MouseRightButtonDown="drawArea_MouseRightButtonDown"
                     >
                 <Canvas.Background>
                     <DrawingBrush Viewport="0,0,128,128" ViewportUnits="Absolute" TileMode="Tile">
@@ -457,7 +457,7 @@
 
         <Canvas Grid.Row="1" Margin="5" ClipToBounds="True" x:Name="selectionDrawArea">
             <!-- Canvas overlaid over the previous one used for rubber band selection -->
-            <Rectangle x:Name="selectionBox" Visibility="Collapsed" Stroke="Black" StrokeThickness="1" StrokeDashArray="2,1" Fill="#262639B0" />
+            <Rectangle x:Name="selectionBox" Visibility="Collapsed" Stroke="Black" StrokeThickness="1" StrokeDashArray="6,3" Fill="#262639B0" />
             <Line x:Name="connectionDrawingLine" Visibility="Collapsed" Stroke="LightSteelBlue" StrokeThickness="5" IsHitTestVisible="False"/>
         </Canvas>
 
