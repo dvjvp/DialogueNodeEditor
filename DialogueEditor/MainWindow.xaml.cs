@@ -1105,5 +1105,17 @@ namespace DialogueEditor
 
 
 		#endregion
+
+		private void OpenFilterWindowButton_Click(object sender, RoutedEventArgs e)
+		{
+			if (NodeBrowser.instance != null) 
+			{
+				NodeBrowser.instance.Activate();
+			}
+			else
+			{
+				(new NodeBrowser()).Show();
+			}
+		}
 	}
 }

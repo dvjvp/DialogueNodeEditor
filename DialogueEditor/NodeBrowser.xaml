@@ -5,22 +5,108 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DialogueEditor"
         mc:Ignorable="d"
-        Title="NodeBrowser" Height="300" Width="300" WindowStyle="ToolWindow">
+        Title="NodeBrowser" Height="600" Width="1000" WindowStyle="ToolWindow">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <UniformGrid Background="#3f3f3f3f">
-            <Button Content="Jump to node" Width="100" Height="30"/>
-        </UniformGrid>
-
-        <DataGrid Grid.Row="1">
+       
+        <DataGrid x:Name="Nodes"  Grid.Row="0" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
+                  CanUserSortColumns="True" CanUserResizeColumns="True" IsReadOnly="True">
             <DataGrid.Columns>
-                
+                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="150"/>
+                <DataGridTextColumn Header="Node type" Binding="{Binding Type}" Width="100"/>
+                <DataGridTextColumn Header="Prompt" Binding="{Binding Prompt}"/>
+                <DataGridTextColumn Header="Bound to actor" Binding="{Binding BoundToActor}"/>
+                <DataGridTextColumn Header="Dialogue text" Binding="{Binding DialogueText}" Width="*"/>
+                <DataGridTextColumn Header="Actor name" Binding="{Binding ActorName}"/>
+                <DataGridTextColumn Header="Event name" Binding="{Binding EventName}"/>
+                <DataGridTextColumn Header="Item name" Binding="{Binding ItemName}"/>
             </DataGrid.Columns>
         </DataGrid>
-        
+
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.Resources>
+                <Style TargetType="Label">
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                </Style>
+                <Style TargetType="TextBox">
+                    <Setter Property="Margin" Value="5"/>
+                    <Setter Property="TextWrapping" Value="Wrap"/>
+                </Style>
+            </Grid.Resources>
+
+            <Label FontWeight="DemiBold">Filters</Label>
+
+            <Grid Grid.Row="1" ShowGridLines="True">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+
+                <Label Grid.Column="0">ID</Label>
+                <Label Grid.Column="1">Node type</Label>
+                <Label Grid.Column="2">Prompt</Label>
+                <Label Grid.Column="3">Bound to actor</Label>
+                <Label Grid.Column="4">Dialogue text</Label>
+                <Label Grid.Column="5">Actor name</Label>
+                <Label Grid.Column="6">Event name</Label>
+                <Label Grid.Column="7">Item name</Label>
+
+                <TextBox Grid.Row="1" Grid.Column="0" x:Name="ID_Textbox"/>
+                <ComboBox Grid.Row="1" Grid.Column="1" x:Name="Nodetype_Combobox" Margin="5">
+                    <ComboBox.Items>
+                        <ComboBoxItem Content="Any" IsSelected="True"/>
+                        <ComboBoxItem Content="Normal dialogue"/>
+                        <ComboBoxItem Content="End dialogue"/>
+                        <ComboBoxItem Content="Multiple choices"/>
+                        <ComboBoxItem Content="If player has item"/>
+                        <ComboBoxItem Content="Call actor event"/>
+                        <ComboBoxItem Content="Call level event"/>
+                        <ComboBoxItem Content="Shortcut"/>
+                        <ComboBoxItem Content="Shortcut target"/>
+                    </ComboBox.Items>
+                </ComboBox>
+                <TextBox Grid.Row="1" Grid.Column="2" x:Name="Prompt_Textbox"/>
+                <TextBox Grid.Row="1" Grid.Column="3" x:Name="BoundToActor_Textbox"/>
+                <TextBox Grid.Row="1" Grid.Column="4" x:Name="DialogueText_Textbox"/>
+                <TextBox Grid.Row="1" Grid.Column="5" x:Name="ActorName_Textbox"/>
+                <TextBox Grid.Row="1" Grid.Column="6" x:Name="EventName_Textbox"/>
+                <TextBox Grid.Row="1" Grid.Column="7" x:Name="ItemName_Textbox"/>
+
+            </Grid>
+
+            <UniformGrid Grid.Row="2" Columns="2">
+                <UniformGrid.Resources>
+                    <Style TargetType="Button">
+                        <Setter Property="Margin" Value="5"/>
+                        <Setter Property="Height" Value="30"/>
+                        <Setter Property="Width" Value="100"/>
+                    </Style>
+                </UniformGrid.Resources>
+                <Button Content="Apply filters" Click="ApplyFiltersButton_Click"/>
+                <Button Content="Reset filters" Click="ResetFiltersButton_Click"/>
+            </UniformGrid>
+        </Grid>
+
     </Grid>
 </Window>
