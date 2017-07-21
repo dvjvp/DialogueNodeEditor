@@ -28,7 +28,9 @@ namespace DialogueEditor
 		public List<Graphics.Comment> comments = new List<Graphics.Comment>();
 
 		//Zoom
-		const double zoomSpeed = .025;
+		const double ZOOM_SPEED = .05;
+		const double ZOOM_MIN = 0.05;
+		const double ZOOM_MAX = 3.0;
 		//Pan
 		bool panInProgress = false;
 		Vector panDragOffset;
@@ -278,16 +280,18 @@ namespace DialogueEditor
 
 			if (e.Delta > 0) 
 			{
-				canvasZoom.ScaleX += zoomSpeed;
-				canvasZoom.ScaleY += zoomSpeed;
+				canvasZoom.ScaleX += ZOOM_SPEED;
+				canvasZoom.ScaleY += ZOOM_SPEED;
 			}
 			else
 			{
-				canvasZoom.ScaleX -= zoomSpeed;
-				canvasZoom.ScaleY -= zoomSpeed;
+				canvasZoom.ScaleX -= ZOOM_SPEED;
+				canvasZoom.ScaleY -= ZOOM_SPEED;
 			}
-			canvasZoom.ScaleX = Math.Max(canvasZoom.ScaleX, 0.025);
-			canvasZoom.ScaleY = Math.Max(canvasZoom.ScaleY, 0.025);
+			canvasZoom.ScaleX = Math.Max(canvasZoom.ScaleX, ZOOM_MIN);
+			canvasZoom.ScaleY = Math.Max(canvasZoom.ScaleY, ZOOM_MIN);
+			canvasZoom.ScaleX = Math.Min(canvasZoom.ScaleX, ZOOM_MAX);
+			canvasZoom.ScaleY = Math.Min(canvasZoom.ScaleY, ZOOM_MAX);
 
 			Vector offset = e.Delta > 0 ? (oldCenter - e.GetPosition(drawArea)) : (oldCenter - GetDrawAreaViewCenter());
 
