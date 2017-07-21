@@ -59,7 +59,8 @@ namespace DialogueEditor.Files
 		{
 			string tempPrompt = prompt.Replace("\"", "\"\"");
 			string tempArgs = commandArguments.Replace("\"", "\"\"");
-			return rowName + ",\"" + tempPrompt + "\",\"" + command + "\",\"" + tempArgs + "\",\"" + nextRowName + "\"";
+			string tempCommand = (command == "go-to-target") ? ("go-to") : command;
+			return rowName + ",\"" + tempPrompt + "\",\"" + tempCommand + "\",\"" + tempArgs + "\",\"" + nextRowName + "\"";
 		}
 
 		public override string ToString()

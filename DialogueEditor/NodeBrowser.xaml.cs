@@ -60,6 +60,12 @@ namespace DialogueEditor
 					case "Call level event":
 						EventName = from.levelEventName.Text;
 						break;
+					case "Shortcut":
+						ItemName = from.TargetDialogueID.Text;
+						break;
+					case "Shortcut target":
+						ItemName = from.nodeNameField.Text;
+						break;
 				}
 
 			}

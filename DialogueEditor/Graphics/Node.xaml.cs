@@ -129,6 +129,12 @@ namespace DialogueEditor
 					}
 					TargetDialogueID.Text = sourceData.nextRowName;
 					break;
+				case "go-to-target":
+					if(!withoutOutputType)
+					{
+						outputType.Text = "Shortcut target";
+					}
+					break;
 				default:
 					if (!withoutOutputType)
 					{
@@ -155,6 +161,9 @@ namespace DialogueEditor
 					sourceData.commandArguments = string.Empty;
 					break;
 				case "Shortcut target":
+					sourceData.command = "go-to-target";
+					sourceData.commandArguments = string.Empty;
+					break;
 				case "Shortcut":
 					sourceData.command = "go-to";
 					sourceData.commandArguments = string.Empty;
@@ -198,6 +207,10 @@ namespace DialogueEditor
 			{
 				case "End dialogue":
 					d.command = "leave";
+					d.commandArguments = string.Empty;
+					break;
+				case "Shortcut target":
+					d.command = "go-to-target";
 					d.commandArguments = string.Empty;
 					break;
 				case "Shortcut":
