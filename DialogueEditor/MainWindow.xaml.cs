@@ -310,10 +310,11 @@ namespace DialogueEditor
 				//drawArea.Focus();	//because of this application crashes on alt+tab. Fix it, yo!
 				//Keyboard.ClearFocus();	//fixed crash, but disables keyboard shortcuts :(
 				//drawArea.Focus();
-				//Console.WriteLine("Old: " + Keyboard.FocusedElement);
-				//this.Focus();
-				/*Console.WriteLine("New: " + */
-				Keyboard.Focus(this);
+				Console.WriteLine("Old: " + Keyboard.FocusedElement);
+				FocusManager.SetFocusedElement(this, drawArea);
+				this.Focus();
+				Console.WriteLine("New: " +
+				Keyboard.Focus(this));
 			}
 
 			if (e.LeftButton == MouseButtonState.Pressed && !Keyboard.IsKeyDown(Key.LeftAlt))
