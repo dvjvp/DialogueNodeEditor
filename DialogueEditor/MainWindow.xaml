@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DialogueEditor"
         mc:Ignorable="d"
-        Title="Woodpecker Dialogue Editor v. 0.9 Beta" Width="1124" Height="768" >
+        Title="Woodpecker Dialogue Editor v. 0.9 Beta" Width="1124" Height="768" 
+        MouseLeave="Window_MouseLeave"
+        >
     <Grid Name="grid">
         <Grid.RowDefinitions>
             <RowDefinition Height="100"/>
@@ -406,19 +408,37 @@
         <Border x:Name="drawAreaBorder"  BorderBrush="Black" BorderThickness="1"  Grid.Row="1" Margin="5" ClipToBounds="True">
             <Canvas Name="drawArea" Focusable="True" FocusManager.IsFocusScope="True"
                     MouseWheel="Canvas_MouseWheel" MouseDown="drawArea_MouseDown" MouseUp="drawArea_MouseUp" MouseMove="drawArea_MouseMove"
-                    MouseRightButtonDown="drawArea_MouseRightButtonDown" 
+                    MouseRightButtonDown="drawArea_MouseRightButtonDown" LostMouseCapture="drawArea_LostMouseCapture"
                     >
                 <Canvas.Background>
-                    <DrawingBrush Viewport="0,0,24,24" ViewportUnits="Absolute" TileMode="Tile">
+                    <DrawingBrush Viewport="0,0,128,128" ViewportUnits="Absolute" TileMode="Tile">
                         <DrawingBrush.Drawing>
                             <DrawingGroup>
-                                <GeometryDrawing Brush="#FFafafaf">
+                                <GeometryDrawing Brush="#FF6f6f6f">
                                     <GeometryDrawing.Geometry>
                                         <RectangleGeometry Rect="0,0,1,1"/>
                                     </GeometryDrawing.Geometry>
                                 </GeometryDrawing>
-                                <GeometryDrawing Geometry="M0,0 L1,0 1,0.05, 0,0.05Z" Brush="#FF6f6f6f" />
-                                <GeometryDrawing Geometry="M0,0 L0,1 0.1,1, 0.1,0Z" Brush="#FF6f6f6f" />
+                                <GeometryDrawing>
+                                    <GeometryDrawing.Pen>
+                                        <Pen Thickness=".015" Brush="#FF5f5f5f"/>
+                                    </GeometryDrawing.Pen>
+                                    <GeometryDrawing.Geometry>
+                                        <GeometryGroup>
+                                            <LineGeometry StartPoint="0,0.2" EndPoint="1,0.2"/>
+                                            <LineGeometry StartPoint="0,0.4" EndPoint="1,0.4"/>
+                                            <LineGeometry StartPoint="0,0.6" EndPoint="1,0.6"/>
+                                            <LineGeometry StartPoint="0,0.8" EndPoint="1,0.8"/>
+                                            <LineGeometry StartPoint="0.2,0" EndPoint="0.2,1"/>
+                                            <LineGeometry StartPoint="0.4,0" EndPoint="0.4,1"/>
+                                            <LineGeometry StartPoint="0.6,0" EndPoint="0.6,1"/>
+                                            <LineGeometry StartPoint="0.8,0" EndPoint="0.8,1"/>
+                                        </GeometryGroup>
+                                    </GeometryDrawing.Geometry>
+                                </GeometryDrawing>
+
+                                <GeometryDrawing Geometry="M0,0 L1,0 1,0.05, 0,0.05Z" Brush="#FF646464" />
+                                <GeometryDrawing Geometry="M0,0 L0,1 0.05,1, 0.05,0Z" Brush="#FF646464" />
                             </DrawingGroup>
                         </DrawingBrush.Drawing>
                     </DrawingBrush>

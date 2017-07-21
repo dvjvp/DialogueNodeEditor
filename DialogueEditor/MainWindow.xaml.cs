@@ -1115,10 +1115,6 @@ namespace DialogueEditor
 			}
 		}
 
-
-
-		#endregion
-
 		private void OpenFilterWindowButton_Click(object sender, RoutedEventArgs e)
 		{
 			if (NodeBrowser.instance != null) 
@@ -1129,6 +1125,24 @@ namespace DialogueEditor
 			{
 				(new NodeBrowser()).Show();
 			}
+		}
+
+
+		#endregion
+
+		private void drawArea_LostMouseCapture(object sender, MouseEventArgs e)
+		{
+			Console.WriteLine("draw area lost capture.");
+
+			if(panInProgress)
+			{
+				EndPanCanvas(sender, null);
+			}
+		}
+
+		private void Window_MouseLeave(object sender, MouseEventArgs e)
+		{
+			drawArea_LostMouseCapture(sender, e);
 		}
 	}
 }
