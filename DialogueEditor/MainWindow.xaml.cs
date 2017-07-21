@@ -66,6 +66,12 @@ namespace DialogueEditor
 			History.History.UpdateHistoryButtonsVisuals();
 
 			AutoSaveTimer_Tick(null, null);
+
+			string[] args = Environment.GetCommandLineArgs();
+			if (args.Length > 1)
+			{
+				OpenFile(args[1]);
+			}
 		}
 		
 
