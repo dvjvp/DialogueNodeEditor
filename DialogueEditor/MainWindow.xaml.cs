@@ -957,7 +957,7 @@ namespace DialogueEditor
 		{
 			MessageBox.Show("\"Woodpecker\" Dialogue editor for Chernobyl Game by The Farm 51.\n"
 				+"Creator: Daniel Janowski\n"
-				+"Version: 0.8.1 Beta\n"
+				+"Version: 0.9 Beta\n"
 				+"Last changes: 19-07-2017"
 				,"Application Info"
 				);
