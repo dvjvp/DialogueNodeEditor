@@ -28,9 +28,9 @@ namespace DialogueEditor.Graphics
 				
 		public static Comment Create()
 		{
-			return Create(Rect.Empty);
+			return Create(Rect.Empty, false);
 		}
-		public static Comment Create(Rect encapsulation)
+		public static Comment Create(Rect encapsulation, bool addMargin)
 		{
 			if (encapsulation == Rect.Empty)
 			{
@@ -42,8 +42,8 @@ namespace DialogueEditor.Graphics
 			Comment c = new Comment();
 			MainWindow.instance.drawArea.Children.Insert(0, c);
 
-			double heightOffset = /*c.DragndropBorder.ActualHeight*/ 20;
-			double margin = 25;
+			double heightOffset = /*c.DragndropBorder.ActualHeight*/ addMargin? 20.0 : 0.0;
+			double margin = addMargin ? 25.0 : 0.0;
 			Point position = encapsulation.Location - new Vector(margin, heightOffset + margin);
 
 			c.SetPosition(position);
@@ -69,7 +69,7 @@ namespace DialogueEditor.Graphics
 				r.Height = 300;
 			}
 
-			Comment c = Create(r);
+			Comment c = Create(r, false);
 			c.CommentName.Text = line.prompt;
 			return c;
 		}

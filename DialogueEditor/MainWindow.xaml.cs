@@ -210,7 +210,24 @@ namespace DialogueEditor
 					break;
 
 				case Key.C:
-					ButtonAddComment_Click(null, null);
+					if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
+					{
+						CopySelectedButton_Click(sender, e);
+					}
+					else
+					{
+						ButtonAddComment_Click(null, null);
+					}
+					break;
+				case Key.V:
+					if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
+					{
+						var pasted = PasteNodesFromClipboard();
+						if(pasted!=null)
+						{
+							LayoutManager.MoveCenterTo(pasted, Mouse.GetPosition(drawArea));
+						}
+					}
 					break;
 
 				case Key.Up:
@@ -326,13 +343,13 @@ namespace DialogueEditor
 
 			if (e.LeftButton == MouseButtonState.Pressed && !Keyboard.IsKeyDown(Key.LeftAlt))
 			{
-				if (e.ClickCount == 2) 
+				if (e.ClickCount == 2 && Mouse.DirectlyOver == drawArea) 
 				{
 					Point mousePos = e.GetPosition(drawArea);
 					var node = AddNode(new DialogueDataLine());
 					node.SetPosition(mousePos.X, mousePos.Y);
 					node.CreateUniqueID();
-					History.History.AddToUndoHistory(new History.Actions.Action_NodeAdded(node));
+					History.History.AddToUndoHistory(new History.Actions.Action_NodesAdded(new Node[] { node }));
 				}
 				else
 				{
@@ -413,7 +430,7 @@ namespace DialogueEditor
 			var node = AddNode(new DialogueDataLine());
 			node.CreateUniqueID();
 			node.SetPosition(GetDrawAreaViewCenter().X, GetDrawAreaViewCenter().Y);
-			History.History.AddToUndoHistory(new History.Actions.Action_NodeAdded(node));
+			History.History.AddToUndoHistory(new History.Actions.Action_NodesAdded(new Node[] { node }));
 			return node;
 		}
 
@@ -1107,7 +1124,7 @@ namespace DialogueEditor
 		{
 			if (selection.Count > 0) 
 			{
-				comments.Add(Graphics.Comment.Create(LayoutManager.GetBounds(selection)));
+				comments.Add(Graphics.Comment.Create(LayoutManager.GetBounds(selection), true));
 			}
 			else
 			{
@@ -1141,11 +1158,117 @@ namespace DialogueEditor
 
 		private void CopySelectedButton_Click(object sender, RoutedEventArgs e)
 		{
+			foreach (var item in selection)
+			{
+				item.ApplyChangesToSourceData();
+			}
+			foreach (var item in selection)
+			{
+				item.ApplyConnectionChangesToSourceData();
+			}
 
+			System.Text.StringBuilder builder = new System.Text.StringBuilder();
+			foreach (var node in selection)
+			{
+				builder.AppendLine(node.sourceData.ToCSVrow());
+			}
+			Clipboard.SetText(builder.ToString());
 		}
+
+		private List<Node> PasteNodesFromClipboard()
+		{
+			string[] buffor = Clipboard.GetText().Split('\n');
+			List<Node> pastedNodes = new List<Node>();
+			List<DialogueDataLine> copiedData = new List<DialogueDataLine>();
+			Dictionary<string, string> newKeys = new Dictionary<string, string>();
+
+
+			if (buffor == null)
+			{
+				return null;
+			}
+			foreach (var line in buffor)
+			{
+				try
+				{
+					DialogueDataLine d = CSVParser.ReadCSVLine_0_8(line);
+					string newKey = Guid.NewGuid().ToString();
+					newKeys.Add(d.rowName, newKey);
+					d.rowName = newKey;
+					copiedData.Add(d);
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine(ex);
+				}
+			}
+			foreach (var line in copiedData)
+			{
+				string[] children = line.nextRowName.Split(' ');
+				for (int i = 0; i < children.Length; i++)
+				{
+					if (newKeys.ContainsKey(children[i]))
+					{
+						children[i] = newKeys[children[i]];
+					}
+				}
+				line.nextRowName = String.Join(" ", children);
+				if (line.command == "options")
+				{
+					children = line.commandArguments.Split(' ');
+					if (children.Length > 1)
+					{
+						if (newKeys.ContainsKey(children[1]))
+						{
+							children[1] = newKeys[children[1]];
+						}
+						line.commandArguments = String.Join(" ", children);
+					}
+				}
+				else if (line.command == "has-item")
+				{
+					children = line.commandArguments.Split(' ');
+					for (int i = 0; i < children.Length; i++)
+					{
+						if (newKeys.ContainsKey(children[i]))
+						{
+							children[i] = newKeys[children[i]];
+						}
+					}
+					line.commandArguments = String.Join(" ", children);
+				}
+			}
+
+			foreach (var item in copiedData)
+			{
+				Node n = AddNode(item);
+				pastedNodes.Add(n);
+			}
+
+			foreach (var item in pastedNodes)
+			{
+				item.LoadOutputConnectionDataFromSource();
+			}
+
+			if (pastedNodes.Count > 0) 
+			{
+				History.History.AddToUndoHistory(new History.Actions.Action_NodesAdded(pastedNodes.ToArray()));
+
+				ClearSelection();
+				foreach (var n in pastedNodes)
+				{
+					n.SetSelected(true);
+					selection.Add(n);
+				}
+			}
+			
+
+			return pastedNodes;
+		}
+
 		private void PasteSelectedButton_Click(object sender, RoutedEventArgs e)
 		{
-
+			PasteNodesFromClipboard();
 		}
 	}
 }

@@ -210,6 +210,7 @@ namespace DialogueEditor.Testing
 					AddCloseWindowButton();
 					break;
 				case "go-to":
+				case "go-to-target":
 					SetNextDataRow(currentNode.sourceData.nextRowName);
 					Next();
 					break;

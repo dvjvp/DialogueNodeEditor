@@ -1,28 +1,34 @@
 ﻿
 namespace DialogueEditor.History.Actions
 {
-	class Action_NodeAdded : Action
+	class Action_NodesAdded : Action
 	{
-		Node node;
+		Node[] nodes;
 
-		public Action_NodeAdded(Node node)
+		public Action_NodesAdded(Node[] nodes)
 		{
-			this.node = node;
+			this.nodes = nodes;
 		}
 
 		public override void Do()
 		{
-			node.ApplyChangesToSourceData();	//it automatically adds to nodeMap as well
-			MainWindow.instance.nodes.Add(node);
-			MainWindow.instance.drawArea.Children.Add(node);
+			foreach (var node in nodes)
+			{
+				node.ApplyChangesToSourceData();    //it automatically adds to nodeMap as well
+				MainWindow.instance.nodes.Add(node);
+				MainWindow.instance.drawArea.Children.Add(node);
+			}
 		}
 
 		public override void Undo()
 		{
-			node.ApplyChangesToSourceData();
-			MainWindow.instance.nodeMap.Remove(node.sourceData.rowName);
-			MainWindow.instance.nodes.Remove(node);
-			MainWindow.instance.drawArea.Children.Remove(node);
+			foreach (var node in nodes)
+			{
+				node.ApplyChangesToSourceData();
+				MainWindow.instance.nodeMap.Remove(node.sourceData.rowName);
+				MainWindow.instance.nodes.Remove(node);
+				MainWindow.instance.drawArea.Children.Remove(node);
+			}
 		}
 	}
 }
