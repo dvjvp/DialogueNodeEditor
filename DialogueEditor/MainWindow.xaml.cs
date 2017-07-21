@@ -26,6 +26,7 @@ namespace DialogueEditor
 		public Dictionary<string, Node> nodeMap = new Dictionary<string, Node>();
 		public List<Node> selection = new List<Node>();
 		public List<Graphics.Comment> comments = new List<Graphics.Comment>();
+		bool nodeDragnDropInProgress = false;
 
 		//Zoom
 		const double ZOOM_SPEED = .05;
@@ -335,13 +336,19 @@ namespace DialogueEditor
 				}
 				else
 				{
-					StartRubberbandSelection(sender, e);
+					if(!panInProgress)
+					{
+						StartRubberbandSelection(sender, e);
+					}
 				}
 			}
 			else if (e.MiddleButton == MouseButtonState.Pressed
 				|| (Keyboard.IsKeyDown(Key.LeftAlt) && e.LeftButton == MouseButtonState.Pressed))
 			{
-				StartPanCanvas(sender, e);
+				if(!nodeDragnDropInProgress)
+				{
+					StartPanCanvas(sender, e);
+				}
 			}
 		}
 
@@ -539,6 +546,7 @@ namespace DialogueEditor
 				selection[i].dragOffset = (Vector)selection[i].GetPosition() - mousePos;
 			}
 			drawArea.Cursor = Cursors.SizeAll;
+			nodeDragnDropInProgress = true;
 		}
 		public void DragnDropSelectedOnMove(object sender, MouseEventArgs e)
 		{
@@ -573,6 +581,7 @@ namespace DialogueEditor
 				}
 			}
 
+			nodeDragnDropInProgress = false;
 		}
 
 

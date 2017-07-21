@@ -680,6 +680,11 @@ namespace DialogueEditor
 			base.OnMouseDown(e);
 			//Console.WriteLine("Down");
 
+			if (e.LeftButton != MouseButtonState.Pressed) 
+			{
+				return;
+			}
+
 			if(Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
 			{
 				if (false == MainWindow.instance.selection.Contains(this))
