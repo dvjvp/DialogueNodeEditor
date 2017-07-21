@@ -14,7 +14,7 @@
 
        
         <DataGrid x:Name="Nodes"  Grid.Row="0" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
-                  CanUserSortColumns="True" CanUserResizeColumns="True" IsReadOnly="True">
+                  CanUserSortColumns="True" CanUserResizeColumns="True" IsReadOnly="True" SelectionUnit="FullRow">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="150"/>
                 <DataGridTextColumn Header="Node type" Binding="{Binding Type}" Width="100"/>
@@ -25,6 +25,17 @@
                 <DataGridTextColumn Header="Event name" Binding="{Binding EventName}"/>
                 <DataGridTextColumn Header="Item name" Binding="{Binding ItemName}"/>
             </DataGrid.Columns>
+            <DataGrid.ItemContainerStyle>
+                <Style TargetType="DataGridRow">
+                    <EventSetter Event="MouseDoubleClick" Handler="DataGridRow_MouseDoubleClick"/>
+                </Style>
+            </DataGrid.ItemContainerStyle>
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                </Style>
+            </DataGrid.CellStyle>
         </DataGrid>
 
         <Grid Grid.Row="1">

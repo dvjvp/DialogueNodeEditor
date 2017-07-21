@@ -94,7 +94,6 @@ namespace DialogueEditor
 				&& (node.ActorName.Contains(ActorName_Textbox.Text))
 				&& (node.EventName.Contains(EventName_Textbox.Text))
 				&& (node.ItemName.Contains(ItemName_Textbox.Text));
-
 		}
 
 		private void LoadNodeListWithFilters()
@@ -129,6 +128,17 @@ namespace DialogueEditor
 		private void ApplyFiltersButton_Click(object sender, RoutedEventArgs e)
 		{
 			LoadNodeListWithFilters();
+		}
+
+		private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+		{
+			DataGridRow row = sender as DataGridRow;
+			NodeData data = row.Item as NodeData;
+
+			MainWindow.instance.ClearSelection();
+			MainWindow.instance.selection.Add(data.node);
+			MainWindow.instance.FocusNodesButton_Click(this, null);
+			data.node.SetSelected(true);
 		}
 	}
 }

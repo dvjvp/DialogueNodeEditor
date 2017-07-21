@@ -1064,7 +1064,7 @@ namespace DialogueEditor
 			}
 		}
 
-		private void FocusNodesButton_Click(object sender, RoutedEventArgs e)
+		public void FocusNodesButton_Click(object sender, RoutedEventArgs e)
 		{
 			if (selection.Count >= 1) 
 			{
