@@ -312,7 +312,8 @@ namespace DialogueEditor
 				//drawArea.Focus();
 				//Console.WriteLine("Old: " + Keyboard.FocusedElement);
 				//this.Focus();
-				/*Console.WriteLine("New: " + */Keyboard.Focus(this);
+				/*Console.WriteLine("New: " + */
+				Keyboard.Focus(this);
 			}
 
 			if (e.LeftButton == MouseButtonState.Pressed && !Keyboard.IsKeyDown(Key.LeftAlt))
