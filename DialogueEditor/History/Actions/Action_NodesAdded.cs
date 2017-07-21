@@ -25,6 +25,10 @@ namespace DialogueEditor.History.Actions
 			foreach (var node in nodes)
 			{
 				node.ApplyChangesToSourceData();
+			}
+			foreach (var node in nodes)
+			{
+				node.ApplyConnectionChangesToSourceData();
 				MainWindow.instance.nodeMap.Remove(node.sourceData.rowName);
 				MainWindow.instance.nodes.Remove(node);
 				MainWindow.instance.drawArea.Children.Remove(node);
