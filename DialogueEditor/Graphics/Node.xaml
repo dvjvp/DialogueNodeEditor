@@ -119,6 +119,8 @@
                         <ComboBoxItem Content="Call level event"/>
                         <ComboBoxItem Content="Shortcut"/>
                         <ComboBoxItem Content="Shortcut target"/>
+                        <ComboBoxItem Content="Check bool"/>
+                        <ComboBoxItem Content="Set bool"/>
                     </ComboBox>
                 </StackPanel>
             </Border>
@@ -292,6 +294,92 @@
                     <Label Grid.Row="0" Foreground="White" HorizontalAlignment="Center">Target dialogue ID</Label>
                     <TextBox x:Name="TargetDialogueID" Grid.Row="1" Margin="2" LostFocus="TargetDialogueID_LostFocus"/>
                 </Grid>
+            </Border>
+            
+            <!-- Check bool -->
+            <Border BorderBrush="Black" BorderThickness="1" Grid.Row="3" Background="#FF420202">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=outputType, Path=SelectedItem.Content}" Value="Check bool">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Row="0" Foreground="White" HorizontalAlignment="Center">Bool to check</Label>
+                    <TextBox x:Name="CheckBoolID" Grid.Row="1" Margin="2" LostFocus="OnNodeDataChanged"/>
+                </Grid>
+            </Border>
+            <Border BorderBrush="Black" BorderThickness="1" Grid.Row="5" Background="Black">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=outputType, Path=SelectedItem.Content}" Value="Check bool">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Column="0" Grid.Row="0" Foreground="White" HorizontalAlignment="Center">TRUE</Label>
+                    <Label Grid.Column="1" Grid.Row="0" Foreground="White" HorizontalAlignment="Center">FALSE</Label> 
+                    <Image Grid.Column="0" Grid.Row="1" Source="../Resources/NodeResources/PinOutput.png" x:Name="outputPinCheckBoolTrue" VerticalAlignment="Center" HorizontalAlignment="Stretch"  PreviewMouseDown="OnPinMousedDown" LostMouseCapture="OnMouseControlLost" MouseEnter="HighlightPinConnections" MouseLeave="UnhighlightPinConnections"  Cursor="Hand" Height="40"/>
+                    <Image Grid.Column="1" Grid.Row="1" Source="../Resources/NodeResources/PinOutput.png" x:Name="outputPinCheckBoolFalse" VerticalAlignment="Center" HorizontalAlignment="Stretch"  PreviewMouseDown="OnPinMousedDown" LostMouseCapture="OnMouseControlLost" MouseEnter="HighlightPinConnections" MouseLeave="UnhighlightPinConnections"  Cursor="Hand" Height="40"/>
+                </Grid>
+            </Border>
+
+            <!-- Set bool -->
+            <Border BorderBrush="Black" BorderThickness="1" Grid.Row="3" Background="#FFFF4E4E">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=outputType, Path=SelectedItem.Content}" Value="Set bool">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <Grid>
+                    <StackPanel>
+                        <Label Foreground="White" HorizontalAlignment="Center">Bool to set:</Label>
+                        <TextBox x:Name="SetBoolID" LostFocus="OnNodeDataChanged"/>
+                        <Label Foreground="White" HorizontalAlignment="Center">Value:</Label>
+                        <CheckBox x:Name="SetBoolValue" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+            <Border BorderBrush="Black" BorderThickness="1" Grid.Row="5" Background="Black">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=outputType, Path=SelectedItem.Content}" Value="Set bool">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <Image Source="../Resources/NodeResources/PinOutput.png" x:Name="outputPinSetBool" VerticalAlignment="Center" HorizontalAlignment="Stretch" Grid.Row="2"  PreviewMouseDown="OnPinMousedDown" LostMouseCapture="OnMouseControlLost" MouseEnter="HighlightPinConnections" MouseLeave="UnhighlightPinConnections"  Cursor="Hand" Height="40"/>
             </Border>
             
         </Grid>
