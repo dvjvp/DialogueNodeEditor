@@ -135,6 +135,30 @@ namespace DialogueEditor
 						outputType.Text = "Shortcut target";
 					}
 					break;
+				case "set-bool":
+					if(!withoutOutputType)
+					{
+						outputType.Text = "Set bool";
+					}
+					string[] __s = sourceData.commandArguments.Split(' ');
+					bool _checked = false;
+					try
+					{
+						SetBoolID.Text = __s[0];
+						_checked = __s[1] == "true";
+					}
+					catch (Exception)
+					{
+					}
+					SetBoolValue.IsChecked = _checked;
+					break;
+				case "get-bool":
+					if(!withoutOutputType)
+					{
+						outputType.Text = "Check bool";
+					}
+					CheckBoolID.Text = sourceData.commandArguments;
+					break;
 				default:
 					if (!withoutOutputType)
 					{
@@ -188,6 +212,14 @@ namespace DialogueEditor
 					sourceData.command = "dialogue";
 					sourceData.commandArguments = actorName.Text + ": " + dialogueText.Text;
 					break;
+				case "Check bool":
+					sourceData.command = "get-bool";
+					sourceData.commandArguments = CheckBoolID.Text;
+					break;
+				case "Set bool":
+					sourceData.command = "set-bool";
+					sourceData.commandArguments = SetBoolID.Text + " " + (SetBoolValue.IsChecked == true ? "true" : "false");
+					break;
 				default:
 					break;
 			}
@@ -237,6 +269,14 @@ namespace DialogueEditor
 				case "Normal dialogue":
 					d.command = "dialogue";
 					d.commandArguments = actorName.Text + ": " + dialogueText.Text;
+					break;
+				case "Check bool":
+					d.command = "get-bool";
+					d.commandArguments = CheckBoolID.Text;
+					break;
+				case "Set bool":
+					d.command = "set-bool";
+					d.commandArguments = SetBoolID.Text + " " + (SetBoolValue.IsChecked == true ? "true" : "false");
 					break;
 				default:
 					break;
@@ -306,10 +346,30 @@ namespace DialogueEditor
 						sourceData.nextRowName = sTrue + " " + sFalse;
 					}
 					break;
+				case "Check bool":
+					{
+						string sTrue = "None";
+						string sFalse = "None";
+
+						foreach (var item in outputConnections)
+						{
+							if (item.objFrom == outputPinCheckBoolTrue) 
+							{
+								sTrue = item.parentTo.sourceData.rowName;
+							}
+							else if(item.objFrom == outputPinCheckBoolFalse)
+							{
+								sFalse = item.parentTo.sourceData.rowName;
+							}
+						}
+						sourceData.nextRowName = sTrue + " " + sFalse;
+					}
+					break;
 				case "Shortcut target":
 				case "Call actor event":
 				case "Call level event":
 				case "Normal dialogue":
+				case "Set bool":
 				default:
 					if (outputConnections.Count > 0)
 					{
@@ -480,6 +540,38 @@ namespace DialogueEditor
 						Console.WriteLine("Exception in LoadOutputConnectionDataFromSource():" + e);
 					}
 					break;
+				case "set-bool":
+					try
+					{
+						Node target = MainWindow.instance.nodeMap[sourceData.nextRowName];
+						MakeConnection(target, outputPinSetBool);
+					}
+					catch (Exception e)
+					{
+						Console.WriteLine("Exception in LoadOutputConnectionDataFromSource():" + e);
+					}
+					break;
+				case "get-bool":
+					string[] _s = sourceData.nextRowName.Split(' ');
+					try
+					{
+						Node target = MainWindow.instance.nodeMap[_s[0]];
+						MakeConnection(target, outputPinCheckBoolTrue);
+					}
+					catch (Exception e)
+					{
+						Console.WriteLine("Exception in LoadOutputConnectionDataFromSource():" + e);
+					}
+					try
+					{
+						Node target = MainWindow.instance.nodeMap[_s[1]];
+						MakeConnection(target, outputPinCheckBoolFalse);
+					}
+					catch (Exception e)
+					{
+						Console.WriteLine("Exception in LoadOutputConnectionDataFromSource():" + e);
+					}
+					break;
 			}
 		}
 
@@ -598,10 +690,12 @@ namespace DialogueEditor
 						History.History.Do(new History.Actions.Action_ConnectionMade(other, otherPin, this));
 						//other.MakeConnection(this, otherPin);
 						break;
+					case "Check bool":
 					case "Shortcut target":
 					case "Call actor event":
 					case "Call level event":
 					case "Normal dialogue":
+					case "Set bool":
 					case "If player has item":
 						if(other.PinHasConnection(otherPin))
 						{
@@ -656,6 +750,19 @@ namespace DialogueEditor
 					case "Normal dialogue":
 					default:
 						TryConnecting(thisPin, other, other.outputPinNormal);
+						break;
+					case "Check bool":
+						if(other.PinHasConnection(other.outputPinCheckBoolTrue))
+						{
+							TryConnecting(thisPin, other, other.outputPinCheckBoolFalse);
+						}
+						else
+						{
+							TryConnecting(thisPin, other, other.outputPinCheckBoolTrue);
+						}
+						break;
+					case "Set bool":
+						TryConnecting(thisPin, other, other.outputPinSetBool);
 						break;
 				}
 			}
@@ -806,6 +913,12 @@ namespace DialogueEditor
 					break;
 				case "Shortcut target":
 					c.R = 232; c.G = 225; c.B = 46;	//bright yellow
+					break;
+				case "Check bool":
+					c.R = 0x42; c.G = 02; c.B = 02;	//red-ish
+					break;
+				case "Set bool":
+					c.R = 0xFF; c.G = 0x4E; c.B = 0x4E; //red-ish
 					break;
 			}
 
@@ -994,6 +1107,14 @@ namespace DialogueEditor
 			}
 
 			OnNodeDataChanged(sender, e);
+		}
+
+		private void DontAllowSpaces(object sender, KeyEventArgs e)
+		{
+			if(e.Key == Key.Space)
+			{
+				e.Handled = true;
+			}
 		}
 	}
 }

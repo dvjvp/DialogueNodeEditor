@@ -820,7 +820,7 @@ namespace DialogueEditor
 				return;
 			}
 			CSVParser.SaveFile(CSVParser.filePath, nodes, comments);
-			MessageLabel.Content = "File saved.";
+			MessageLabel.Content = "File saved. " + DateTime.Now.ToShortTimeString();
 		}
 
 		private void ButtonSaveAs_Click(object sender, RoutedEventArgs e)

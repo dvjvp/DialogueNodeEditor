@@ -41,7 +41,7 @@
                         </Grid.RowDefinitions>
 
                         <Label Grid.Column="0" Grid.Row="0" FontWeight="DemiBold" IsHitTestVisible="False">Dialogue ID:</Label>
-                        <TextBox x:Name="nodeNameField" Text="NodeName" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center">
+                        <TextBox x:Name="nodeNameField" Text="NodeName" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" PreviewKeyDown="DontAllowSpaces">
                             <TextBox.Style>
                                 <Style TargetType="TextBox">
                                     <Setter Property="IsHitTestVisible" Value="False"/>
@@ -292,7 +292,7 @@
                     </Grid.RowDefinitions>
 
                     <Label Grid.Row="0" Foreground="White" HorizontalAlignment="Center">Target dialogue ID</Label>
-                    <TextBox x:Name="TargetDialogueID" Grid.Row="1" Margin="2" LostFocus="TargetDialogueID_LostFocus"/>
+                    <TextBox x:Name="TargetDialogueID" Grid.Row="1" Margin="2" LostFocus="TargetDialogueID_LostFocus" PreviewKeyDown="DontAllowSpaces"/>
                 </Grid>
             </Border>
             
@@ -316,7 +316,7 @@
                     </Grid.RowDefinitions>
 
                     <Label Grid.Row="0" Foreground="White" HorizontalAlignment="Center">Bool to check</Label>
-                    <TextBox x:Name="CheckBoolID" Grid.Row="1" Margin="2" LostFocus="OnNodeDataChanged"/>
+                    <TextBox x:Name="CheckBoolID" Grid.Row="1" Margin="2" LostFocus="OnNodeDataChanged" PreviewKeyDown="DontAllowSpaces"/>
                 </Grid>
             </Border>
             <Border BorderBrush="Black" BorderThickness="1" Grid.Row="5" Background="Black">
@@ -362,7 +362,7 @@
                 <Grid>
                     <StackPanel>
                         <Label Foreground="White" HorizontalAlignment="Center">Bool to set:</Label>
-                        <TextBox x:Name="SetBoolID" LostFocus="OnNodeDataChanged"/>
+                        <TextBox x:Name="SetBoolID" LostFocus="OnNodeDataChanged" PreviewKeyDown="DontAllowSpaces"/>
                         <Label Foreground="White" HorizontalAlignment="Center">Value:</Label>
                         <CheckBox x:Name="SetBoolValue" HorizontalAlignment="Center"/>
                     </StackPanel>
