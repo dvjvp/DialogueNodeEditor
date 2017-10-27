@@ -11,6 +11,7 @@ namespace DialogueEditor.Testing
 	public partial class TestingWindow : Window
 	{
 		Dictionary<string, Node> nodes;
+		Dictionary<string, bool> dialogueFlags = new Dictionary<string, bool>();
 		Node currentNode;
 
 		Node errorNode;
@@ -173,6 +174,14 @@ namespace DialogueEditor.Testing
 
 		private void SetNextDataRow(string from)
 		{
+			if (from == "None")
+			{
+				DialogueText.Text = "<<null Node (\"None\") reached. Ending dialogue.>>";
+				DeleteAllButtons();
+				AddCloseWindowButton();
+				return;
+			}
+
 			try
 			{
 				currentNode = nodes[from];
@@ -222,7 +231,69 @@ namespace DialogueEditor.Testing
 				case "options":
 					AddOptionsButtons();
 					break;
+				case "get-bool":
+					{
+						string boolName = currentNode.sourceData.commandArguments;
+						bool boolValue = false;
+						if(dialogueFlags.ContainsKey(boolName))
+						{
+							boolValue = dialogueFlags[boolName];
+						}
+						else
+						{
+							dialogueFlags.Add(boolName, false);
+						}
+
+						DialogueText.Text = "<<Checking for bool \"" + boolName + "\", current value: " + (boolValue ? "true" : "false") + "...>>";
+						AddCheckBollButtons(boolValue);
+					}
+					break;
+				case "set-bool":
+					{
+						string[] s = currentNode.sourceData.commandArguments.Split(' ');
+						DialogueText.Text = "<<Setting bool \"" + s[0] + "\" to " + s[1] + "...>>";
+						if(dialogueFlags.ContainsKey(s[0]))
+						{
+							dialogueFlags[s[0]] = (s[1] == "true");
+						}
+						else
+						{
+							dialogueFlags.Add(s[0], (s[1] == "true"));
+						}
+						AddNextButton();
+						SetNextDataRow(currentNode.sourceData.nextRowName);
+					}
+					break;
 			}
+		}
+
+		private void AddCheckBollButtons(bool defaultValue)
+		{
+			var buttonDefault = new Button();
+			buttonDefault.Content = defaultValue ? "Default (true)" : "Default (false)";
+			Buttons.Children.Add(buttonDefault);
+			buttonDefault.Margin = margins;
+			if(defaultValue)
+			{
+				buttonDefault.Click += ButtonTrue_Click;
+			}
+			else
+			{
+				buttonDefault.Click += ButtonFalse_Click;
+			}
+
+			var buttonTrue = new Button();
+			buttonTrue.Content = "Force TRUE";
+			Buttons.Children.Add(buttonTrue);
+			buttonTrue.Margin = margins;
+			buttonTrue.Click += ButtonTrue_Click;
+
+			var buttonFalse = new Button();
+			buttonFalse.Content = "Force FALSE";
+			Buttons.Children.Add(buttonFalse);
+			buttonFalse.Margin = margins;
+			Buttons.Columns = Buttons.Children.Count;
+			buttonFalse.Click += ButtonFalse_Click;
 		}
 
 		#endregion
