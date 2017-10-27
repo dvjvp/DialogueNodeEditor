@@ -963,6 +963,30 @@ namespace DialogueEditor
 
 		public bool RecalculatePromptAreaVisibility()
 		{
+			if(IsFlowControlNode)
+			{
+				BorderPrompt.Visibility = Visibility.Collapsed;
+
+				foreach(var item in inputConnections)
+				{
+					if (item.parentFrom.outputType.Text == "Multiple choices")
+					{
+						if (!(item.parentFrom.outputPinMultipleChoicesDefault == item.objFrom))
+						{
+							return true;
+						}
+					}
+					else if (item.parentFrom.IsFlowControlNode)
+					{
+						if (item.parentFrom.RecalculatePromptAreaVisibility())
+						{
+							return true;
+						}
+					}
+				}
+
+				return false;
+			}
 
 			foreach (var item in inputConnections)
 			{
