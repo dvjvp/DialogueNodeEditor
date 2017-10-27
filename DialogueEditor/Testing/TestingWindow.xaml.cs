@@ -86,9 +86,12 @@ namespace DialogueEditor.Testing
 			string[] s = currentNode.sourceData.nextRowName.Split(' ');
 			foreach (var item in s)
 			{
+				string actualItem = ResolveNodeID(item);
+				if (actualItem == "None") continue;
+
 				try
 				{
-					Node n = nodes[item];
+					Node n = nodes[actualItem];
 					var button = new Button();
 					button.Content = n.sourceData.prompt;
 					Buttons.Children.Add(button);
@@ -112,6 +115,36 @@ namespace DialogueEditor.Testing
 			Buttons.Columns = Buttons.Children.Count;
 		}
 
+		private void AddCheckBoolButtons(bool defaultValue)
+		{
+			var buttonDefault = new Button();
+			buttonDefault.Content = defaultValue ? "Default (true)" : "Default (false)";
+			Buttons.Children.Add(buttonDefault);
+			buttonDefault.Margin = margins;
+			if (defaultValue)
+			{
+				buttonDefault.Click += ButtonTrue_Click;
+			}
+			else
+			{
+				buttonDefault.Click += ButtonFalse_Click;
+			}
+
+			var buttonTrue = new Button();
+			buttonTrue.Content = "Force TRUE";
+			Buttons.Children.Add(buttonTrue);
+			buttonTrue.Margin = margins;
+			buttonTrue.Click += ButtonTrue_Click;
+
+			var buttonFalse = new Button();
+			buttonFalse.Content = "Force FALSE";
+			Buttons.Children.Add(buttonFalse);
+			buttonFalse.Margin = margins;
+			Buttons.Columns = Buttons.Children.Count;
+			buttonFalse.Click += ButtonFalse_Click;
+		}
+
+
 		#endregion
 
 		#region On button(s) clicked
@@ -127,21 +160,17 @@ namespace DialogueEditor.Testing
 		{
 			Button b = sender as Button;
 			string[] s = currentNode.sourceData.nextRowName.Split(' ');
-			for (int i = 0; i < s.Length; i++) 
+			int index = Buttons.Children.IndexOf(b);
+
+			try
 			{
-				try
-				{
-					Node n = nodes[s[i]];
-					if (n.sourceData.prompt == b.Content.ToString()) 
-					{
-						SetNextDataRow(s[i]);
-						Next();
-						return;
-					}
-				}
-				catch (Exception)
-				{
-				}
+				Node n = nodes[s[index]];
+				SetNextDataRow(s[index]);
+				Next();
+				return;
+			}
+			catch (Exception)
+			{
 			}
 		}
 
@@ -172,8 +201,109 @@ namespace DialogueEditor.Testing
 
 		#region Dialogue System Interpreter
 
+		private string ResolveNodeID(string inID)
+		{
+			if(inID == "None")
+			{
+				return "None";
+			}
+
+			Node node;
+			try
+			{
+				node = nodes[inID];
+			}
+			catch (Exception)
+			{
+				node = errorNode;
+			}
+
+			if(node.sourceData.command == "get-bool")
+			{
+				string nextName = "None";
+				string boolName = node.sourceData.commandArguments;
+				string[] n = node.sourceData.nextRowName.Split(' ');
+
+				if (!dialogueFlags.ContainsKey(boolName)) 
+				{
+					dialogueFlags.Add(boolName, false);
+				}
+				if (dialogueFlags[boolName]) 
+				{
+					try
+					{
+						nextName = n[0];
+					}
+					catch (Exception)
+					{ }
+				}
+				else
+				{
+					try
+					{
+						nextName = n[1];
+					}
+					catch (Exception)
+					{ }
+				}
+
+				return ResolveNodeID(nextName);
+
+			}
+			else if(node.sourceData.command == "has-item")
+			{
+				string message = "Does player have at least ";
+
+				string[] s = node.sourceData.commandArguments.Split(' ');
+				string count = "-1";
+				string itemName = "<errorName>";
+				try
+				{
+					itemName = s[0];
+				}
+				catch (Exception)
+				{}
+				try
+				{
+					count = s[1];
+				}
+				catch (Exception)
+				{}
+				message += count + " " + itemName + "?";
+
+				string nextName = "None";
+				string[] n = node.sourceData.nextRowName.Split(' ');
+
+				if (MessageBox.Show(message, "(Resolve has-item sub-tree)", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+				{
+					try
+					{
+						nextName = n[0];
+					}
+					catch (Exception)
+					{}
+				}
+				else
+				{
+					try
+					{
+						nextName = n[1];
+					}
+					catch (Exception)
+					{}
+				}
+
+				return ResolveNodeID(nextName);
+			}
+			else
+			{
+				return inID;
+			}
+		}
+
 		private void SetNextDataRow(string from)
 		{
+			from = ResolveNodeID(from);
 			if (from == "None")
 			{
 				DialogueText.Text = "<<null Node (\"None\") reached. Ending dialogue.>>";
@@ -245,7 +375,7 @@ namespace DialogueEditor.Testing
 						}
 
 						DialogueText.Text = "<<Checking for bool \"" + boolName + "\", current value: " + (boolValue ? "true" : "false") + "...>>";
-						AddCheckBollButtons(boolValue);
+						AddCheckBoolButtons(boolValue);
 					}
 					break;
 				case "set-bool":
@@ -265,35 +395,6 @@ namespace DialogueEditor.Testing
 					}
 					break;
 			}
-		}
-
-		private void AddCheckBollButtons(bool defaultValue)
-		{
-			var buttonDefault = new Button();
-			buttonDefault.Content = defaultValue ? "Default (true)" : "Default (false)";
-			Buttons.Children.Add(buttonDefault);
-			buttonDefault.Margin = margins;
-			if(defaultValue)
-			{
-				buttonDefault.Click += ButtonTrue_Click;
-			}
-			else
-			{
-				buttonDefault.Click += ButtonFalse_Click;
-			}
-
-			var buttonTrue = new Button();
-			buttonTrue.Content = "Force TRUE";
-			Buttons.Children.Add(buttonTrue);
-			buttonTrue.Margin = margins;
-			buttonTrue.Click += ButtonTrue_Click;
-
-			var buttonFalse = new Button();
-			buttonFalse.Content = "Force FALSE";
-			Buttons.Children.Add(buttonFalse);
-			buttonFalse.Margin = margins;
-			Buttons.Columns = Buttons.Children.Count;
-			buttonFalse.Click += ButtonFalse_Click;
 		}
 
 		#endregion
