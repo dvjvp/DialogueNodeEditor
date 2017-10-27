@@ -953,21 +953,38 @@ namespace DialogueEditor
 			b.Text = b.Text.Replace(" ", "");
 		}
 
-		public void RecalculatePromptAreaVisibility()
+		public bool IsFlowControlNode
+		{
+			get
+			{
+				return outputType.Text == "Check bool" || outputType.Text == "If player has item";
+			}
+		}
+
+		public bool RecalculatePromptAreaVisibility()
 		{
 
 			foreach (var item in inputConnections)
 			{
 				if (item.parentFrom.outputType.Text == "Multiple choices")
 				{
-					if(!(item.parentFrom.outputPinMultipleChoicesDefault == item.objFrom))
+					if (!(item.parentFrom.outputPinMultipleChoicesDefault == item.objFrom))
 					{
 						BorderPrompt.Visibility = Visibility.Visible;
-						return;
+						return true;
+					}
+				}
+				else if (item.parentFrom.IsFlowControlNode) 
+				{
+					if(item.parentFrom.RecalculatePromptAreaVisibility())
+					{
+						BorderPrompt.Visibility = Visibility.Visible;
+						return true;
 					}
 				}
 			}
 			BorderPrompt.Visibility = Visibility.Collapsed;
+			return false;
 		}
 
 		public void CreateUniqueID()
