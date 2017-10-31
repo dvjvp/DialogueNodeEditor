@@ -299,7 +299,9 @@ namespace DialogueEditor
 					{
 						System.Text.StringBuilder s = new System.Text.StringBuilder();
 						Connection defaultC = null;
-						foreach (var item in outputConnections)
+						List<Connection> sortedConnections = new List<Connection>(outputConnections);
+						sortedConnections.Sort((c1, c2) => { return Math.Sign(Canvas.GetLeft(c1.parentTo) - Canvas.GetLeft(c2.parentTo)); });
+						foreach (var item in sortedConnections)
 						{
 							if (item.objFrom == outputPinMultipleChoices)
 							{
@@ -919,6 +921,9 @@ namespace DialogueEditor
 					break;
 				case "Set bool":
 					c.R = 0xFF; c.G = 0x4E; c.B = 0x4E; //red-ish
+					break;
+				case "Counter":
+					c.R = 0xDC; c.G = 0xD5; c.B = 0x8A; //yellow-ish
 					break;
 			}
 

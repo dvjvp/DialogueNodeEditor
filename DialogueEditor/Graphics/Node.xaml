@@ -121,6 +121,7 @@
                         <ComboBoxItem Content="Shortcut target"/>
                         <ComboBoxItem Content="Check bool"/>
                         <ComboBoxItem Content="Set bool"/>
+                        <ComboBoxItem Content="Counter"/>
                     </ComboBox>
                 </StackPanel>
             </Border>
@@ -382,6 +383,57 @@
                 <Image Source="../Resources/NodeResources/PinOutput.png" x:Name="outputPinSetBool" VerticalAlignment="Center" HorizontalAlignment="Stretch" Grid.Row="2"  PreviewMouseDown="OnPinMousedDown" LostMouseCapture="OnMouseControlLost" MouseEnter="HighlightPinConnections" MouseLeave="UnhighlightPinConnections"  Cursor="Hand" Height="40"/>
             </Border>
             
+            <!-- Counter -->
+            <Border BorderBrush="Black" BorderThickness="1" Grid.Row="3" Background="#FFDCD58A">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=outputType, Path=SelectedItem.Content}" Value="Counter">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Row="0" HorizontalAlignment="Center">Number used</Label>
+                    <TextBox x:Name="CounterNo" Grid.Row="1" Margin="2" LostFocus="OnNodeDataChanged" PreviewKeyDown="DontAllowSpaces" Text="1"/>
+                </Grid>
+            </Border>
+            <Border BorderBrush="Black" BorderThickness="1" Grid.Row="5" Background="Black">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=outputType, Path=SelectedItem.Content}" Value="Counter">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Column="0" Grid.Row="0" Foreground="White" HorizontalAlignment="Center">Less</Label>
+                    <Label Grid.Column="1" Grid.Row="0" Foreground="White" HorizontalAlignment="Center">More or equal</Label>
+                    <Image Grid.Column="0" Grid.Row="1" Source="../Resources/NodeResources/PinOutput.png" x:Name="outputPinCounterLess" VerticalAlignment="Center" HorizontalAlignment="Stretch"  PreviewMouseDown="OnPinMousedDown" LostMouseCapture="OnMouseControlLost" MouseEnter="HighlightPinConnections" MouseLeave="UnhighlightPinConnections"  Cursor="Hand" Height="40"/>
+                    <Image Grid.Column="1" Grid.Row="1" Source="../Resources/NodeResources/PinOutput.png" x:Name="outputPinCounterMore" VerticalAlignment="Center" HorizontalAlignment="Stretch"  PreviewMouseDown="OnPinMousedDown" LostMouseCapture="OnMouseControlLost" MouseEnter="HighlightPinConnections" MouseLeave="UnhighlightPinConnections"  Cursor="Hand" Height="40"/>
+                </Grid>
+            </Border>
+
         </Grid>
     </Border>
     
