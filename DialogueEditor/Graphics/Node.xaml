@@ -400,10 +400,13 @@
                         <RowDefinition/>
                         <RowDefinition/>
                         <RowDefinition/>
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
 
                     <Label Grid.Row="0" HorizontalAlignment="Center">Number used</Label>
                     <TextBox x:Name="CounterNo" Grid.Row="1" Margin="2" LostFocus="OnNodeDataChanged" PreviewKeyDown="DontAllowSpaces" Text="1"/>
+                    <Label Grid.Row="2" HorizontalAlignment="Center">Reset on dialogue start</Label>
+                    <CheckBox x:Name="CounterScopeLocal" Grid.Row="3" HorizontalAlignment="Center" LostFocus="OnNodeDataChanged"/>
                 </Grid>
             </Border>
             <Border BorderBrush="Black" BorderThickness="1" Grid.Row="5" Background="Black">

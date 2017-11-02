@@ -159,6 +159,29 @@ namespace DialogueEditor
 					}
 					CheckBoolID.Text = sourceData.commandArguments;
 					break;
+				case "counter":
+					if(!withoutOutputType)
+					{
+						outputType.Text = "Counter";
+					}
+					{
+						string[] s = sourceData.commandArguments.Split(' ');
+						try
+						{
+							CounterNo.Text = s[0];
+						}
+						catch (Exception)
+						{
+						}
+						try
+						{
+							CounterScopeLocal.IsChecked = (s[1] == "local");
+						}
+						catch (Exception)
+						{
+						}
+					}
+					break;
 				default:
 					if (!withoutOutputType)
 					{
@@ -220,6 +243,10 @@ namespace DialogueEditor
 					sourceData.command = "set-bool";
 					sourceData.commandArguments = SetBoolID.Text + " " + (SetBoolValue.IsChecked == true ? "true" : "false");
 					break;
+				case "Counter":
+					sourceData.command = "counter";
+					sourceData.commandArguments = CounterNo.Text + " " + (CounterScopeLocal.IsChecked == true ? "local" : "global");
+					break;
 				default:
 					break;
 			}
@@ -277,6 +304,10 @@ namespace DialogueEditor
 				case "Set bool":
 					d.command = "set-bool";
 					d.commandArguments = SetBoolID.Text + " " + (SetBoolValue.IsChecked == true ? "true" : "false");
+					break;
+				case "Counter":
+					d.command = "counter";
+					d.commandArguments = CounterNo.Text + " " + (CounterScopeLocal.IsChecked == true ? "local" : "global");
 					break;
 				default:
 					break;
@@ -346,6 +377,24 @@ namespace DialogueEditor
 							}
 						}
 						sourceData.nextRowName = sTrue + " " + sFalse;
+					}
+					break;
+				case "Counter":
+					{
+						string less = "None";
+						string moreOrEqual = "None";
+						foreach (var item in outputConnections)
+						{
+							if (item.objFrom == outputPinCounterLess)
+							{
+								less = item.parentTo.sourceData.rowName;
+							}
+							else if (item.objFrom == outputPinCounterMore)
+							{
+								moreOrEqual = item.parentTo.sourceData.rowName;
+							}
+							sourceData.nextRowName = less + " " + moreOrEqual;
+						}
 					}
 					break;
 				case "Check bool":
@@ -503,6 +552,29 @@ namespace DialogueEditor
 						{
 							Node target = MainWindow.instance.nodeMap[s[1]];
 							MakeConnection(target, outputPinItemFalse);
+						}
+						catch (Exception e)
+						{
+							Console.WriteLine("Exception in LoadOutputConnectionDataFromSource():" + e);
+						}
+					}
+					break;
+				case "counter":
+					{
+						string[] s = sourceData.nextRowName.Split(' ');
+						try
+						{
+							Node target = MainWindow.instance.nodeMap[s[0]];
+							MakeConnection(target, outputPinCounterLess);
+						}
+						catch (Exception e)
+						{
+							Console.WriteLine("Exception in LoadOutputConnectionDataFromSource():" + e);
+						}
+						try
+						{
+							Node target = MainWindow.instance.nodeMap[s[1]];
+							MakeConnection(target, outputPinCounterMore);
 						}
 						catch (Exception e)
 						{
@@ -692,6 +764,7 @@ namespace DialogueEditor
 						History.History.Do(new History.Actions.Action_ConnectionMade(other, otherPin, this));
 						//other.MakeConnection(this, otherPin);
 						break;
+					case "Counter":
 					case "Check bool":
 					case "Shortcut target":
 					case "Call actor event":
@@ -741,6 +814,16 @@ namespace DialogueEditor
 						else
 						{
 							TryConnecting(thisPin, other, other.outputPinItemTrue);
+						}
+						break;
+					case "Counter":
+						if(other.PinHasConnection(other.outputPinCounterLess))
+						{
+							TryConnecting(thisPin, other, other.outputPinCounterLess);
+						}
+						else
+						{
+							TryConnecting(thisPin, other, other.outputPinCounterMore);
 						}
 						break;
 					case "Call actor event":
@@ -962,7 +1045,7 @@ namespace DialogueEditor
 		{
 			get
 			{
-				return outputType.Text == "Check bool" || outputType.Text == "If player has item";
+				return outputType.Text == "Check bool" || outputType.Text == "If player has item" || outputType.Text == "Counter";
 			}
 		}
 
